@@ -1,0 +1,220 @@
+﻿@{
+    Layout = null;
+}
+
+<script src="../../../Javascript/Utilities/FTPControl.js" type="text/javascript"> </script>
+
+<div id="dialthisPhone" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent' style="width: 500px; margin-top: 50px">
+        <h1>
+            Create Audio File</h1>
+        <p id="userPromptMessage">
+            Please add the number you want to dial to record a new message. Alternatively, to manage file locally please use the upload and download buttons.</p>
+        <br />
+        <div class="tabTableText tabTableSetButtonPosition">
+     
+            <div id="startControls">
+                <div style="margin-bottom: 10px" >
+                    <label  style="margin-right: 4px" >
+                        Extension:</label>
+                    <input type="text" style="margin-right: 10px" id="audioCallExtNumber" />
+                    <input type="button" value="Call Now" id="dialPhoneFromPage" class="button" onclick=" thisCurrentCallPhoneInterface.dialFromPage();return false; " />
+                </div>
+
+                <div  style="margin-bottom: 2px">
+                    <label style="margin-right: 18px; display: none" id="uploadLabel" >
+                        Upload:</label>
+                    <input type="button" value="Upload" id="uploadFile" class="button" onclick=" thisCurrentCallPhoneInterface.showUpload();return false; " style="display: none" />
+        
+                </div>
+			
+                <div >
+                    <label style="margin-right: 2px; display: none" id="downloadLabel"  >
+                        Download:</label>
+                    <input type="button" id="downloadFile" value="DownLoad" class="button" onclick=" thisCurrentCallPhoneInterface.showDownload();return false; " style="display: none" /> 
+                </div>
+            </div>   
+      
+            <div id="downloadMessage"></div>
+
+            <div id="downloadInterface" style="display: none">
+                <input type="text" id="downloadLocation" />
+                <input type="button" value="DownLoad" class="button" onclick=" thisCurrentCallPhoneInterface.download();return false; " />
+            </div>
+            <input type="hidden" id="autoId" />
+            <input type="hidden" id="autoName" />
+            <input type="hidden" id="invisibleLoader" />
+            <input type="hidden" id="hascalled" />
+            <div id="fileUploader">
+                <iframe id="iFrameLoader" src="@Url.Content("~/FTP/Uploader")" width="475px" scrolling="no"></iframe>
+            </div>
+        </div>
+        <div id="dialPhonenotSaveMessage">
+            <br />
+            Click off this window to close.
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var thisCurrentCallPhoneInterface;
+    var createCallPhone = function(config) {
+
+        var publicMembers = {
+            showInterface: function() {
+                privateMembers.reappear();
+                window.thisCurrentCallPhoneInterface = this;
+            },
+            hideInterface: function() {
+                privateMembers.disappear();
+                window.thisCurrentCallPhoneInterface = null;
+            },
+            dialFromPage: function() {
+                privateMembers.dialFunction();
+            },
+            setIdAndName: function(id, name) {
+                privateMembers.setIdandNameVariables(id, name);
+            },
+            showUpload: function() {
+                privateMembers.showUploadFile();
+            },
+            showDownload: function() {
+                privateMembers.showDownloadInterface();
+            },
+            download: function() {
+                privateMembers.downloadFile();
+            }
+        };
+
+        var privateMembers = {
+            ftp: function() {
+                var ftpConfig = {
+                    downLoaction: $('#downloadLocation').val(),
+                    rowId: $('#autoId').val(),
+                    fileName: $('#autoName').val()
+                };
+
+                return FtpControl(ftpConfig);
+            },
+
+            initialise: function() {
+
+                if (config.isAutoAtt) {
+                    $('#uploadLabel').show();
+                    $('#uploadFile').show();
+                    $('#downloadLabel').show();
+                    $('#downloadFile').show();
+                } else {
+                    $('#voicemailNumber').val(config.voiceMailInEdit);
+                }
+                $(".modalClose").click(function(e) {
+                    e.preventDefault();
+                    $('#dialthisPhone').hide('fast');
+                    privateMembers.disappear();
+                    if ($('#hascalled').val() === '1') {
+                        table.refreshDataTable();
+                    }
+                });
+            },
+            setIdandNameVariables: function(id, name) {
+                $('#autoId').val(id);
+                $('#autoName').val(name);
+
+                //initalize the FTP!!!!!!
+                privateMembers.ftp();
+            },
+
+            disappear: function() {
+                privateMembers.showStartControls();
+
+                $('#dialthisPhone').hide('fast');
+                $('#audioCallExtNumber').val("");
+                $('#fileUploader').hide();
+                $('#downloadInterface').hide();
+                $('#downloadMessage').hide();
+
+                if (config.isAutoAtt) {
+                    $('#uploadFile').show();
+                    $('#downloadFile').show();
+                    $('#uploadFile').show();
+                    $('#downloadLabel').show();
+                }
+                $('#dialPhonenotSaveMessage').show();
+                $('#userPromptMessage').html('Please add the number you want to dial.</p>');
+                privateMembers.ftp().reset();
+            },
+
+            reappear: function() {
+                $('#fileUploader').hide();
+                $('#dialthisPhone').show('fast');
+            },
+
+            dialFunction: function() {
+                if ($('#audioCallExtNumber').val() !== "") {
+                    if (config.isAutoAtt) {
+                        //todo:this this crap out!!!!!!
+                        $('#invisibleLoader').load('@Url.Content("~/AutoAttendant/CallForAudio?extension=")' + $('#audioCallExtNumber').val() + '&Id=' + $('#autoId').val());
+                    } else {
+                        $('#invisibleLoader').load('@Url.Content("~/UserVoiceMail/CallForAudio?extension=")' + $('#audioCallExtNumber').val());
+                    }
+
+                    privateMembers.hideValueForDial('<p style="margin-top:5px;margin-bottom:5px" >Once you have recorded your file click off this window to close....</p>' +
+                        '<p>Your sound file will be automatically added to the dialplan.</p>');
+
+                    $('#hascalled').val('1');
+                } else {
+                    alert('No extension number added');
+                }
+            },
+
+            showUploadFile: function() {
+                $('#fileUploader').show();
+                privateMembers.hideValueForDial('<p style="margin-top:5px;margin-bottom:5px">Once you have uploaded your file click off this window to close....</p></br>');
+            },
+
+            showDownloadInterface: function() {
+                privateMembers.hideValueForDial('<p style="margin-top:5px;margin-bottom:5px">Please define the download connection in the box provided. Click off this window to close....</p></br>');
+                $('#downloadInterface').show();
+            },
+
+            hideValueForDial: function(promptHtml) {
+                privateMembers.hideStartControls();
+                $('#uploadFile').hide();
+                $('#downloadFile').hide();
+                $('#uploadFile').hide();
+                $('#downloadLabel').hide();
+                $('#dialPhonenotSaveMessage').hide();
+                $('#userPromptMessage').html(promptHtml);
+            },
+
+            hideStartControls: function() {
+                $('#startControls').hide();
+            },
+
+            showStartControls: function() {
+                $('#startControls').show();
+            },
+
+            hideDownloadInterface: function() {
+                $('#downloadInterface').hide();
+            },
+
+            downloadFile: function() {
+                if ($('#downloadLocation').val().length > 2) {
+                    privateMembers.hideValueForDial('<p style="margin-top:5px;margin-bottom:5px">click off this window to close....</p>');
+                    privateMembers.hideDownloadInterface();
+                    $('#downloadMessage').html(privateMembers.ftp().downLoad());
+                } else {
+                    $('#downloadLocation').css('outline', 'yellow solid thin');
+                    alert('Please place a valid loaction in the text-box provided.');
+                }
+            }
+        };
+
+        privateMembers.initialise();
+
+        return publicMembers;
+    };
+
+</script>

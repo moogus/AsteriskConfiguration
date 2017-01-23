@@ -1,0 +1,50 @@
+;;CALL FROM TYPE
+;;Low Level call routing
+;;call using Macro(CallFromType,type,number)
+;;Types are ('Extension','Group','Voicemail','External','Ringtone','Route','AutoAttendant','Playback','AddCode')
+
+[macro-CallFromType]
+exten => s,1,Goto(${ARG1})
+exten => s,n,NoOp("Dest type doesn't exist")TEST
+exten => s,n,Hangup()
+
+exten => s,n(Extension),Set(MAILDELAY=${ODBC_GETMAILDELAYEXT(${ARG2})})
+same => n,Set(SERVERIP=${ODBC_GETSERVERIP()})
+same => n,SIPAddHeader(Call-Info: <http://${SERVERIP}/phonebook/${CALLERID(num)}.jpg>\;purpose=icon)
+same => n,GotoIf($[${MAILDELAY} > 0]?AddDelayExt)
+same => n,Dial(SIP/${ARG2})
+same => n,Hangup()
+same => n(AddDelayExt),Dial(SIP/${ARG2},${MAILDELAY})
+same => n,Set(VOICE=${ODBC_GETVOICEMAILEXT(${ARG2})})
+same => n,Voicemail(${VOICE},u)
+same => n,Hangup()
+
+exten => s,n(AddCode),GoSub(MakeInternalOrExternalCall,start,1(${ARG2}${ARG3},addcodeCFT,${CALLERID(num)}))
+same => n,HangUp()
+
+exten => s,n(Group),Set(MAILDELAY=${ODBC_GETMAILDELAYQUE(${ARG2})})
+same => n,GotoIf($[${MAILDELAY} > 0]?AddDelayQue)
+same => n,Macro(simplequeuenohang,${ARG2})
+same => n,Hangup()
+same => n(AddDelayQue),Macro(simplequeuenohang,${ARG2},${MAILDELAY})
+same => n,Set(VOICE=${ODBC_GETVOICEMAILQUE(${ARG2})})
+same => n,Voicemail(${VOICE},u)
+same => n,Hangup()
+
+exten => s,n(Voicemail),Voicemail(${ARG2},u)
+exten => s,n,Hangup()
+;exten => s,n(External),Dial(local/${ARG2}@Outgoing)
+exten => s,n(External),GoSub(MakeInternalOrExternalCall,start,1(${ARG2},forwardCFT,${CALLERID(num)}))
+exten => s,n,Hangup()
+exten => s,n(Ringtone),NoOp("Auto Attendant has been set to move to a ringtone, so the engineer programming it is obviously not smart.")
+exten => s,n,Hangup()
+exten => s,n(Route),Dial(local${ARG2}@MakeInternalCall)
+exten => s,n,Hangup()
+exten => s,n(AutoAttendant),Macro(AA,${ARG2})
+exten => s,n,Hangup()
+exten => s,n(Playback),Playback(${ARG2})
+exten => s,n,Hangup()
+
+[macro-simplequeuenohang]
+exten => s,1,Verbose(2,${CALLERID(num)} entering the ${ARG1} queue)
+exten => s,2,Queue(${ARG1},rt,,,${ARG2})

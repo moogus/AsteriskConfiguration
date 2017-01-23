@@ -1,0 +1,21 @@
+/*
+ * Namespace DTCR - "DataTables ColReorder" plug-in
+ */
+
+table.DTCR_clonedTable {
+    background-color: white;
+    z-index: 202;
+}
+
+div.DTCR_pointer {
+    background-color: #0259C4;
+    width: 1px;
+    z-index: 201;
+}
+
+body.alt div.DTCR_pointer {
+    background: url('../images/insert.png') no-repeat top left;
+    margin-left: -9px;
+    margin-top: -15px;
+    width: 18px;
+}

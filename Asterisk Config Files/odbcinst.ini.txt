@@ -1,0 +1,20 @@
+[MySQL]
+Description = ODBC for MySQL
+Driver = /usr/lib/odbc/libmyodbc.so
+Setup = /usr/lib/odbc/libodbcmyS.so
+FileUsage = 1
+
+
+;or
+[MySQL]
+Description		= ODBC for MySQL
+Driver		= /usr/lib/i386-linux-gnu/odbc/libmyodbc.so
+Setup		= /usr/lib/i386-linux-gnu/odbc/libodbcmyS.so
+FileUsage		= 1
+
+;or for ubuntu server
+[MySQL]
+Description		= ODBC for MySQL
+Driver		= /usr/lib/x86_64-linux-gnu/odbc/libmyodbc.so
+Setup		= /usr/lib/x86_64-linux-gnu/odbc/libodbcmyS.so
+FileUsage		= 1

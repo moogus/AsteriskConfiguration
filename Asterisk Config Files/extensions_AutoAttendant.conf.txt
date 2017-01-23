@@ -1,0 +1,95 @@
+;;AUTO ATTENDANT
+;;Handles all side of the Auto Attendant
+;;Called by Macro(AA,number)
+
+;;This needs to be split into both calling and creating
+
+
+[macro-AA]
+exten => s,1,Read(num,${ODBC_AAAnnouncement(${ARG1})},1,i,,${ODBC_AATimeout(${ARG1})})
+exten => s,n,Set(TEST=${ODBC_AARuleExists(${ARG1},${num})})
+exten => s,n,GotoIf($[${TEST}=1]?dial)
+exten => s,n,GotoIf($["${num}"=""]?timeout)
+exten => s,n,NoOp("rule doesn't exist - check i")
+exten => s,n,Set(num=i)
+exten => s,n,Goto(dial)
+exten => s,n(timeout),Set(num=t)
+exten => s,n(dial),Macro(CallFromType,${ODBC_AARuleType(${ARG1},${num})},${ODBC_AARuleDest(${ARG1},${num})})
+exten => s,n,Hangup()
+
+[CreateAudioForAA]
+exten => s,1,Answer
+same => n,Gosub(CreateAudioRecordMessage,s,1(${soundName}))
+
+
+[CreateAudioMainMenu]
+exten => s,1,Background(mainMenuMessage)
+same =>n,WaitExten(10)
+;goto where told---
+exten => 1,1,Gosub(CreateAudioPlayMessage,s,1(${ARG1}))
+exten => 2,1,Gosub(CreateAudioRecordMessage,s,1(${ARG1}))
+;Line Below Is not in if needed uncomment
+;same => n(notAnAccessCode),return()
+exten => 3,1,Gosub(CreateAudioSaveMessage,s,1(${ARG1}))
+exten => i,1,Playback(pbx-invalid)
+same => n,Macro(CreateAudioMainMenu,s,1(${ARG1}))
+exten => t,n,Gosub(CreateAudioMainMenu,s,1(${ARG1}))
+
+
+[CreateAudioPlayMessage]
+exten =>s,1,Playback(/usr/share/asterisk/sounds/temp/${ARG1})
+;goto Message Menu---
+exten => s,n,Gosub(CreateAudioMainMenu,s,1(${ARG1}))
+
+
+[CreateAudioRecordMessage]
+exten => s,1,Background(recordYourMessage)
+exten => s,n,Record(/usr/share/asterisk/sounds/temp/${ARG1}.gsm)
+;exten => s,n,Wait(10)
+;goto Message Menu---
+exten => s,n,Gosub(CreateAudioMainMenu,s,1(${ARG1}))
+
+
+[CreateAudioSaveMessage]
+exten => s,1,System(mv -f /usr/share/asterisk/sounds/temp/${ARG1}.gsm /usr/share/asterisk/sounds/en/${ARG1}.gsm)
+exten => s,n,Playback(saveMessage)
+exten => s,n,Hangup()
+
+;the code below is a duplicate of above...this should be condensable 
+
+[MakeVoiceMailGreeting]
+exten => s,1,Answer
+same => n,Gosub(CreateGreetingRecordMessage,s,1(${soundName}))
+
+
+[CreateGreetingMainMenu]
+exten => s,1,Background(mainMenuMessage)
+same =>n,WaitExten(10)
+;goto where told---
+exten => 1,1,Gosub(CreateGreetingPlayMessage,s,1(${ARG1}))
+exten => 2,1,Gosub(CreateGreetingRecordMessage,s,1(${ARG1}))
+exten => 3,1,Gosub(CreateGreetingSaveMessage,s,1(${ARG1}))
+exten => i,1,Playback(pbx-invalid)
+same => n(notAnAccessCode),return()
+same => n,Macro(CreateAudioMainMenu,s,1(${ARG1}))
+exten => t,n,Gosub(CreateAudioMainMenu,s,1(${ARG1}))
+
+
+[CreateGreetingPlayMessage]
+exten =>s,1,Playback(/usr/share/asterisk/sounds/temp/${ARG1})
+;goto Message Menu---
+exten => s,n,Gosub(CreateAudioMainMenu,s,1(${ARG1}))
+
+
+[CreateGreetingRecordMessage]
+exten => s,1,Background(recordYourMessage)
+exten => s,n,Record(/usr/share/asterisk/sounds/temp/${ARG1}.wav)
+;exten => s,n,Wait(10)
+;goto Message Menu---
+exten => s,n,Gosub(CreateGreetingMainMenu,s,1(${ARG1}))
+
+
+[CreateGreetingSaveMessage]
+exten => s,1,System(/home/asterisktest/importVMtoDB.pl /usr/share/asterisk/sounds/temp/${ARG1}.wav ${ARG1})
+same => n,Playback(saveMessage)
+same => n,Hangup()

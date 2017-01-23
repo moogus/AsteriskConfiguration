@@ -1,0 +1,29 @@
+﻿@model Asterisk.ViewModels.FtpResultViewModel
+@{
+    Layout = null;
+}
+<html>
+    <head>
+        <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <form method="post">
+            <div style="background: #F1F1F1">
+                <div>
+                    @if (Model.IsSucess)
+                    {
+                        <p style="font-size: 20px; color: #027384; margin-left: 20px; padding-top: 20px">
+                            '@Model.File' uploaded sucessfully.</p>
+                    }
+                    else
+                    {
+                        <p style="font-size: 20px; color: #027384; margin-left: 20px; padding-top: 20px">
+                            Something went wrong.</p>
+                    }
+                </div>
+            </div>
+            <input type="submit" value="Upload Again" class="button" style="margin-left: 350px; margin-top: 75px" />
+        </form>
+    </body>
+</html>

@@ -1,0 +1,52 @@
+﻿<script type="text/javascript">
+
+     var createAjaxNumberPicker = function() {
+         var heldValue;
+
+         var publicMembers = picker({ title: "Add Number", width: '450', moveTop: '-250' });
+
+         var baseshow = publicMembers.show;
+
+         publicMembers.show = function(value) {
+             heldValue = value;
+             baseshow();
+         };
+
+
+         publicMembers.showAddTabs = function(basediv) {
+
+             var ddiTab = addAjaxTabWithRadio('DDI', '/DDI/DDIData', [
+                 ["", function(a) { return a.DDINumber; }],
+                 ["DDI Number", function(a) { return a.DDINumber + " -- used on " + a.Used; }]
+             ], heldValue);
+
+             var extTab = addAjaxTabWithRadio('Extension', '/ExtensionAdmin/ExtensionData', [
+                 ["", function(a) { return a.Number; }],
+                 ["Number", function(a) { return a.Number; }],
+                 ["Name", function(a) { return a.FullName; }],
+                 ["Department", function(a) { return a.Department; }],
+                 ["Job Title", function(a) { return a.JobTitle; }]
+             ], heldValue);
+
+             var queueTab = addAjaxTabWithRadio('Queue', '/GroupAdmin/QueueData', [
+                 ["", function(a) { return a.Number; }],
+                 ["Number", function(a) { return a.Number; }],
+                 ["Name", function(a) { return a.QueueName; }],
+                 ["Strategy", function(a) { return a.Strategy; }]
+             ], heldValue);
+
+             var routeTab = addStaticTabWithTextInput('Route');
+
+             publicMembers.addTab(extTab);
+             publicMembers.addTab(queueTab);
+             publicMembers.addTab(ddiTab);
+             publicMembers.addTab(routeTab);
+
+         };
+
+         publicMembers.linkText = "Number Picker";
+
+         return publicMembers;
+     };
+
+ </script>

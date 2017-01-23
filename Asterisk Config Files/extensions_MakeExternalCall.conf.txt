@@ -1,0 +1,151 @@
+;;MAKE EXTERNAL CALL
+;;For making a call on a Trunk
+;;Call using GoSub(MakeExternalCall,s,1(accessCode,number))
+
+[MakeExternalCall]
+exten => s,1,SET(ACCESSCODE=${ARG1})
+same => n,SET(NUMBER=${ARG2})
+same => n,GoSub(ChannelAvailableQuery,s,1(${ACCESSCODE},${NUMBER},,1))
+
+[ChannelAvailableQuery]
+exten => s,1,SET(ACCESSCODE=${ARG1})
+same => n,SET(NUMBER=${ARG2})
+same => n,Set(QUERY=${ARG3})
+same => n,NoOp(${QUERY})
+same => n,SET(TRUNKPRIORITY=${ARG4})
+same => n,Set(HASANOTHERTRUNK=${ODBC_HASNEXTTRUNK(${ACCESSCODE},${TRUNKPRIORITY})})
+same=>n,NoOp(${HASANOTHERTRUNK})
+same => n,GotoIf($[${HASANOTHERTRUNK}=0]?channelAvailable)
+
+same => n,Set(TRUNKTYPE=${ODBC_GETTRUNKTYPE(${ACCESSCODE},${TRUNKPRIORITY})})
+same => n,Goto(${TRUNKTYPE})
+
+exten => s,n(Iax),GoSub(IaxChannelAvailable,s,1,(${NUMBER},${ACCESSCODE},${TRUNKPRIORITY},${QUERY}))
+exten => s,n(Sip),GoSub(SipChannelAvailable,s,1(${NUMBER},${ACCESSCODE},${TRUNKPRIORITY},${QUERY}))
+exten => s,n(Bri),GoSub(DahdiChannelsAvailable,s,1(${NUMBER},${ACCESSCODE},${TRUNKPRIORITY},${QUERY},1))
+
+same => n(channelAvailable),GoSub(ChannelAvailable,s,1(${NUMBER},${QUERY}))
+same => n,return()
+
+[IaxChannelAvailable]
+exten => s,1,Set(NUMBER=${ARG1})
+same => n,Set(ACCESSCODE=${ARG2})
+same => n,Set(TRUNKPRIORITY=${ARG3})
+same => n,Set(QUERY=${ARG4})
+same => n,Set(IAXTRUNK=${ODBC_GETIAXNAME(${ACCESSCODE},${TRUNKPRIORITY})})
+;;
+;;this need to set to check for available IAX TRUNKS see sip trunks below
+;;
+same => n,SET(NEWQUERY="IAX2/${IAXTRUNK}/")
+same => n,SET(TRUNKPRIORITY=${MATH(${TRUNKPRIORITY}+1,int)})
+same => n,GoSub(ChannelAvailableQuery,s,1(${ACCESSCODE},${NUMBER},${NEWQUERY},${TRUNKPRIORITY}))
+;;
+;;this need to set to check for available IAX TRUNKS see sip trunks below
+;;
+
+[SipChannelAvailable]
+exten => s,1,Set(NUMBER=${ARG1})
+same => n,Set(ACCESSCODE=${ARG2})
+same => n,Set(TRUNKPRIORITY=${ARG3})
+same => n,Set(QUERY=${ARG4})
+same => n,Set(SIPTRUNK=${ODBC_GETSIPCARRIER(${ACCESSCODE},${TRUNKPRIORITY})})
+;
+;the group thing in here sets the group to look at
+;group couter gets the sip calls on that trunk 
+;	
+same => n,Set(GROUP()=${SIPTRUNK}) 
+same => n,Set(GROUPCOUNTER=${GROUP_COUNT(${SIPTRUNK})})
+same => n,Set(SIPCALLCOUNT=${ODBC_GETSIPTRUNKAVAILCHANNEL(${SIPTRUNK})})
+same => n,GotoIf($[${GROUPCOUNTER}>${SIPCALLCOUNT}]?StopCall)
+same => n,GotoIf($[${TRUNKPRIORITY}=1]?newString)
+
+same => n,Set(NEWQUERY=${QUERY}&$SIP/{CHANNELNAME})
+same => n(sendQuery),SET(TRUNKPRIORITY=${MATH(${TRUNKPRIORITY}+1,int)})
+same => n,GoSub(ChannelAvailableQuery,s,1(${ACCESSCODE},${NUMBER},${NEWQUERY},${TRUNKPRIORITY}))
+
+same => n(newString),SET(TRUNKPRIORITY=${MATH(${TRUNKPRIORITY}+1,int)})
+exten => s,n,GoSub(ChannelAvailableQuery,s,1(${ACCESSCODE},${NUMBER},SIP/${SIPTRUNK},${TRUNKPRIORITY}))
+
+exten => s,n(StopCall),SET(TRUNKPRIORITY=${MATH(${TRUNKPRIORITY}+1,int)})
+exten => s,n,GoSub(ChannelAvailableQuery,s,1(${ACCESSCODE},${NUMBER},${QUERY},${TRUNKPRIORITY}))
+
+[DahdiChannelsAvailable]
+exten => s,1,SET(NUMBER=${ARG1})
+same => n,SET(ACCESSCODE=${ARG2})
+same => n,SET(TRUNKPRIORITY=${ARG3})
+same => n,Set(QUERY=${ARG4})
+same => n,Set(CURRENTCHANNEL=${ARG5})
+
+same => n,Set(NUMBEROFCHANNELS=${ODBC_GETNUMBEROFDAHDICHANNEL(${ACCESSCODE},${TRUNKPRIORITY})})
+same => n,GotoIf($[${CURRENTCHANNEL}>${NUMBEROFCHANNELS}]?sendQuery)
+same => n,Set(LIMIT=${MATH(${CURRENTCHANNEL}-1,int)})
+
+same => n,Set(CHANNELNAME=${ODBC_GETNEXTDAHADICHANNEL(${ACCESSCODE},${TRUNKPRIORITY},${LIMIT})})
+same => n,GotoIf($[${CURRENTCHANNEL}=1]?newString)
+
+same => n,Set(NEWQUERY=${QUERY}&${CHANNELNAME})
+same => n,SET(CURRENTCHANNEL=${MATH(${CURRENTCHANNEL}+1,int)})
+same => n,GoSub(DahdiChannelsAvailable,s,1(${NUMBER},${ACCESSCODE},${TRUNKPRIORITY},${NEWQUERY},${CURRENTCHANNEL}))
+
+same => n(newString),GotoIf($[${TRUNKPRIORITY}=1]?reallyNewString)
+same => n,Set(NEWQUERY=${QUERY}&${CHANNELNAME})
+same => n,SET(CURRENTCHANNEL=${MATH(${CURRENTCHANNEL}+1,int)})
+same => n,GoSub(DahdiChannelsAvailable,s,1(${NUMBER},${ACCESSCODE},${TRUNKPRIORITY},${NEWQUERY},${CURRENTCHANNEL}))
+
+same => n(reallyNewString),SET(CURRENTCHANNEL=${MATH(${CURRENTCHANNEL}+1,int)})
+same => n,GoSub(DahdiChannelsAvailable,s,1(${NUMBER},${ACCESSCODE},${TRUNKPRIORITY},${CHANNELNAME},${CURRENTCHANNEL}))
+
+same => n(sendQuery),SET(TRUNKPRIORITY=${MATH(${TRUNKPRIORITY}+1,int)})
+same => n,GoSub(ChannelAvailableQuery,s,1(${ACCESSCODE},${NUMBER},${QUERY},${TRUNKPRIORITY}))
+
+[ChannelAvailable]
+exten => s,1,SET(NUMBER=${ARG1})
+same => n,Set(QUERY=${ARG2})
+same => n,ChanIsAvail(${QUERY})
+same => n,Set(TYPE=${AVAILORIGCHAN:0:1})
+same => n,Goto(${TYPE})
+
+same => n(I),Gosub(CreateIaxDialString,s,1(${NUMBER},${AVAILORIGCHAN}))
+same => n(S),GoSub(CreateSipDialString,s,1(${NUMBER},${AVAILORIGCHAN}))
+same => n(d),GoSub(CreateDahdiDialString,s,1(${NUMBER},${AVAILORIGCHAN}))
+
+[CreateIaxDialString]
+exten => s,1,SET(NUMBER=${ARG1})
+same => n,Set(IAXBASE=${ARG2})
+same => n,Set(DIALSTRING=${IAXBASE}${NUMBER})
+same => n,GoSub(trunkdial,${NUMBER},1(${DIALSTRING}))
+
+[CreateSipDialString]
+exten => s,1,SET(NUMBER=${ARG1})
+same => n,Set(CARRIER=${ARG2:4})
+same => n,Set(DIALSTRING=SIP/${NUMBER}@${CARRIER})
+same => n,GoSub(trunkdial,${NUMBER},1(${DIALSTRING}))
+
+[CreateDahdiDialString]
+exten => s,1,SET(NUMBER=${ARG1})
+same => n,Set(DCHANNEL=${ARG2})
+same => n,Set(DIALSTRING=${DCHANNEL}/${NUMBER})
+same => n,GoSub(trunkdial,${NUMBER},1(${DIALSTRING}))
+
+[trunkdial]
+exten => _[0-9*].,1,GoSub(SetCli,${CALLERID(num)},1)
+;line below for testing pickup
+;exten => _[0-9*].,1,SET(CALLERID(num)=01202592226)
+same => n,NoOp(${CALLERID(num)})
+same => n,Dial(${ARG1})
+same => n,GotoIf($[${DIALSTATUS} = NOANSWER]?displayMessage)
+same => n,GotoIf($[${DIALSTATUS} = BUSY]?displayMessage)
+same => n,GotoIf($[${DIALSTATUS} = CONGESTION]?displayMessage)
+same => n,Return()
+same => n(displayMessage),NoOp(${DSTATE})
+same => n,Hangup()
+
+[SetCli]
+;refactor this so it is called in CheckAccesscode
+exten => _X.,1,Set(HASCLI=${ODBC_ISCLISET(${EXTEN})})
+same => n,GotoIf($[${HASCLI} = 1]?HasCli)
+same => n,Return()
+same => n(HasCli),SET(CALLERID(num)=${ODBC_GETCLINUMBER(${EXTEN})})
+same => n,SET(CALLERID(name)=${ODBC_GETCLINAME(${EXTEN})})
+same => n,Verbose(1, Outgoing Caller ID: {$CALLERID(num)})
+same => n,Return()

@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Server Settings Admin";
+}
+@section AddToHead
+{
+    <script src="@Url.Content("~/Javascript/DynamicTable/dynamicTable.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/DynamicTable/dynamicColumn.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/modalDialog.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/picker.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/pickerTabFactory.js")" type="text/javascript"> </script>
+    <link href="@Url.Content("~/Content/TabbedModalPopup.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/datePicker.css")" rel="stylesheet" type="text/css" />
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        SetCurrentPage("Server");
+
+        var tableConfig = {
+            table: $("#serverSettings"),
+            source: 'ServerSettingsData',
+            columnTypes: [idColumn(),
+                editTextColumn(),
+                editTextColumn(),
+                editTextColumn(),
+                editTextColumn(),
+                editTextColumn(),
+                editTextNoEditColumn(),
+                editTextColumn(),
+                editColumn(),
+                deleteColumnNotVisable()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&ipaddress=" + encodeURI(inputs[1]) + "&userName=" + encodeURI(inputs[2]) +
+                    "&password=" + encodeURI(inputs[3]) + "&mailserver=" + encodeURI(inputs[4]) + "&voiceMail=" + encodeURI(inputs[5]) +
+                    "&admin=" + encodeURI(inputs[6]) + "&extenIpRange=" + encodeURI(inputs[7]);
+            }
+        };
+
+        dynamicTable(tableConfig);
+        $('#serverSettings_addItem').hide();
+    });
+</script>
+
+<div class='description' style="clear: both">
+    <p>
+        The details here are specific to the deployed phone system.  
+    </p>
+    <p>
+        All values are used by internal processes. Adjusting these settings can cause service issues.
+    </p>
+</div>
+
+<table id="serverSettings">
+
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Server IP
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                Password
+            </th>
+            <th>
+                Mail Server 
+            </th>
+            <th>
+                Voicemail Number
+            </th>
+            <th>
+                Admin Login
+            </th>
+            <th>
+                Extension IP-Range
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

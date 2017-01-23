@@ -1,0 +1,39 @@
+<Window x:Class="AsteriskCTIClient.Views.NotifyIcon"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:note="clr-namespace:Hardcodet.Wpf.TaskbarNotification;assembly=Hardcodet.Wpf.TaskbarNotification"
+        Title="MainWindow" Height="350" Width="525" Visibility="Hidden">
+
+
+  <note:TaskbarIcon 
+    LeftClickCommand="{Binding OpenPhoneWindowCommand}" x:Name="tbIcon">
+    <note:TaskbarIcon.Style>
+      <Style TargetType="{x:Type note:TaskbarIcon}">
+        <Setter Property="IconSource" Value="/Views\ViewResources\Disconnected.ico" />
+        <Style.Triggers>
+          <DataTrigger Binding="{Binding Connected}" Value="True">
+            <Setter Property="IconSource" Value="/Views\ViewResources\Connected.ico" />
+          </DataTrigger>
+          <DataTrigger Binding="{Binding Connected}" Value="False">
+            <Setter Property="IconSource" Value="/Views\ViewResources\Disconnected.ico" />
+          </DataTrigger>
+          <DataTrigger Binding="{Binding CurrentCall.State}" Value="InProgress">
+            <Setter Property="IconSource" Value="/Views\ViewResources\Busy.ico" />
+          </DataTrigger>
+          <DataTrigger Binding="{Binding CurrentCall.State}" Value="Terminated">
+            <Setter Property="IconSource" Value="/Views\ViewResources\Connected.ico" />
+          </DataTrigger>
+        </Style.Triggers>
+      </Style>
+    </note:TaskbarIcon.Style>
+    <note:TaskbarIcon.ContextMenu>
+      <ContextMenu>
+        <MenuItem Header="Phone Window" Command="{Binding OpenPhoneWindowCommand}" />
+        <MenuItem Header="History Window" Command="{Binding OpenHistoryWindowCommand}" />
+        <MenuItem Header="Settings Window" Command="{Binding OpenSettingsWindowCommand}" />
+      </ContextMenu>
+    </note:TaskbarIcon.ContextMenu>
+
+  </note:TaskbarIcon>
+
+</Window>

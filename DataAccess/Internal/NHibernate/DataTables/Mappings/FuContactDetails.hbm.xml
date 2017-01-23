@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+   <class name ="FuContactDetails" table="fu_contactDetails">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="FirstName" column="fu_firstName"/>
+    <property name="LastName" column="fu_lastName" />
+    <property name="Department" column="fu_Department" />
+    <property name="Email" column="fu_email"/>
+    <property name="JobTitle" column="fu_jobTitle" />
+    <property name="FuExtensionNumber" column="fu_extension"/>
+    <property name ="Notes" column="fu_notes"/>
+  </class>
+
+</hibernate-mapping>

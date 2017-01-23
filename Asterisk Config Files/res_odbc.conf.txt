@@ -1,0 +1,8 @@
+[asterisk]
+enabled => yes
+dsn=> asterisk-connector
+username => root
+password =>password
+pooling => no
+limit => 2
+pre-connect => yes

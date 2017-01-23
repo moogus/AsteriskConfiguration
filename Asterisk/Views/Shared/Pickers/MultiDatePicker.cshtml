@@ -1,0 +1,80 @@
+﻿<script type="text/javascript">
+     var createMultiDatePicker = function() {
+
+         var publicMembers = picker({ title: "Select Date(s)", width: '500', moveTop: '-75' });
+
+         publicMembers.showAddTabs = function(basediv) {
+
+             var spicker = addStaticTab('Add Single Date');
+             spicker.html = "<div><label style=\"margin-right: 5px;\">Enter Date</label><input type=\"text\" id=\"datePicker1\" size=\"10\" " +
+                 " onchange=\"$('#" + spicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" /></div>" + spicker.html;
+
+             var baseAddTab1 = spicker.addTabForThisTable;
+             spicker.addTabForThisTable = function(parent) {
+                 baseAddTab1(parent);
+                 spicker.currentTab.find("#datePicker1").datepicker({ dateFormat: 'dd/mm/yy' });
+                 spicker.currentTab.css('height', '30px');
+             };
+
+             spicker.click = function(picker) {
+                 var dateSingle = $('#datePicker1').val();
+
+                 if (dateSingle !== "") {
+                     picker.setValueInDataTable(dateSingle);
+                 } else {
+                     picker.hide();
+                     pri.showError();
+                 }
+             };
+
+             var ddpicker = addStaticTab('Add Double Date');
+
+             ddpicker.html = "<div style=\"float: left; margin-left: -5px;\"><label style=\"margin-right: 5px;\" >Start Date</label><input type=\"text\" id=\"datePicker2\"" +
+                 " onchange=\"$('#" + ddpicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" size=\"7\"  /></div><div style=\"float: left; margin-left: 10px;\">" +
+                 "<label style=\"margin-right: 5px;\" >End Date</label><input type=\"text\" id=\"datePicker3\" size=\"7\" " +
+                 "onchange=\"$('#" + ddpicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" /></div>" + ddpicker.html;
+
+             var baseAddTab2 = ddpicker.addTabForThisTable;
+             ddpicker.addTabForThisTable = function(parent) {
+                 baseAddTab2(parent);
+                 ddpicker.currentTab.find("#datePicker2").datepicker({ dateFormat: 'dd/mm/yy' });
+                 ddpicker.currentTab.find("#datePicker3").datepicker({ dateFormat: 'dd/mm/yy' });
+                 ddpicker.currentTab.css('height', '30px');
+             };
+
+             ddpicker.click = function(picker) {
+                 var date1 = $('#datePicker2').val();
+                 var date2 = $('#datePicker3').val();
+
+                 if (date1 !== "" && date2 !== "") {
+                     var dateString = date1 + " - " + date2;
+                     picker.setValueInDataTable(dateString);
+                 } else {
+                     picker.hide();
+                     pri.showError();
+                 }
+             };
+
+             publicMembers.addTab(spicker);
+             publicMembers.addTab(ddpicker);
+         };
+
+         publicMembers.linkText = "Date Picker";
+         publicMembers.removeUpdate = true;
+
+         publicMembers.returnToDate = function() {
+             $('#errorDate').hide('fast');
+             publicMembers.show();
+         };
+
+         var pri = {
+             //for this to be seen the page must have this element on it see the Routing Admin/Index
+             showError: function() {
+                 $('#errorDate').show('fast');
+             }
+         };
+
+         return publicMembers;
+     };
+
+ </script>

@@ -1,0 +1,64 @@
+﻿@using Asterisk.ViewHelpers
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+    <script src="../../Javascript/TimePicker/jquery.timepicker.js" type="text/javascript"> </script>
+    <link href="../../Content/jquery.timepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+}
+<script type="text/javascript">
+    SetCurrentPage("Defaults");
+
+    $(document).ready(function() {
+
+        var tableConfig = {
+            table: $("#sipDefaults"),
+            source: "DefaultData",
+            columnTypes: [idColumn(),
+                editTextNoEditColumn(),
+                editTextNoEditColumn(),
+                editTextColumn(),
+                editColumn(),
+                deleteColumnNotVisable()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&number=" + encodeURI(inputs[1]);
+            }
+        };
+
+        dynamicTable(tableConfig);
+        $('#sipDefaults_addItem').hide();
+
+    });
+</script>
+
+<div class="dataUploader">
+    <a href="@Url.Content("~/EmergencyNumbers/Index")" class="linkFormat">....edit emergency numbers</a>
+</div>
+<br/><br/>
+<div class="description" style="clear: both; margin-bottom: -10px">
+    <p>
+        Default settings add basic settings to each record per the page when new records are added.  Please be aware Voice-Messages Recycle time is a system setting. </p>
+</div>
+
+<table id="sipDefaults">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Type</th>
+            <th>
+                Column Title</th>
+            <th>
+                Default</th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

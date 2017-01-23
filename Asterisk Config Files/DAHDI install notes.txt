@@ -1,0 +1,7 @@
+the link for DAHDI :
+
+http://svn.asterisk.org/svn/dahdi/linux-complete/tags/2.6.1+2.6.1/
+
+the link in the book is out of date and will not complie with the current version of ubuntu.
+
+http://www.southernspeakers.net/2011/12/how-to-install-dahdi-for-asterisk.html

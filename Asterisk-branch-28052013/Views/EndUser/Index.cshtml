@@ -1,0 +1,41 @@
+﻿@model Asterisk.ViewModels.EndUserCurrentDialplanViewModel
+@{
+    ViewBag.Title = "Set Current Dialplan";
+    Layout = "~/Views/Shared/_EndUserLayout.cshtml";
+}
+@using (Html.BeginForm("Update", "EndUser", FormMethod.Get))
+{
+    <div class='modalContentLighter' style="width: 325px; margin-top: 20px; margin-left: 15%">
+        <div id="voiceMailHeader" class="headUserConfig">
+            <h1>
+                Set Current Dialplan</h1>
+        </div>
+        <p class="spaceBelowLarge message">
+        </p>
+        <p class="spaceBelowLarge message">@Model.Message</p>
+        <br />
+        <div style="clear: both;">
+            <div style="margin-top: 2px;" class="SpaceBelow labelSetWidth">
+                Select Dialplan:
+            </div>
+            <select style="margin-top: 2px;" name="currentDialPlan">
+                @foreach (var dp in Model.Dialplans)
+                {
+                    var selected = dp.Id == Model.CurrentDialPlan.Dialplan.Id ? "selected" : "";
+                    <option @selected value="@dp.Id">@dp.Name</option>
+                }
+            </select>
+        </div>
+        @{
+            var cbchecked =
+                Model.CurrentDialPlan.AutomaticallyChange ? "checked" : "";
+            <div style="clear: both;">
+                <div class="SpaceBelow labelSetWidth">
+                    Enable calendar:
+                </div>
+                <input name="enableCalendar" style="margin-top: 5px" value="true" type="checkbox" @cbchecked/>
+            </div>
+        }
+        <input type="submit" value="Change" class="button partialButtonRight" />
+    </div>
+}

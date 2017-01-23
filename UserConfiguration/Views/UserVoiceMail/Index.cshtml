@@ -1,0 +1,87 @@
+﻿@model UserConfiguration.Controllers.UserVoiceMailViewModel
+@{
+	Layout = null;
+}
+<div style="margin-left: 75px; width: 350px; padding-left: 50px; padding-right: 20px;">
+	@using (Html.BeginForm())
+ {
+	 if (Model.Extension.VoiceMail != null)
+	 {
+		<div style="height: 10px;">
+		</div>
+		<div class='modalContentLighter' style="width: 350px;">
+			<div id="voiceMailHeader" style="background-color: #f1f1f1; margin-left: -50px; margin-right: -45px; margin-top: -10px; text-align: center;">
+				<h1 style="padding-top: 5px;">
+					Voice Mail</h1>
+			</div>
+			<fieldset>
+				<input type="hidden" name="id" value="@Model.Extension.Id"/>
+				<div class="SpaceBelow" style="margin-left: -40px; margin-right: -40px;">
+					<p>
+            Please be aware mail delay allows you to determine how long the phone will ring before transferring to voice-mail. 
+						To disable your voice-mail select the option 'voice-mail off' from mail delay.</p>
+				</div>
+				<div>
+					<div style="clear: both;">
+						<div class="SpaceBelow labelSetWidth">
+							Mail Delay:</div>
+						<div>
+							<select name="mailDelay" style="margin-left: -0px;width:162px;">
+								@foreach (var delay in @Model.MailDelay)
+				{
+					if (@delay.Key == Model.Extension.VoicemailDelay)
+					{
+									<option value="@delay.Key" selected="selected">@delay.Value</option>
+					}
+					else
+					{
+									<option value="@delay.Key">@delay.Value</option>
+					}
+
+				}
+							</select>
+						</div>
+					</div>
+					<div style="clear: both;">
+						<div class="SpaceBelow labelSetWidth">
+							Voice-Mail Email:
+						</div>
+						<input type="text" name="defaultEmail" value="@Model.Extension.VoiceMail.DefaultEmail"/>
+					</div>
+					<div style="clear: both;">
+						<div class="SpaceBelow labelSetWidth">
+							Attatch Mp3:
+						</div>
+						<div>
+							@if (@Model.Extension.VoiceMail.EmailNotificationHasMp3)
+			 {
+								<input type="checkbox" style="margin-top: 5px" value="@Model.Extension.VoiceMail.Id" checked="checked" name="includeMp3"/>
+			 }
+			 else
+			 {
+								<input type="checkbox" style="margin-top: 5px" value="@Model.Extension.VoiceMail.Id" name="includeMp3"/>
+			 }
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<input type="submit" class="button" value="Save" style="float: right; margin-top: 10px; margin-right: 10px" />
+		</div>
+		<div style="clear: both; font-size: 15px; margin-left: 10px;">
+			@if (!string.IsNullOrEmpty(@Model.Status))
+	 {
+				@Model.Status
+	 }
+		</div>
+
+ 
+	 }
+	 else
+	 {
+		<script type="text/javascript">
+			window.location.replace("/Account/Index");
+		</script>
+	 }
+
+ }
+</div>

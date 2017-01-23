@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="AsteriskCTIClient.Views.Presence.PresenceItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Views="clr-namespace:AsteriskCTIClient.Views"
+             xmlns:viewUtilities="clr-namespace:AsteriskCTIClient.Views.ViewUtilities"
+             mc:Ignorable="d" Height="28" d:DesignWidth="200">
+  <UserControl.Resources>
+    <viewUtilities:BoolToHeightConverter x:Key="BoolToHeightConverter" />
+  </UserControl.Resources>
+  <Button Click="Button_Click" BorderThickness="0,0,0,1">
+    <Button.ContextMenu>
+      <ContextMenu x:Uid="userContextMenu" x:Name="userContextMenu">
+        <MenuItem Header="Call" Command="{Binding DialExtensionCommand}"></MenuItem>
+        <MenuItem Header="Send IM"></MenuItem>
+        <Separator></Separator>
+        <MenuItem Header="Add Favourite" Command="{Binding FavouriteOperationCommand}">
+          <MenuItem.Icon>
+            <Image Source="/Views\ViewResources\Favourite.png" />
+          </MenuItem.Icon>
+        </MenuItem>
+
+      </ContextMenu>
+    </Button.ContextMenu>
+    <Button.Template>
+      <ControlTemplate>
+
+        <Border Background="Transparent"
+                BorderBrush="Black"
+                BorderThickness="{Binding StartOfGroup, Converter={StaticResource BoolToHeightConverter}}">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="22" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="24" />
+            </Grid.ColumnDefinitions>
+
+            <Image Grid.Row="0" Margin="2,0,0,0" Width="17" Height="17" VerticalAlignment="Center">
+              <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                  <Setter Property="Source" Value="/Views\ViewResources\Available.png" />
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding Presence.PresenceStateEnum}" Value="OnCall">
+                      <Setter Property="Source" Value="/Views\ViewResources\OnPhone.png" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Presence.PresenceStateEnum}" Value="UserSetUnavailable">
+                      <Setter Property="Source" Value="/Views\ViewResources\DND.png" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Image.Style>
+            </Image>
+
+            <Grid Grid.Column="1" VerticalAlignment="Center">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35" />
+                <ColumnDefinition Width="*" />
+              </Grid.ColumnDefinitions>
+              <TextBlock Margin="5,0,0,0" Text="{Binding Extension}" Grid.Column="0" FontSize="12"
+                         VerticalAlignment="Bottom" />
+              <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Text="{Binding UserName}" FontSize="12" VerticalAlignment="Bottom" FontWeight="SemiBold" />
+                <TextBlock Margin="4,0,0,0" Text="{Binding Department}" FontSize="10" VerticalAlignment="Bottom" />
+              </StackPanel>
+            </Grid>
+            <Border HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2">
+              <Image Height="18" Width="18" Source="/Views\ViewResources\More.png" />
+            </Border>
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Button.Template>
+  </Button>
+</UserControl>

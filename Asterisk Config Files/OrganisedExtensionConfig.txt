@@ -1,0 +1,21 @@
+;;;Organised Extension Conf
+
+#include extensions_IncomingInternal.conf
+
+#include extensions_IncomingExternal.conf
+
+#include extensions_MakeInternalOrExternalCall.conf
+
+#include extensions_MakeExternalCall.conf
+
+#include extensions_MakeInternalCall.conf
+
+#include extensions_CallFromType.conf
+
+#include extensions_Utilities.conf
+
+#include extensions_Permissions.conf
+
+#include extensions_AutoAttendant.conf
+
+#include extensions_4Sight.conf

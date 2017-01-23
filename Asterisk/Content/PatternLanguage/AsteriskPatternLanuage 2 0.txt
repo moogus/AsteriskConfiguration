@@ -1,0 +1,51 @@
+DScript applies to characters matching on the 4Com Phone System
+
+**TYPES**
+
+Types must also be declared at the start of a pattern.  Types can be used in conjunction with operators and wildcards. 
+***ONLY ONE TYPE CAN BE USED PER PATTERN****	
+
+I = Internal number
+E = External
+
+**OPERATORS**
+
+'()' = Group values specified by the ',' multiple condition operator and '-' and range operator 
+
+',' = multiple condition statement 
+Example I(1000,2000,3000) : can dial only 1000 and 2000 and 3000
+
+'-' = range statement
+Example I(1000-1010) : can dial any Extension from 1000 to 1010 inclusive
+
+',' and '-' operators can be chained 
+Example I((1000-1010),(2000-2010),3001) : can dial any Extension 1000 to 1010 and 2000 to 2010 and 3001
+
+EXPLICIT DENY OPERATOR
+
+'!' = explicit deny a specific pattern
+I!1000 : cannot dial Queue 1000 
+
+Explicit deny can be used with other operators 
+I(1000,!1001,(1002-1005),(!1006-1010)) : can dial Extension 1000, cannot dial Extension 1001, can dial Extension 1002 to 1005, and cannot dial Extension dial 1006 to 1010
+
+**WILDCARDS**
+
+'_' = wildcard single number 0-9
+Example E200_ : can dial Extension 2001 to 2009
+
+'{n}' = wildcard of specified amount of numbers 0-9
+Example E2{3} : can dial any Extension from 2000 to 2999
+
+'%' = wildcard unspecified amount of numbers 0-9
+Example E2% : can dial any Voivemail starting with 2 eg 2000 or 27453 etc.
+
+Wildcards and the ',' operator can be used together
+Example I(100_,200_) : can dial 1001 to 1009 and 2001 to 2009
+Example E9(01202,01305)% : can dial any 01202  and any 01305 number on a trunk with an access code of 9
+
+Wildcards and the '!' operator can be used
+Example E9!(07%,N200_) : cannot dial numbers starting with 07 and numbers 2001 to 2009 on a trunk with an access code of 9
+Example E9(!0900%,01202%) : cannot dial any numbers starting with 0900 can dial any number starting with 01202 on a trunk with an access code of 9
+
+

@@ -1,0 +1,49 @@
+﻿@model string
+@if (User.Identity.IsAuthenticated)
+{
+	<div style="width: 1000px;">
+		<div id="message" style="float: right; margin-top: 20px; margin-right: 300px;">
+			<h1 id="messageh1" style="font-size: 15px;">@ViewBag.Message</h1>
+		</div>
+    <div style="display: none; float: right; margin-top: 20px; margin-right: 300px;" id="profilePartial">
+      <img src="../../Content/Images/ajax-loader.gif" style="margin-left: 37px;margin-bottom: 10px;" alt=""/>
+      <h1 id ="profileh1" style="font-size: 15px; ">
+        User Profile Loading....</h1>
+    </div>
+    <div style="display: none; float: right; margin-top: 20px; margin-right: 300px;" id="voiceMailPartial">
+      <img src="../../Content/Images/ajax-loader.gif" style="margin-left: 37px;margin-bottom: 10px;" alt=""/>
+      <h1 id ="voiceMailh1" style="font-size: 15px; ">
+        Voice-Mail Loading....</h1>
+    </div>
+    <div style="display: none; float: right; margin-top: 20px;" id="forwardingPartial">
+      <img src="../../Content/Images/ajax-loader.gif" style="margin-left: 37px;margin-bottom: 10px;" alt=""/>
+      <h1 id ="forwardingh1" style="font-size: 15px; ">
+        Forwarding Loading....</h1>
+    </div>
+    <div style="display: none; float: right; margin-top: 20px; margin-right: 300px;" id="passwordPartial">
+      <img src="../../Content/Images/ajax-loader.gif" style="margin-left: 37px;margin-bottom: 10px;" alt=""/>
+      <h1 id ="passwordh1" style="font-size: 15px; ">
+        Password Loading....</h1>
+    </div>
+		<div id="side">
+			<ul style="display: block; float: left;">
+				<li><a id="sideUserDetails" href="">Profile</a> </li>
+				<li><a id="sideVoiceMail" href="">Voice-Mail</a> </li>
+				<li><a id="sideForwarding" href="">Forwarding</a> </li>
+				<li><a id="sidePassword" href="">Password</a> </li>
+			</ul>
+		</div>
+	</div>
+}
+<script type="text/javascript">
+	var page;
+	$(document).ready(function () {
+		var thisConfig = {
+			isGood: "@User.Identity.IsAuthenticated"
+		};
+		page = userHomePageSetUp(thisConfig);
+
+		var message = '@ViewBag.Message';
+		page.setMessagePositions(message.length);
+	});
+</script>

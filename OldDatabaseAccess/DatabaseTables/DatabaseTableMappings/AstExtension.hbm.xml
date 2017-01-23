@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="AstExtension" table="ast_extensions">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Context" column="context"/>
+    <property name="ExtensionNumber" column="exten" />
+    <property name="Priority" column="priority" />
+    <property name="App" column="app"/>
+    <property name="Appdata" column="appdata" />
+    <property name="Order" column="fu_order" />
+    <property name="DestinationType" column="fu_destinationType" />
+    <property name="DestinationNumber" column="fuDestinationNumber" />
+    <property name="ForwardingType" column="fu_forwardingType" />
+  </class>
+
+</hibernate-mapping>

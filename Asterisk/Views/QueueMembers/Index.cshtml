@@ -1,0 +1,280 @@
+﻿@using System.Globalization
+@using ModelRepository.ModelInterfaces
+@model Asterisk.ViewModels.QueueMemberViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/queueMembers.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/addQueueMember.js" type="text/javascript"> </script>
+}
+
+<script type="text/javascript">
+    var addExtension;
+    var addQueue;
+    var queueMemberTable;
+    $(document).ready(function() {
+
+        //#region ** DataTable **
+
+        window.SetCurrentPage("Queues");
+
+        var addExtensionConfig = {
+            table: $("#membersAddExtension"),
+            columns: [{ "bSortable": false }, null, null, null, null],
+            checkBox: "#Extensions :checkbox[name='selectedExtensionId'][checked]",
+            valueType: '#Extensions',
+            addUrl: '@Url.Content("~/QueueMembers/AddExtensionsGroup")'
+        };
+
+        addExtension = addQueueMember(addExtensionConfig);
+
+        var addQueueConfig = {
+            table: $("#membersAddQueue"),
+            columns: [{ "bSortable": false }, null, null, null],
+            checkBox: "#Queues :checkbox[name='selectedQueueId'][checked]",
+            valueType: $('#Queues'),
+            addUrl: '@Url.Content("~/QueueMembers/AddQueuesGroup")'
+        };
+
+        addQueue = addQueueMember(addQueueConfig);
+
+        var queueMemeberConfig = {
+            table: $('#queueMembers'),
+            columns: [{ "bSortable": false }, null, null, null, null, null, null, { "bSortable": false }],
+            queueNumber: @Model.Queue.Number.ToString(CultureInfo.InvariantCulture),
+            deleteUrl: '@Url.Content("~/QueueMembers/RemoveFromGroup")',
+            tableVariableName: 'queueMemberTable',
+            addExtensionName: 'addExtension',
+            addQueueName: 'addQueue'
+        };
+
+        queueMemberTable = queueMember(queueMemeberConfig);
+
+        //#endregion ** DataTable **
+
+    });
+</script>
+
+<div id="penaltyInfo" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent'>
+        <h1>
+            Penalty</h1>
+        <table class='dataTable'>
+            <thead>
+                <tr>
+                    <th>
+                        Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class='odd'>
+                    <td><b>Sets the preference for a queue member to receive calls within a queue. The higher the number value the lower the preference.<br />
+                            <br />
+                            Setting all members to an equal value creates equal call distribution. </b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="pausedInfo" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent'>
+        <h1>
+            Paused</h1>
+        <table class='dataTable'>
+            <thead>
+                <tr>
+                    <th>
+                        Value</th>
+                    <th>
+                        Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class='odd'>
+                    <td><b>1</b></td>
+                    <td><b>sets the queue member as unavailable to recieve calls held in this queue </b></td>
+                </tr>
+                <tr class='even'>
+                    <td><b>0</b></td>
+                    <td><b>sets the queue member as available to recieve calls held in this queue </b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div style="float: right">
+    <p class="CurrentObjectInfo">
+        You are editing the queue members for <b>Queue @Model.Queue.Number</b></p>
+</div>
+
+<div style="margin-bottom: 5px;">
+    <a href="@Url.Content("~/GroupAdmin/Index")" class="linkFormat">...return to Queues</a>
+</div>
+
+<div class='description'>
+    <p>
+        Add extensions and queues to as members by selecting them in the bottom tables.</p>
+    <p>
+        Remove members by selecting them in the top table.</p>
+</div>
+
+<form id="QueueMs" method="GET">
+    <input type="hidden" name="queueNumber" value="@Model.Queue.Number"/>
+    <table id="queueMembers">
+        <thead>
+            <tr>
+                <th>
+                </th>
+                <th>
+                    Number</th>
+                <th>
+                    Name</th>
+                <th>
+                    Department</th>
+                <th>
+                    Job Title</th>
+                <th>
+                    Penalty<a id='showPenalty' class="infoIco" /></th>
+                <th>
+                    Paused<a id='showPaused' class="infoIco" /></th>
+                <th>
+                    Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (IQueueMember e in Model.Queue.QueueMembers)
+            {
+                if (e.Type == ModelRepository.ModelInterfaces.QueueMemberType.Extension)
+                {
+                    <tr id="@e.Id">
+                        <td>
+                            <input type="checkbox" id="chMemebers" name="queueMemeberId" value="@e.Id" /></td>
+                        <td>@e.Extension.Number</td>
+                        <td>@string.Format("{0} {1}", @e.Extension.FirstName, @e.Extension.LastName)</td>
+                        <td>@e.Extension.Department</td>
+                        <td>@e.Extension.JobTitle</td>
+                        <td>@e.Penalty</td>
+                        @if (@e.Paused == 1)
+                        {
+                            <td>yes</td>
+                        }
+                        else
+                        {
+                            <td>no</td>
+                        }
+                        <td><a class="edit" href="">Edit</a> </td>
+                    </tr>
+                }
+                else if (e.Type == ModelRepository.ModelInterfaces.QueueMemberType.Queue)
+                {
+                    <tr id="@e.Id">
+                        <td>
+                            <input type="checkbox" id="chMemebers" name="queueMemeberId" value="@e.Id" /></td>
+                        <td>@e.Queue.Number</td>
+                        <td></td>
+                        <td>@e.Queue.Department</td>
+                        <td>@e.Queue.Strategy</td>
+                        <td>@e.Penalty</td>
+                        @if (@e.Paused == 1)
+                        {
+                            <td>yes</td>
+                        }
+                        else
+                        {
+                            <td>no</td>
+                        }
+                        <td><a class="edit" href="">Edit</a></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</form>
+
+<div style='clear: both'>
+    <br />
+    <br />
+</div>
+
+<div id="selectExtensionTable" style="float: left;">
+    <form id="Extensions" method="GET">
+        <input type="hidden" name="queueNumber" value="@Model.Queue.Number"/>
+        <table id="membersAddExtension" class="dataTable" style="width: 550px">
+            <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        Number</th>
+                    <th>
+                        Name</th>
+                    <th>
+                        Department</th>
+                    <th>
+                        Job Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (IExtension e in Model.ListOfExtensions)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="chExtensions" name="selectedExtensionId" value="@e.Id" />
+                        </td>
+                        <td>@e.Number</td>
+                        <td>@string.Format("{0} {1}", @e.FirstName, @e.LastName)</td>
+                        <td>@e.Department</td>
+                        <td>@e.JobTitle</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<div id="selectQueueTable" style="float: left; margin-left: 20px;">
+    <form id="Queues" method="GET">
+        <input type="hidden" name="queueNumber" value="@Model.Queue.Number"/>
+        <table id="membersAddQueue" class="dataTable" style="width: 550px;">
+            <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        Number</th>
+                    <th>
+                        Name</th>
+                    <th>
+                        Strategy</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (IQueue q in Model.ListOfQueues)
+                {
+                    //do not let the user add th current Queue
+                    if (q.Number != Model.Queue.Number)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="chQueues" name="selectedQueueId" value="@q.Number" />
+                            </td>
+                            <td>@q.Number</td>
+                            <td>@q.QueueName</td>
+                            <td>@q.Strategy</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </form>
+</div>

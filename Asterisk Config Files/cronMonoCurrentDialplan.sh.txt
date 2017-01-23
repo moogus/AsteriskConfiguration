@@ -1,0 +1,13 @@
+#!/bin/bash
+
+/usr/bin/mono /home/CronDialplanCheck/Release/SetCurrentDialplan.exe > /home/CronDialplanCheck/joboutput
+
+
+#
+#to be placed in /home/CronDialplanCheck/
+#The relase folder for the SetCurrentDialplan.exe need to in there two
+#
+#
+#crontab -e --to edit the cronjob set up the folowing below
+#
+# */1 * * * * /home/CronDialplanCheck/cronMonoCurrentDialplan.sh

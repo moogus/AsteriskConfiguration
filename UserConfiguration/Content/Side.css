@@ -1,0 +1,104 @@
+﻿#side
+{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-top: -10px;
+  margin-left: -12px;
+  display: block;
+  width: 75px;
+}
+#side ul li
+{
+  padding-left: 1px;
+  padding-right: 1px;
+  display: block;
+  width: 100%;
+}
+
+#side ul li.current
+{
+  background-color: #e1e1e1;
+  width: 100%;
+  background: -webkit-linear-gradient(top, #f1f1f1, #e1e1e1);
+}
+
+#side ul li a
+{
+  display: inline-block;
+  padding-top: 15px;
+  float: left;
+  height: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 12pt;
+  text-decoration: none;
+  color: #444;
+}
+
+#side ul li a.current
+{  
+  background: -webkit-linear-gradient(left, #f1f1f1, #fff);
+  width: 100%;
+  border-left: 1px solid #f9f9f9;
+}
+
+#side ul li a:hover
+{
+  width: 100%;
+  background: -webkit-linear-gradient(top, #f1f1f1, #d2ecf0);
+}
+div.modalContentLighter
+{
+
+    background: white;
+    width: 400px;
+   
+}
+div.modalBackgroundLighter
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height:100%;
+    width:100%;
+    background: #000;
+    opacity: 0.2;
+    z-index: 1000;
+}
+
+div.SpaceBelow {
+  margin: 5px;
+}
+div.Alert {
+  color: red;
+}
+.ButtonRight {
+  float: right; 
+  margin-bottom: 7.5px; 
+  margin-right:15px;
+}
+p.modalSmallP 
+{
+  clear: both;
+  font-size: 12.5px;
+}
+div.labelSetWidth {
+float:left;  
+width: 100px;  
+}
+div.labelSetWidth2 {
+float:left;  
+width: 125px;  
+}
+#test ul {
+	list-style: none;
+	padding:0;
+	margin:0;
+}
+#test li {
+  display: inline;
+	border: solid;
+	border-width: 1px 1px 0 1px;
+	margin: 0 0.5em 0 0;
+}

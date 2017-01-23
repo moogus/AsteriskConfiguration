@@ -1,0 +1,4 @@
+;musiconhold.conf
+[default]
+mode=files
+directory=moh

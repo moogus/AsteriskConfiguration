@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ECB132F6-D702-47EF-8E6B-22FB2DEFA05F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OldDatabaseAccess</RootNamespace>
+    <AssemblyName>OldDatabaseAccess</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DatabaseTables\AstExtension.cs" />
+    <Compile Include="DatabaseTables\AstQueue.cs" />
+    <Compile Include="DatabaseTables\AstQueueMember.cs" />
+    <Compile Include="DatabaseTables\AstSipFriend.cs" />
+    <Compile Include="DatabaseTables\AstVoicemail.cs" />
+    <Compile Include="DatabaseTables\FuAutoAttendant.cs" />
+    <Compile Include="DatabaseTables\FuAutoAttendantRules.cs" />
+    <Compile Include="DatabaseTables\FuContactDetails.cs" />
+    <Compile Include="DatabaseTables\FuCurrentDialplan.cs" />
+    <Compile Include="DatabaseTables\FuDDIs.cs" />
+    <Compile Include="DatabaseTables\FuDefaults.cs" />
+    <Compile Include="DatabaseTables\FuDialPlan.cs" />
+    <Compile Include="DatabaseTables\FuDialplanDate.cs" />
+    <Compile Include="DatabaseTables\FuDialplanRange.cs" />
+    <Compile Include="DatabaseTables\FuRingtone.cs" />
+    <Compile Include="DatabaseTables\FuUserConfig.cs" />
+    <Compile Include="DatabaseTables\IDatabaseTable.cs" />
+    <Compile Include="DatabaseTables\SessionWrapper.cs" />
+    <Compile Include="Models\AccessCode.cs" />
+    <Compile Include="Models\AutoAttendant.cs" />
+    <Compile Include="Models\AutoAttendantRules.cs" />
+    <Compile Include="Models\CurrentDialPlan.cs" />
+    <Compile Include="Models\DDI.cs" />
+    <Compile Include="Models\Default.cs" />
+    <Compile Include="Models\Dialplan.cs" />
+    <Compile Include="Models\DialplanDate.cs" />
+    <Compile Include="Models\DialplanRange.cs" />
+    <Compile Include="Models\Extension.cs" />
+    <Compile Include="Models\Queue.cs" />
+    <Compile Include="Models\QueueMember.cs" />
+    <Compile Include="Models\RingTone.cs" />
+    <Compile Include="Models\RoutingRule.cs" />
+    <Compile Include="Models\SipTrunk.cs" />
+    <Compile Include="Models\UserConfig.cs" />
+    <Compile Include="Models\Voicemail.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\AstExtension.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\AstQueue.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\AstQueueMember.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\AstSipFriend.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\AstVoicemail.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuAutoAttendant.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuAutoAttendantRules.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuContactDetails.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuCurrentDialplan.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDDI.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDefaults.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDialplan.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDialplanDate.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDialplanRange.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuRingtone.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuUserConfig.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

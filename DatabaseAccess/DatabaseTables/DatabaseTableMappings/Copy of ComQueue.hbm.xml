@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="ComQueue" table="com_queues">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Number" column="Number" />
+    <property name="Notes" column="Notes" />
+    <property name="QueueName" column="QueueName" />
+    <property name="Department" column="Department" />
+    <property name="Strategy" column="Strategy" />
+    <property name="RingOnBusy" column="RingOnBusy" />
+    <property name="DDINumber" column="DDINumber" />
+    <property name="VoiceMailId" column="VoiceMailId" />
+    <property name="VoicemailDelay" column="VoicemailDelay" />
+    <property name="CLIId" column="CliId" />
+    <property name="ComMusicOnHoldId" column="com_musiconholdId" />
+    <property name="IncludeInDirectory" column="IncludeInDirectory" />
+  </class>
+</hibernate-mapping>

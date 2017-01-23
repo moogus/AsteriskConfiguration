@@ -1,0 +1,71 @@
+﻿.tabbedPopUp { width: 500px; }
+
+.tabTableText {
+    font-family: calibri;
+    font-size: 10pt;
+}
+
+.tabTableSetButtonPosition { margin-bottom: 20px; }
+
+#valueCustom {
+    margin-right: 10px;
+    margin-top: 20px;
+    width: 125px;
+}
+
+.valueCustom {
+    margin-right: 10px;
+    margin-top: 20px;
+    width: 125px;
+}
+
+#customLabel { margin-right: 10px; }
+
+.ui-tabs {
+    padding: .1em;
+    position: relative;
+    zoom: 1;
+}
+/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+
+.ui-tabs .ui-tabs-nav {
+    background: #e1e2e1;
+    margin: 0;
+    padding: .2em .2em 0;
+}
+
+.ui-tabs .ui-tabs-nav li {
+    border-bottom: 0 !important;
+    float: left;
+    list-style: none;
+    margin: 0 .1em .5px 0;
+    padding: 0;
+    position: relative;
+    top: .5px;
+    white-space: nowrap;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    float: left;
+    padding: .35em 1em;
+    text-decoration: none;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+    margin-bottom: 0;
+    padding-bottom: 1px;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
+/* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+
+.ui-tabs .ui-tabs-panel {
+    background: #fff;
+    border-width: 0;
+    display: block;
+    padding: 1em 1.4em;
+}
+
+.ui-tabs .ui-tabs-hide { display: none !important; }

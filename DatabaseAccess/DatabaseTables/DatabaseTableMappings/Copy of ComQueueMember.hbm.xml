@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="ComQueueMember" table="com_queueMembers">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="ParentQueueId" column="ParentQueueId" />
+    <property name="Penalty" column="Penalty" />
+    <property name="Paused" column="Paused" />
+    <property name="Type" column="Type" />
+    <property name="ExtensionId" column="ExtensionId" />
+    <property name="QueueId" column="QueueId" />
+   </class>
+</hibernate-mapping>

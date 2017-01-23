@@ -1,0 +1,85 @@
+﻿@model ModelAccess.Models.IExtension
+@{
+    Layout = null;
+}
+
+<div style="margin-left: 75px;  width:300px; padding-left:50px; padding-right: 20px; ">
+
+@using (Html.BeginForm())
+{
+  <div style="height: 10px;">
+		</div>
+  <div class='modalContentLighter' style="width: 300px;">
+   <div id="profileHeader" style="background-color:#f1f1f1; margin-left: -50px; margin-right: -45px; margin-top: -10px; text-align: center; ">
+      <h1 style="padding-top: 5px;" >Profile Information</h1>
+    </div>
+		
+    <fieldset>
+		
+		 <p class="SpaceBelow" style="margin-left: -40px; margin-right: -40px;" >
+          The data saved here will be displayed in the phone systems' address book.
+        </p>
+		
+      <div>
+        
+        <div style="margin-top: 10px; clear: both;">
+          @Html.HiddenFor(m => m.Id)
+        </div>
+        <div >
+          <div class="SpaceBelow labelSetWidth" >
+            First Name:</div>
+          <div>
+            @Html.EditorFor(m => m.FirstName)
+          </div>
+        </div>
+
+        <div style="clear:both;" >
+          <div class="SpaceBelow labelSetWidth" >
+            Last Name:</div>
+          <div>
+            @Html.EditorFor(m => m.LastName)
+          </div>
+        </div>
+        
+        <div style="clear:both;">
+          <div class="SpaceBelow labelSetWidth" >
+            Email:
+          </div>
+          <div>
+            @Html.EditorFor(m => m.Email)
+          </div>
+        </div>
+
+        <div style="clear:both;">
+          <div class="SpaceBelow labelSetWidth"  >
+            Department:
+          </div>
+          <div>
+            @Html.EditorFor(m => m.Department)
+          </div>
+        </div>
+
+        <div style="clear:both; margin-left: 0px;" class="SpaceBelow">
+          <div  class="SpaceBelow labelSetWidth" >
+            Job Title:
+          </div>
+          <div>
+            @Html.EditorFor(m => m.JobTitle)
+          </div>
+        </div>
+			
+      </div>
+
+    <p>
+      <input type="submit" class="button ButtonRight" style="margin-top: 15px;margin-right:0px; " value="Save"  />
+    </p>
+		
+		</fieldset>
+
+  </div>
+
+}
+
+	</div>
+
+

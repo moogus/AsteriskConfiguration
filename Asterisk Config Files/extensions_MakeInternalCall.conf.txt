@@ -1,0 +1,72 @@
+;;;;MAKE INTERNAL CALL
+;;How to make an internal call
+;;Call using GoSub(MakeInternalCall,number,1)
+
+[MakeInternalCall]
+;;the two lines below need to be moved to a new method
+exten => _X.,1,Set(TEST=${ODBC_CURRENTDIALPLAN()})
+same => n,GoSub(CallRRs,${EXTEN},1(${TEST},TRUE))
+same => n,GoSub(CallExtensions,${EXTEN},1)
+same => n,GoSub(CallDDIs,${EXTEN},1)
+same => n,GoSub(CallQueues,${EXTEN},1)
+same => n,GoSub(CallUnknownDest,${EXTEN},1)
+
+[CallUnknownDest]
+exten => _X.,1,Set(ISROUTINGRULE=${ODBC_ISROUTINGRULE(13,"Any")})
+same => n,GotoIf($[${ISROUTINGRULE} = 1]?IsRr)
+same => n,Return()
+same => n(IsRr),Set(EXTNO=${ODBC_GETNUMBERFROMRR(13,"Any")})
+same => n,Set(EXTTYPE=${ODBC_GETTYPEFROMRR(13,"Any")})
+same => n,Macro(CallFromType,${EXTTYPE},${EXTNO},${ARG1}${EXTEN})
+
+[CallRRs]
+exten =>_X.,1,SET(DIALPLAN=${ARG1})
+same => n,SET(NUMBER=${EXTEN})
+same => n,SET(CHECKDEFAULT=${ARG2})
+same => n,Set(ISROUTINGRULE=${ODBC_ISROUTINGRULE(${DIALPLAN},${NUMBER})})
+same => n,GotoIf($[${ISROUTINGRULE} = 1]?IsRr)
+;recusive call on default dialplan
+same => n,GotoIf($[${CHECKDEFAULT} = TRUE]?TryDefaut)
+same => n,Return()
+same => n(TryDefaut),GoSub(CallRRs,${NUMBER},1(1,FALSE))
+same => n,Return()
+same => n(IsRr),Set(EXTNO=${ODBC_GETNUMBERFROMRR(${ARG1},${EXTEN})})
+same => n,Set(EXTTYPE=${ODBC_GETTYPEFROMRR(${ARG1},${EXTEN})})
+same => n,Macro(CallFromType,${EXTTYPE},${EXTNO},${EXTEN})
+
+[CallDDIs]
+exten => _X.,1,Set(ISDDI=${ODBC_ISDDI(${EXTEN})})
+same => n,GotoIf($[${ISDDI} = 1]?IsDdi)
+same => n,Return()
+same => n(IsDdi),Set(DDITYPE=${ODBC_GETDDITYPE(${EXTEN})})
+same => n,Goto(${DDITYPE})
+same => n(NotUsed),Return()
+same => n(Extension),Set(EXTNO=${ODBC_GETNUMBERFROMDDIEXT(${EXTEN})})
+same => n,Macro(CallFromType,Extension,${EXTNO})
+same => n(Queue),Set(QUENO=${ODBC_GETNUMBERFROMDDIQUE(${EXTEN})})
+same => n,Macro(CallFromType,Group,${QUENO})
+same => n(Rule),Set(TEST=${ODBC_CURRENTDIALPLAN()})
+same => n,GoSub(CallRRs,start,1(${TEST},${EXTEN}))
+same => n(Default),GoSub(CallRRs,${EXTEN},1(12))
+
+[CallExtensions]
+exten => _X.,1,Set(ISEXT=${ODBC_ISEXT(${EXTEN})})
+same => n,GotoIf($[${ISEXT} = 1]?IsExt)
+same => n,Return()
+;determine if the phone is on forward
+same => n(IsExt),Set(ONFORWARD=${ODBC_ISONFORWARD(${EXTEN})})
+same => n,GotoIf($[${ONFORWARD} = 1]?Forward)
+;not on forward call number
+;Set the CallerId
+;same => n,SET(CALLERID(name)=${ODBC_GETCALLERIDNAME(${EXTEN})})
+same => n,Macro(CallFromType,Extension,${EXTEN})
+;on Forward 
+same => n(Forward),Set(NUMBER=${ODBC_GETNUMBERFROMRR(6,${EXTEN})})
+same => n,GoSub(MakeInternalCall,${NUMBER},1)
+
+[CallQueues]
+exten => _X.,1,Set(ISQ=${ODBC_ISQUEUE(${EXTEN})})
+same => n,GotoIf($[${ISQ} = 1]?IsQ)
+same => n,Return()
+same => n(IsQ),Macro(CallFromType,Group,${EXTEN})
+

@@ -1,0 +1,83 @@
+﻿<script type="text/javascript">
+     var createRouteToPicker = function() {
+         var heldValue;
+
+         var publicMembers = picker({ title: "Add Route", width: "1200", moveLeft: "600", moveTop: "10" });
+
+         var baseshow = publicMembers.show;
+         publicMembers.show = function(value) {
+             heldValue = value;
+             baseshow();
+         };
+
+         publicMembers.showAddTabs = function(basediv) {
+
+             var makevalue = function(type, id) { return type + ", " + $('#' + id).val(); };
+             var routeTab = addStaticTabWithTextInput('Route');
+             routeTab.makeValue = makevalue.curry('Route');
+
+             var extTab = addAjaxTabWithRadio('Extension', '@Url.Content("~/ExtensionAdmin/ExtensionData")', [
+                     ["", function(a) { return "Extension, " + a.Number; }],
+                     ["Number", function(a) { return a.Number; }],
+                     ["Name", function(a) { return a.FullName; }],
+                     ["Department", function(a) { return a.Department; }],
+                     ["Job Title", function(a) { return a.JobTitle; }]
+                 ],
+                 heldValue);
+
+             var queueTab = addAjaxTabWithRadio('Queue', '/GroupAdmin/QueueData', [
+                     ["", function(a) { return "Group, " + a.Number; }],
+                     ["Number", function(a) { return a.Number; }],
+                     ["Name", function(a) { return a.QueueName; }]
+                 ],
+                 heldValue);
+
+             var autoAttTab = addAjaxTabWithRadio('Auto Attendant', '/AutoAttendant/AutoAttendantData', [
+                     ["", function(a) { return "AutoAttendant, " + a.Name; }],
+                     ["Name", function(a) { return a.Name; }]
+                 ],
+                 heldValue);
+
+             var voiceMailTab = addAjaxTabWithRadio('Voice Mail', '/VoiceMail/VoiceMailData', [
+                     ["", function(a) { return "Voicemail, " + a.Number; }],
+                     ["Number", function(a) { return a.Number; }]
+                 ],
+                 heldValue);
+
+             var ringtoneTab = addAjaxTabWithRadio('Ringtones', '/Ringtones/RingToneData', [
+                     ["", function(a) { return "Ringtone, " + a.Name; }],
+                     ["Name", function(a) { return a.Name; }]
+                 ],
+                 heldValue);
+
+             var soundFileTab = addStaticTabWithTextInput('Sound File');
+             soundFileTab.makeValue = makevalue.curry('Playback');
+
+             var addCodeTab = addStaticTabWithTextInput('Add Code');
+             addCodeTab.makeValue = makevalue.curry('AddCode');
+
+             var externalTab = addStaticTabWithTextInput('External Number');
+             externalTab.makeValue = makevalue.curry('External');
+
+             var removeTab = addRemoveTab();
+
+             publicMembers.addTab(routeTab);
+             publicMembers.addTab(extTab);
+             publicMembers.addTab(queueTab);
+             publicMembers.addTab(autoAttTab);
+             publicMembers.addTab(voiceMailTab);
+             publicMembers.addTab(ringtoneTab);
+             publicMembers.addTab(soundFileTab);
+             publicMembers.addTab(externalTab);
+             publicMembers.addTab(addCodeTab);
+             publicMembers.addTab(removeTab);
+
+         };
+
+         publicMembers.linkText = "Route Picker";
+
+         return publicMembers;
+
+
+     };
+ </script>

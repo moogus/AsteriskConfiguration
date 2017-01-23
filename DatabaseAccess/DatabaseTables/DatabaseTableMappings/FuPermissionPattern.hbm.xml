@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="FuPermissionPattern" table="fu_permissionPattern">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Pattern" column="fu_pattern"/>
+    <property name="Name" column="fu_name"/>
+  </class>
+
+</hibernate-mapping>

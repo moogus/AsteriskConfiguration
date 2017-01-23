@@ -1,0 +1,13 @@
+[general]
+context=incoming
+allowguest=no
+srvlookup=yes
+udpbindaddr=0.0.0.0
+tcpenable=yes
+videosupport=yes
+#exec /etc/asterisk/dbregister.pl
+rtcachefriends=yes
+callcounter=yes
+notifycid=yes
+canreinvite = nonat ;this setting allows the internal 4COM program to adjust SipHeaders but excludeds external changes
+dtmfmode=auto

@@ -1,0 +1,35 @@
+﻿<script type="text/javascript">
+
+     var createPermisionApplicationPicker = function() {
+         var heldValue;
+
+         var publicMembers = picker({ title: "Add Extensions", width: "550" });
+
+         var baseshow = publicMembers.show;
+         publicMembers.show = function(value) {
+             heldValue = value;
+             baseshow();
+         };
+
+         publicMembers.showAddTabs = function(basediv) {
+             var knownPattern = addAjaxTabWithCheckBox('Available Extensions', '/ExtensionAdmin/ExtensionData', [
+                     ["", function(a) { return a.Number; }],
+                     ["Extension Number ", function(a) { return a.Number; }],
+                     ["Name ", function(a) { return a.FullName; }],
+                     ["Department", function(a) { return a.Department; }],
+                     ["Position", function(a) { return a.JobTitle; }]
+                 ],
+                 heldValue);
+
+             var customPattern = addStaticTabWithTextInput('Custom Number');
+             publicMembers.addTab(knownPattern);
+             //publicMembers.addTab(customPattern);
+         };
+
+         publicMembers.linkText = "Number Picker";
+
+         return publicMembers;
+
+     };
+
+ </script>

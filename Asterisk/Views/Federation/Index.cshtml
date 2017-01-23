@@ -1,0 +1,171 @@
+﻿@{
+    ViewBag.Title = "Federation Administration";
+}
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+    <link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+    <script src="../../Javascript/Modal Interfaces/modalDialog.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/picker.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/pickerTabFactory.js" type="text/javascript"> </script>
+}
+@{
+    @Html.Partial("Pickers/FederationCredentialPicker")
+
+    @Html.Partial("Pickers/SingleAccessCodePicker")
+}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        window.SetCurrentPage("Federation");
+
+        $("#showPickerInfo").click(function(e) {
+            $("#trunkPickerInfo").show('fast');
+            e.preventDefault();
+        });
+        $(".modalClose").click(function(e) {
+            $("#trunkPickerInfo").hide('fast');
+            e.preventDefault();
+        });
+
+        $("#showCodeInfo").click(function(e) {
+            $("#accessCodeInfo").show('fast');
+            e.preventDefault();
+        });
+        $(".modalClose").click(function(e) {
+            $("#accessCodeInfo").hide('fast');
+            e.preventDefault();
+        });
+
+        var trunkDetailsPicker = createFedrationInfoPicker();
+        trunkDetailsPicker.hideBri = true;
+        trunkDetailsPicker.tabTitle = 'Federation Values';
+        trunkDetailsPicker.linkText = 'Federation Values';
+
+        var singleAccessCodePicker = createSingleAccessCodePicker();
+
+        var tableConfig = {
+            table: $("#federation"),
+            source: "FederationData",
+            columnTypes: [idColumn(),
+                editTextColumn(),
+                editTextColumn(),
+                dropdownColumn(['4Com', 'Samsung']),
+                pickerColumn(singleAccessCodePicker),
+                pickerColumn(trunkDetailsPicker),
+                editColumn(),
+                deleteColumn()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&name=" + encodeURI(inputs[1]) + "&description=" + encodeURI(inputs[2]) + "&fedType=" + encodeURI(inputs[3]) +
+                    "&accessCode=" + encodeURI(inputs[4] + ':1') + "&info=fedtrunk," + encodeURI(inputs[5]);
+            }
+        };
+        dynamicTable(tableConfig);
+
+    });
+</script>
+
+<div class='description' style="clear: both">
+    <p>
+        Federation allows connections between other systems and the 4Com phone system.</p>
+</div>
+
+<table id="federation">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Name</th>
+            <th>
+                Description</th>
+            <th>
+                Type</th>
+            <th>
+                Connection Code<a id='showCodeInfo' class="infoIco" /></th>
+            <th>
+                Credentials<a id='showPickerInfo' class="infoIco" /></th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div id="trunkPickerInfo" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent'>
+        <h1>
+            Setting Trunk Values</h1>
+        <table class='dataTable'>
+            <thead>
+                <tr>
+                    <th>
+                        When setting up a Federation link the details should be completed as follows:</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr class='odd'>
+                    <td><b>User Name & Password: </b>
+                        <br />
+                        The name or number, and password used by both systems to identify and authenticate. (Federation links between 2 4Com systems do not require a password)
+                    </td>
+                </tr>
+                <tr class='even'>
+                    <td><b>Host: </b>
+                        <br />
+                        The IP Address of the connecting system.
+                    </td>
+                </tr>
+                <tr class='odd'>
+                    <td><b>Channels: </b>
+                        <br />
+                        The number of live calls allowed between the two systems.
+                    </td>
+                </tr>
+                <tr class='even'>
+                    <td><b>CLI Type: </b>
+                        <br />
+                        The type of alteration the connecting system will perform to incoming numbers.
+                    </td>
+                </tr>
+                <tr class='odd'>
+                    <td><b>CLI Value: </b>
+                        <br />
+                        The character(s) expected from the CLI Type.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="accessCodeInfo" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent'>
+        <h1>
+            Setting Connection Code</h1>
+        <table class='dataTable'>
+            <thead>
+                <tr>
+                    <th>
+                        Please be aware:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class='odd'>
+                    <td>The connection code is presented by the 4Com system and is used by the connecting phone system as an access code. 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

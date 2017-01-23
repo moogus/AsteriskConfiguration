@@ -1,0 +1,115 @@
+﻿<script type="text/javascript">
+
+     var emptyValues = 0;
+
+     var createSingleAccessCodePicker = function() {
+         var publicMembers = picker({ title: "Set Connection Code", width: '450' });
+         var baseshow = publicMembers.show;
+
+
+         publicMembers.show = function(value) {
+             emptyValues = 0;
+             baseshow();
+             publicMembers.setCurrentValues(value);
+         };
+
+         publicMembers.showAddTabs = function(basediv) {
+
+             var accessCodePicker = addStaticTab('Set Connection Code');
+
+             accessCodePicker.html = " <div style=\"width: 325px\">  <div class=\"accessCodeLeft\"> <div style=\"width: 155px; clear: both\"> <label style=\"margin-left:2px; padding-top:2px\">Access Code</label> <input type=\"text\" id=\"code1\" style=\"margin-right: -5px; padding-top:2px\" /> </div> " +
+                 "<div style=\"clear: both; height: 2px\"> <br /> </div> <div style=\" width: 250px; clear: both\"> </div> <div style=\" width: 250px; clear: both\">" +
+                 " </div> </div>  <div style=\"padding-top: 5px; width: 400px; clear: both\"> <label id=\"messageUser\" style=\"color: red;font-weight: bold; margin-top:2px\"></label></div>  </div>" + accessCodePicker.html;
+
+             accessCodePicker.click = function(picker) {
+                 $('#code1').removeClass('hasError');
+
+                 if (privateMembers.validateAllValues()) {
+                     picker.setValueInDataTable(privateMembers.setValuesForPicker());
+                 }
+             };
+
+             //TODO this needs to be set so if the value has not been entered the button is greyed out
+             var baseAddTab1 = accessCodePicker.addTabForThisTable;
+
+             accessCodePicker.addTabForThisTable = function(parent) {
+                 baseAddTab1(parent);
+                 accessCodePicker.currentTab.find('input.button').removeAttr('disabled');
+             };
+
+             publicMembers.addTab(accessCodePicker);
+
+         };
+
+         publicMembers.setCurrentValues = function(value) {
+             var csl = value.split(',');
+             for (var i in csl) {
+                 var codeAndPriority = csl[i].split(':');
+                 $('#code' + (parseInt(i) + 1)).val(codeAndPriority[0]);
+             }
+         };
+
+         publicMembers.linkText = "Connection Code";
+         return publicMembers;
+     };
+
+     var privateMembers = {
+         validateAllValues: function() {
+
+             if (privateMembers.hasValue('#code1') === false) {
+                 return false;
+             }
+
+             if (emptyValues === 2) {
+                 return false;
+             }
+             return true;
+         },
+
+         hasValue: function(input1) {
+             var t1 = true;
+             var rtn = false;
+
+             if ($(input1).val() === undefined || $(input1).val().length === 0) {
+                 t1 = false;
+             }
+
+             if (t1 === false) {
+                 $(input1).addClass('hasError');
+                 $('#messageUser').text('Every code must have a priority.');
+             }
+
+             if (t1) {
+                 if (privateMembers.validator(input1)) {
+                     rtn = true;
+                 }
+             }
+             return rtn;
+         },
+
+         validator: function(input) {
+             var regex = '^(\\d+(,\\d+)*)?$';
+             var valueToCheck = $(input).val();
+             if (valueToCheck.match(regex)) {
+                 return true;
+             } else {
+                 $('#messageUser').text('Please ensure the value entered is valid.');
+                 $(input).addClass('hasError');
+                 return false;
+             }
+
+         },
+
+         setValuesForPicker: function() {
+             var rtn = '';
+             var hasValue = $('#code1').val();
+
+             if (hasValue.length > 0) {
+                 rtn = $('#code1').val();
+             }
+
+             return rtn;
+         }
+     };
+
+ </script>

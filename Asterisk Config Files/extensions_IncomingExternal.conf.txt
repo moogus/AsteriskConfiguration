@@ -1,0 +1,116 @@
+;;Incoming External
+;;Access Trunks by dialing
+;;Called by User interaction
+
+;;The two contexts below should be one 
+[Trunks]
+exten => _X.,1,NOOP(${CALLERID(all)})
+exten => _X.,2,SET(TRUNK=${SHELL(echo "${CHANNEL:4}" | sed "s/.*@//" | sed "s/-.*//"):0:-1})
+same => n,NoOp(${TRUNK})
+same => n,GoSub(SetCallerIDFromTrunk,${EXTEN},1(${TRUNK},1))
+same => n,GoSub(MakeInternalOrExternalCall,start,1(${EXTEN},trunk,${CALLERID(num)}))
+same => n,Return()
+;include => incoming
+
+; Context that all external calls come in to
+[incoming]
+;the incoming number is never being caught--call routing now filters and directs ddis
+exten => _X.,1,NOOP(${CALLERID(all)})
+same => n,Hangup()
+
+[SetCallerIDFromTrunk]
+exten => _X.,1,SET(CALLER=${CALLERID(num)})
+same => n,SET(TRUNK=${ARG1})
+same => n,SET(PASS=${ARG2})
+same => n,SET(IsTrunk=${ODBC_ISTRUNK(${TRUNK})})
+same => n,GotoIf($[${IsTrunk} > 0]?IsTrunk)
+same => n,SET(CALLERID(all)="${ODBC_GETCALLERIDNAME(${CALLER})}" <${CALLER}>)
+same => n,Return()
+
+same => n(IsTrunk),NoOp(${LEN(${CALLER})})
+
+;;;No CallerId???
+same => n,SET(IsTrunkName=${ODBC_ISTRUNKID(${CALLER})})
+same => n,GotoIf($[${IsTrunkName} > 0]?NotKnown)
+
+;;if is the second time called goto SecondPass
+same => n,GotoIf($[${PASS} = 2]?SecondPass)
+
+same => n,SET(PresenationType=${ODBC_GETPRESENTATIONTYPE(${TRUNK})})
+same => n,SET(PresenationValue=${ODBC_GETPRESENTATIONVALUE(${TRUNK})})
+same => n,SET(PresentaionLength=${ODBC_GETPRESENTATIONLENGTH(${TRUNK})})
+same => n,GoSub(AdjustCallerID,${EXTEN},1(${PASS},${PresenationType},${PresenationValue},${PresentaionLength}))
+same => n,Return()
+
+same => n(SecondPass),SET(HasSecond=${ODBC_HASSECONDPRESENTATIONVAL(${TRUNK})})
+same => n,GotoIf($[${HasSecond} = 1]?ValidateSecond)
+same => n,GoSub(MakeInternalOrExternalCall,start,1(${EXTEN},trunk,${CALLERID(num)}))
+same => n,Return()
+
+same => n(ValidateSecond),SET(PresenationTypeSecond=${ODBC_GETOTHERPRESENTATIONTYPE(${TRUNK})})
+same => n,SET(PresenationValueSecond=${ODBC_GETOTHERPRESENTATIONVALUE(${TRUNK})})
+same => n,SET(PresentaionLengthSecond=${ODBC_GETOTHERPRESENTATIONLENGTH(${TRUNK})})
+same => n,GoSub(AdjustCallerID,${EXTEN},1(${PASS},${PresenationTypeSecond},${PresenationValueSecond},${PresentaionLengthSecond}))
+same => n,GoSub(MakeInternalOrExternalCall,start,1(${EXTEN},trunk,${CALLERID(num)}))
+same => n,Return()
+
+same => n(NotKnown),SET(CALLERID(all)="No Caller ID" <>)
+same => n,GoSub(MakeInternalOrExternalCall,start,1(${EXTEN},trunk,${CALLERID(num)}))
+same => n,Return()
+
+[AdjustCallerID]
+exten => _X.,1,SET(CALLER=${CALLERID(num)})
+same => n,SET(PASS=${ARG1})
+same => n,SET(PresenationType=${ARG2})
+same => n,SET(PresentationValue=${ARG3})
+same => n,SET(PresentaionLength=${ARG4})
+same => n,Goto(${PresenationType})
+
+same => n(StartWith),NoOp(StartWith)
+;create variable for substring
+same => n,SET(StartChar=${CALLER:0:1})
+same => n,GotoIf($[${StartChar} = ${PresentationValue}]?AdjustStart)
+same => n,GotoIf($[${PASS} = 1]?CheckForSecond)
+same => n,Return()
+
+;set caller num and name
+same => n(AdjustStart),SET(StartNumber=${CALLER:${PresentaionLength}})
+same => n,GoSub(TrunkCallerNameNumber,${StartNumber},1)
+same => n,GotoIf($[${PASS} = 1]?CheckForSecond)
+same => n,Return()
+
+same => n(EndWith),NoOp(EndWith)
+;create variable for substring
+same => n,SET(EndChar=${CALLER:-1})
+same => n,GotoIf($[${EndChar} = ${PresentationValue}]?AdjustEnd)
+same => n,GotoIf($[${PASS} = 1]?CheckForSecond)
+same => n,Return()
+
+;create start and end points for substring
+same => n(AdjustEnd),SET(ENDVAL=${MATH(${LEN(${CALLER})}-${PresentaionLength},int)})
+same => n,SET(STARTVAL=-${LEN(${CALLER})})
+same => n,SET(EndNumber=${CALLER:${STARTVAL}:${ENDVAL}})
+;set caller num and name
+same =>n,GoSub(TrunkCallerNameNumber,${EndNumber},1)
+same => n,GotoIf($[${PASS} = 1]?CheckForSecond)
+same => n,Return()
+
+same => n(RegExp),NoOp(Regex)
+same => n,SET(Number=${SHELL(echo -n "${CALLER}" | sed "${PresentationValue}")})
+same => n,GoSub(TrunkCallerNameNumber,${Number},1)
+same => n,GotoIf($[${PASS} = 1]?CheckForSecond)
+same => n,Return()
+
+same => n(None),Return()
+
+same => n(External),GoSub(TrunkCallerNameNumber,${CALLER},1)
+same => n,GotoIf($[${PASS} = 1]?CheckForSecond)
+same => n,Return()
+
+same => n(CheckForSecond),GoSub(SetCallerIDFromTrunk,${EXTEN},1(${TRUNK},2))
+
+[TrunkCallerNameNumber]
+exten => _X.,1,SET(CallerNumber=${EXTEN})
+same => n,SET(CALLERID(num)=${CallerNumber})
+same => n,SET(CALLERID(name)=${ODBC_GETCALLERNAME(${CallerNumber})})
+same => n,Return()

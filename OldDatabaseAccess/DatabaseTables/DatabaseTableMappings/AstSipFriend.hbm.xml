@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name="AstSipFriend" table="ast_sipfriends">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Type" column="type" />
+    <property name="Number" column="name" />
+    <property name="Password" column="secret"/>
+    <property name="Context" column="context"/>
+    <property name="Host" column="host" />   
+    <property name="IpAddress" column="ipaddr" />
+    <property name ="Model" column="useragent"/>
+    <property name ="StatusTime" column="regseconds"/>
+    <property name ="DefaultUser" column="defaultuser"/>
+    <property name ="SubscribeContext" column="subscribecontext"/>
+    <property name ="CallGroup" column="callgroup"/>
+    <property name ="PickupGroup" column="pickupgroup"/>
+    <property name ="AllowSubscribe" column="allowsubscribe"/>
+    <property name ="NotifyRinging" column="notifyringing"/>
+    <property name ="NotifyHold" column="notifyhold"/>
+    <property name ="NotifyCid" column="notifycid"/>
+    <property name ="Insecure" column="insecure"/>
+    <property name ="CallLimit" column="`call-limit`"/>
+
+  </class>
+
+</hibernate-mapping>

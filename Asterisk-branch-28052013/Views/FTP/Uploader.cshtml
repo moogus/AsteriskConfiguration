@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+<html>
+    <head>
+        <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+    <body>
+  
+        @using (Html.BeginForm("Uploader", "FTP", FormMethod.Post, new {enctype = "multipart/form-data"}))
+        {
+            <div style="background: #F1F1F1">
+                <input type="file" name="file" id="getFile" style="margin-top: 20px; margin-left: 10px;" />
+                <input type="hidden" id="uploadRowId" name="id"/>
+                <input type="submit" value="Upload File"  class="button" />
+            </div>
+        }
+
+    </body>
+</html>

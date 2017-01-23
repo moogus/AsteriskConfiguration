@@ -1,0 +1,32 @@
+;;UTIL
+;;Collection of assorted utilities
+
+[CheckPickUp]
+exten => _X.,1,Set(ISEXT=${ODBC_ISEXT(${EXTEN})})
+same => n,GotoIf($[${ISEXT} = 1]?IsExt)
+same => n,Set(ISKNOWN=${ODBC_ISKNOWNNUMBER(${EXTEN})})
+same => n,GotoIf($[${ISKNOWN} = 1]?IsKnown)
+same => n,Return()
+same => n(IsExt),PickUp(${EXTEN}@LocalSets)
+same => n,Return()
+same => n(IsKnown),SET(MYID=0120259${CALLERID(num)})
+;;in order to do pick the mobex on samsung need to have the main ddi....and all the stuff below...not good!!! 
+;same => n,SET(CALLERID(num)=${MYID})
+;same => n,Dial(SIP/651451@SAMSUNGTOASTERISK,,D(*59${EXTEN}))
+same => n,Return()
+
+
+[SetDnD]
+exten => s,1,Set(ODBC_SETDND(${ARG1})=${ARG2})
+same => n,Hangup()
+
+;;;;;Enable SIP hints for BLF
+[BLF_Group_1]
+exten => _other.,hint,Custom:extblf${EXTEN:5}
+exten => _X.,hint,SIP/${EXTEN} 
+
+[CheckVoiceMail]
+exten => _X.,1,Set(ISVOICEMAIL=${ODBC_ISVOICEMAIL(${EXTEN})})
+same => n,GotoIf($[${ISVOICEMAIL} = 1]?IsVoicemail)
+same => n,Return()
+same => n(IsVoicemail),VoiceMailMain(${CALLERID(num)})

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="FuAutoAttendantRules" table="fu_AutoAttendantRules">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="AaName" column="AAName"/>
+    <property name="Entry" column="entry"/>
+    <property name="Destination" column="destination"/>
+    <property name="DestinationType" column="destinationType"/>
+  </class>
+
+</hibernate-mapping>

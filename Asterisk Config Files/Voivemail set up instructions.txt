@@ -1,0 +1,44 @@
+http://www.voip-info.org/wiki/view/Asterisk+Voicemail+as+email+using+sendmail
+
+http://bernaerts.dyndns.org/linux/179-asterisk-voicemail-mp3
+
+
+
+set the client info in the file  /auth off the root.  this is then pointed to by the sendmail.cf
+
+in the local-host-names add the following:
+
+localhost
+asterisktest-VirtualBox
+
+setting up voicemessages do the following:
+1) 
+create the table in the database to add the voicemessages see MySqlTables and Views for create statement.
+
+2)
+add the following lines to the voicemail.conf 
+odbcstorage=asterisk(or whatever the connection is cann in the res_odbc)
+odbctable=ast_voicemessages(or whatever the table is called in the db)
+
+3)
+add the following commands to get up the menu select:
+$ cd ~/src/asterisk-complete/asterisk/1.8.<your version>/
+$ make menuselect
+
+select the voicemail module and REMOVE ALL STORAGE OPTIONS, why who knows but this works!!!!
+
+4)
+rebuilt the install
+$ cd ~/src/asterisk-complete/asterisk/1.8.<your version number>/
+$ ./configure
+$ make
+$ make install
+
+should just work then........fingers crossed.
+
+for ref:
+http://www.voip-info.org/wiki/view/Asterisk+Voicemail+ODBC+storage be aware the dbtable is not accurate use the one in the MySqlTables and Views
+
+http://www.asteriskguru.com/archives/image-vp347482.html
+
+rememeber to place the importVmtoDB.pl in the etc/asterisk/ folder  without this you will not be able to record personal voicemail greetings

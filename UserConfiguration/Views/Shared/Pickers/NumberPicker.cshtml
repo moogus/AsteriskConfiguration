@@ -1,0 +1,210 @@
+﻿@using ModelAccess.Models
+@model UserConfiguration.Controllers.ForwardingViewModel
+<script type="text/javascript">
+    var ThisPageCurrentNumberPickerObject;
+    var createNumberPicker = function () {
+    	var publicMembers = {
+    		           
+						updatePicker: function (pickerValue, hiddenValue) {
+                $(hiddenValue).val(pickerValue);
+            },
+
+            setValueInDataTable: function (heldValue) {
+                this.externalValueSetter(heldValue);
+                this.hidePicker();
+            },
+
+            externalValueSetter: function (value) {
+            },
+
+            linkText: "Number Picker",
+
+            showPicker: function (value) {
+            	window.ThisPageCurrentNumberPickerObject = this;
+                $('#addNumber').show('fast');
+            },
+
+            hidePicker: function () {
+                $('#addNumber').hide('fast');
+                window.ThisPageCurrentNumberPickerObject = null;
+            }
+        };
+
+        var privateMembers = {
+            initialise: function () {
+                $("#numberPickerDDI").dataTable();
+                $("#numberPickerExtns").dataTable();
+                $("#numberPickerQueue").dataTable();
+                $("#numberPickerVoiceMail").dataTable();
+                $("#tabs").tabs();
+                //Close picker
+                $(".modalClose").click(function (e) {
+                    e.preventDefault();
+                    publicMembers.hidePicker();
+                });
+            }
+        };
+
+        privateMembers.initialise();
+
+        return publicMembers;
+    };
+    
+</script>
+ 
+<div id="addNumber" class='startHidden'>
+    <div class='modalBackground modalClose' >
+    </div>
+    <div class='modalContent tabbedPopUp' style="width: 500px;">
+        <h1>
+            Add Number</h1>
+        <p>
+            Please select a type from the tabs and a number from the options presented.</p>
+        <div id="tabs" style="margin-top: 5px;">
+            <ul>
+                <li><a href="#tabs-1">DDI</a></li>
+                <li><a href="#tabs-2">Extension</a></li>
+              <li><a href="#tabs-3">Queue</a></li>
+							<li><a href="#tabs-4">Voice-Mail</a></li>
+                <li><a href="#tabs-5">Custom</a></li>
+            </ul>
+            <div id="tabs-1" style="">
+	
+                <div class="tabTableText tabTableSetButtonPosition" >
+                    <table id="numberPickerDDI" class="dataTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>
+                                    DDI Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (IDDI d in Model.DDIList.OrderBy(dd => dd.DDINumber))
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="radio" name="ddi" value="@d.DDINumber" onclick=" ThisPageCurrentNumberPickerObject.updatePicker(this.value, '#valueDDI') " /></td>
+                                    <td>@d.DDINumber</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" name="valueDDI" id="valueDDI" value="@Model.DDIList.OrderBy(dd => dd.DDINumber).First().DDINumber" />
+                <input type="button" value="Set Number" name="setNumber" class="button" onclick=" ThisPageCurrentNumberPickerObject.setValueInDataTable($('#valueDDI').val()) " />
+            </div>
+            <div id="tabs-2" class="tabTableText tabTableSetButtonPosition">
+			
+                <div style="margin-bottom: 20px;">
+                    <table id="numberPickerExtns" class="dataTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>
+                                    Number</th>
+                                <th>
+                                    Name</th>
+                                <th>
+                                    Department</th>
+                                <th>
+                                    Job Title</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (IExtension e in Model.ExtensionList.OrderBy(ee => ee.Number))
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="radio" name="extn"  value="@e.Number" onclick=" ThisPageCurrentNumberPickerObject.updatePicker(this.value, '#valueExtension') " /></td>
+                                    <td>@e.Number</td>
+                                    <td>@string.Format("{0} {1}", @e.FirstName, @e.LastName)</td>
+                                    <td>@e.Department</td>
+                                    <td>@e.JobTitle</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" name="valueExtension" id="valueExtension" value="@Model.ExtensionList.OrderBy(ee => ee.Number).First().Number" />
+                <input type="button" value="Set Number" name="setNumber" class="button" onclick=" ThisPageCurrentNumberPickerObject.setValueInDataTable($('#valueExtension').val()) " />
+            </div>
+          <div id="tabs-3" class="tabTableText tabTableSetButtonPosition">
+			
+            <div class="tabTableText tabTableSetButtonPosition">
+              <table id="numberPickerQueue" class="dataTable">
+                <thead>
+                  <tr>
+                    <th>
+                    </th>
+                    <th>
+                      Number</th>
+                    <th>
+                      Name</th>
+                    <th>
+                      Strategy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach (IQueue q in Model.QueueList.OrderBy(qq => qq.Number))
+                  {
+                    <tr>
+                      <td>
+                        <input type="radio" name="queue" value="@q.Number" onclick=" ThisPageCurrentNumberPickerObject.updatePicker(this.value, '#valueQueue') " /></td>
+                      <td>@q.Number</td>
+                      <td>@q.QueueName</td>
+                      <td>@q.Strategy</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <input type="hidden" name="valueQueue" id="valueQueue" value="@Model.QueueList.OrderBy(qq => qq.Number).First().Number"/>
+            <input type="button" value="Set Number" name="setNumber" class="button" onclick=" ThisPageCurrentNumberPickerObject.setValueInDataTable($('#valueQueue').val()) " />
+          </div>
+					<div id="tabs-4" class="tabTableText tabTableSetButtonPosition">
+			
+                <div class="tabTableText tabTableSetButtonPosition">
+                    <table id="numberPickerVoiceMail" class="dataTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>
+                                    Box Number</th>
+                                <th>
+                                    Box Name</th>
+                         
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (IVoiceMail v in Model.VoiceMailList.OrderBy(qq => qq.Number))
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="radio" name="queue" value="@v.Number" onclick=" ThisPageCurrentNumberPickerObject.updatePicker(this.value, '#valueQueue') " /></td>
+                                    <td>@v.Number</td>
+                                  <td>@v.Under.FullName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" name="valueQueue" id="valueQueue" value="@Model.QueueList.OrderBy(qq => qq.Number).First().Number"/>
+                <input type="button" value="Set Number" name="setNumber" class="button" onclick=" ThisPageCurrentNumberPickerObject.setValueInDataTable('vm ' +$('#valueQueue').val()) " />
+            </div>
+            <div id="tabs-5" class="tabTableText tabTableSetButtonPosition">
+                <p>
+                    Type a number in the textbox provided.</p>
+                <label id="customLabel">
+                    Custom:</label>
+                <input type="text" name="valueCustom" id="valueCustom"  />
+                <input type="button" value="Set Number" name="setNumber" class="button" onclick=" ThisPageCurrentNumberPickerObject.setValueInDataTable($('#valueCustom').val()) " />
+            </div>
+        </div>
+        <br />
+        Click off this window to close.
+    </div>
+</div>

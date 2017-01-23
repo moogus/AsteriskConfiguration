@@ -1,0 +1,155 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="~/Scripts/jquery-1.8.3.js"></script>
+    <link href="~/Content/tablet.css" rel="stylesheet" />
+    <title>title</title>
+    <script type="text/javascript">
+        function toArray(enu) {
+            return Array.prototype.slice.call(enu);
+        }
+
+        Function.prototype.curry = function () {
+            if (arguments.length < 1) {
+                return this; //nothing to curry with - return function
+            }
+            var method = this;
+            var args = toArray(arguments);
+            return function () {
+                return method.apply(this, args.concat(toArray(arguments)));
+            };
+        };
+
+        function eachJson(sourceUrl, action) {
+            $.getJSON(sourceUrl, function (data) {
+                $.each(data, function (index, item) {
+                    action(item);
+                });
+            });
+        }
+
+        function getFolders() {
+            eachJson('Voicemail/GetFolders', function (item) {
+                addFolder(item);
+            });
+        }
+
+        function addFolder(folder) {
+            $("#viewFolders").append("<h2>" + folder + "</h2>");
+            var tableName = "messages" + folder;
+            // $("#viewFolders").append("<table class='messages' id='" + tableName + "'><thead><tr><th>From</th><th>Id</th><th>Time</th><th>Duration</th></tr></thead><tbody></tbody></table>");
+            $("#viewFolders").append("<div class='messages' id='" + tableName + "'/>");
+
+            eachJson('Voicemail/GetMessages?folder=' + folder, addMessage.curry(tableName));
+        }
+
+        function addMessage(table, message) {
+            //$('#' + table + ' tbody').append("<tr class='messageRow' id='" + message.Id + "'><td>" + message.FromNumber + "</td><td>" + message.FromName + "</td><td>" + message.Time + "</td><td>" + message.Duration + "</td></tr>");
+            $('#' + table).append("<div class='messageRow' id='" + message.Id + "'><span class='fromNumber'>" + message.FromNumber + "</span><span class='fromName'>" + message.FromName + "</span><span class='time'>" + message.Time + "</span><span class='duration'>" + message.Duration + "</span></div>");
+        }
+
+        function showMessage(id) {
+            $("#" + id).append($("#messageDisplay"));
+        }
+
+        $(document).ready(function () {
+            getFolders();
+            $('.messageRow').live("click", function (e) {
+                $('.messageRow').removeClass("selected");
+                $(this).addClass("selected");
+                showMessage($(this).attr("id"));
+            });
+
+            var audio = $("#audio");
+            //audio.removeAttr('controls');
+            var audioElement = audio.get(0);
+            var play = $("#play");
+            var seek = $("#seek");
+            var timeRemaining = $("#timeRemaining");
+            play.live("click", function (e) {
+                var audio = $("#audio");
+                var audioElement = audio.get(0);
+                if (audioElement.ended)
+                    audioElement.currentTime = 0;
+                audioElement[audioElement.paused ? "play" : "pause"]();
+            });
+            audioElement.addEventListener('play', function () {
+                play.html('&#x2590;&#x2590;');
+            }, false);
+            audioElement.addEventListener('pause', function () {
+                play.html('&#x25BA;');
+            }, false);
+            audioElement.addEventListener('ended', function () { this.pause(); }, false);
+            seek.bind("change", function () { audioElement.currentTime = this.value; });
+            audio.bind("timeupdate", function () {
+                seek.attr("value", this.currentTime);
+                var rem = parseInt(audioElement.duration - audioElement.currentTime, 10), mins = Math.floor(rem / 60, 10), secs = rem - mins * 60;
+                timeRemaining.text('-' + mins + ':' + (secs > 9 ? secs : '0' + secs));
+            });
+            audio.bind("durationchange", function () { seek.attr("max", audioElement.duration); });
+
+        });
+
+
+    </script>
+</head>
+<body>
+  <audio id="audio" controls>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <source src='Content/test.mp3' type="audio/mpeg" />
+  </audio>
+    <div id='left'>
+        <h1>Voicemail</h1>
+        <div id="viewFolders">
+        </div>
+    </div>
+    <div id="hide">
+        <div id="messageDisplay">
+
+            <button class="control" id="play" title="play">&#x25BA;</button>
+            <input class="control" type="range" id="seek" value="0" min="0" />
+            <span class="control" id="timeRemaining">0:00</span>
+            <button class="actionControl" id="call">Call</button>
+            <button class="actionControl" id="delete">Delete</button>
+            <button class="actionControl" id="move">Move</button>
+
+        </div>
+    </div>
+</body>
+</html>

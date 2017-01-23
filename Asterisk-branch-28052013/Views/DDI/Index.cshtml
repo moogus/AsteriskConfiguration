@@ -1,0 +1,102 @@
+﻿@model IEnumerable<DatabaseAccess.ITrunk>
+@{
+    ViewBag.Title = "DDI Admin";
+}
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#rangeOpen").click(function(e) {
+            $("#addRange").show('fast');
+            e.preventDefault();
+        });
+        $(".modalClose").click(function(e) {
+            $("#addRange").hide('fast');
+            e.preventDefault();
+        });
+
+        window.SetCurrentPage("DDIs");
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var tableConfig = {
+            table: $("#ddis"),
+            source: "DDIData",
+            columnTypes: [idColumn(),
+                editTextColumn(),
+                nonEditColumn(),
+                dropdownColumn([@Html.Raw(String.Join(",", Model.Select(d => "'" + d.Name + "'")))]),
+                editColumn(),
+                deleteColumn()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&ddi=" + encodeURI(inputs[1]) + "&trunk=" + encodeURI(inputs[3]);
+            }
+        };
+        dynamicTable(tableConfig);
+
+    });
+</script>
+<div id="addRange" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent'>
+        <h1>
+            Add Range</h1>
+        <p>
+            Please enter a the lowest number in the left and the highest in the right, the range must be sequential.</p>
+        <br />
+        @using (Html.BeginForm("AddRangeDDI", "DDI", FormMethod.Post, new {enctype = "multipart/form-data"}))
+        {
+            <input type="text" name="ddiFrom" id="ddiFrom" style="margin-right: 2px;" />
+            <input type="text" name="ddiTo" id="ddiTo" />
+            <br />
+            <br />
+            <input type="submit" value="Add Range" name="AddRange" class="button" />
+        }
+        <br />
+        <br />
+        Click off this window to close.
+    </div>
+</div>
+
+<div class="dataUploader" >
+    <a href="" id="rangeOpen" class="linkFormat">Add Range...</a>
+</div>
+<br/>
+<div class='description'style="clear: both">
+    <p>
+        Each DDI that comes in on any of the connected trunks needs an entry in this table.</p>
+    <p>
+        SIP trunks normally present the full number including dialing code as the DDI whereas ISDN normally presents only the last 6 digits.</p>
+    <p>
+        If you are unsure of how the DDIs will be presented please check with the trunk provider.</p>
+    <p>
+        The "Used By" column will be automatically filled in when the DDI is assigned to an extension or route.</p>
+</div>
+
+<table id="ddis">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                DDI</th>
+            <th>
+                Used By</th>
+            <th>
+                Trunk</th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

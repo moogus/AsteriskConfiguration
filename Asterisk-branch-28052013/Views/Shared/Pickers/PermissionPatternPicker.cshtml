@@ -1,0 +1,31 @@
+﻿<script type="text/javascript">
+
+     var createPermisssionPatternPicker = function() {
+         var heldValue;
+         var publicMembers = picker({ title: "Add Pattern", width: "550" });
+
+         var baseshow = publicMembers.show;
+         publicMembers.show = function(value) {
+             heldValue = value;
+             baseshow();
+         };
+
+         publicMembers.showAddTabs = function(basediv) {
+
+             var knownPattern = addAjaxTabWithCheckBox('Current Patterns', '/PermissionPattern/PatternData', [
+                 ["", function(a) { return a.Name; }],
+                 ["Pattern Name ", function(a) { return a.Name; }],
+                 ["Pattern ", function(a) { return a.Pattern; }]
+             ], heldValue);
+
+             publicMembers.addTab(knownPattern);
+
+         };
+
+         publicMembers.linkText = "Pattern Picker";
+
+         return publicMembers;
+
+     };
+
+ </script>

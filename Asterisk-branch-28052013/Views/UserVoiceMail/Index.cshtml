@@ -1,0 +1,75 @@
+﻿@model Asterisk.ViewModels.UserVoiceMailViewModel
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm())
+{
+    <div class='modalContentLighter' style="width: 350px;">
+        <div id="voiceMailHeader" class="headUserConfig">
+            <h1>
+                Voice Mail for Extension : @Model.ExtNumber</h1>
+        </div>
+        <fieldset>
+            <input type="hidden" name="Id" value="@Model.Id"/>
+            <p class="spaceBelowLarge message">
+                Please be aware mail delay allows you to determine how long the phone will ring before transferring to voice-mail. To disable your voice-mail select the option 'voice-mail off' from mail delay.</p>
+            <div class="SpaceBelow labelSetWidth">
+                Mail Delay:</div>
+            <div>
+                <select name="MailDelay" style="width: 162px;">
+                    @{
+                        var delays = new List<Tuple<int, string>>
+                            {
+                                Tuple.Create(0, "Voice-Mail off"),
+                                Tuple.Create(5, "5 second delay"),
+                                Tuple.Create(10, "10 second delay"),
+                                Tuple.Create(15, "15 second delay"),
+                                Tuple.Create(20, "20 second delay"),
+                                Tuple.Create(25, "25 second delay"),
+                                Tuple.Create(30, "30 second delay")
+                            };
+
+                        foreach (var result in delays)
+                        {
+                            var selected = Model.MailDelay == result.Item1 ? "selected='selected'" : "";
+                            <option value="@result.Item1" @selected>@result.Item2</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div style="clear: both;">
+                <div class="SpaceBelow labelSetWidth" style="margin-top: 1px;">
+                    Voice-Mail Pin:
+                </div>
+                <input style="margin-top: 1px;" type="text" name="VoicePassword" value="@Model.VoicePassword"/>
+            </div>
+            <div style="clear: both;">
+                <div style="margin-top: 2px;" class="SpaceBelow labelSetWidth">
+                    Voice-Mail Email:
+                </div>
+                <input style="margin-top: 2px;"  type="text" name="DefaultEmail" value="@Model.DefaultEmail"/>
+            </div>
+            <div style="clear: both;" class="spaceBelowLarge">
+                <div class="SpaceBelow labelSetWidth">
+                    Attatch Mp3:
+                </div>
+                <div>
+                    @{
+
+                        var check = Model.IncludeMp3 ? "checked='checked'" : "";
+
+                        <input type="checkbox" style="margin-top: 5px" value="true" @check name="IncludeMp3"/>
+                    }
+                </div>
+            </div>
+            <div style="">
+                <a id="addGreeting" href="" onclick=" page.showCallPhoneForAudio(); return false; ">Create a personalized greeting</a>
+            </div>
+        </fieldset>
+        <input type="hidden" value="@Model.Id" name="Id"/>
+        <input type="hidden" value="@Model.ExtNumber" name="ExtNumber"/>
+	
+        <input type="submit" class="button partialButtonRight" value="Save" />
+    </div>
+}

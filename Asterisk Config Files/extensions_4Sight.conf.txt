@@ -1,0 +1,47 @@
+;;4Sight
+;;Collection of assorted 4Sight utilities
+
+
+;;;4Sight Dialing
+[AutoDial]
+exten => _X.,1,Answer()
+same=>n,NoOp(${EXTEN})
+same => n,Wait(200)
+same => n,Hangup()
+
+;;;4Sight Dial
+[CheckAutoDial]
+exten => _X.,1,SET(IsAuto=${SHELL(echo "${ARG1}" | sed "s/.*@//" | sed "s/-.*//"):0:-1})
+same => n,GotoIf($[${IsAuto} = AutoDial]?autoDial)
+same => n,Return()
+;AUTO-DIAL
+same => n(autoDial),SET(MYEXT=${SHELL(echo "${ARG1}" | sed "s/.*\///" | sed "s/@.*//"):0:-1})
+same => n,SET(MYIP=${ODBC_GETEXTENSIONIP(${MYEXT})})
+same => n,NoOp(${MYIP})
+;SNOM SPECIFIC
+same => n,System(/usr/bin/curl "http://${MYIP}/command.htm?number=${EXTEN}&outgoing_uri=URI")
+same => n,Hangup()
+
+;;;;4Sight button press
+[CheckAutoButton]
+exten => _[A-Z].,1,NoOp(${UNIQUEID} " == " ${ARG2})
+same => n,Set(MYEXT=${SHELL(echo "${ARG1}" | sed "s/.*\///" | sed "s/@.*//"):0:-1})
+same => n,NoOp(${MYEXT})
+same => n,SET(MYIP=${ODBC_GETEXTENSIONIP(${MYEXT})})
+same => n,NoOp(${MYIP})
+;SNOM SPECIFIC
+same => n,System(/usr/bin/curl "http://${MYIP}/command.htm?key=${EXTEN}")
+same => n,Hangup()
+
+;same => n,GotoIf($[${ARG1:-19:8} = AutoDial]?autoButton)
+;same => n,Return()
+
+;AUTO-BUTTON
+;same => n(autoButton),SET(MYIP=${ODBC_GETEXTENSIONIP(${ARG1:6:-20})})
+;same => n,System(/usr/bin/curl  "http://${MYIP}/command.htm?key=${EXTEN}")
+;same => n,Hangup()
+
+;;
+;;ensure curl is installed to use this 
+;;apt-get install php5-curl
+;;

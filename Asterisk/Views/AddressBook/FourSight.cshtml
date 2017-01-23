@@ -1,0 +1,21 @@
+﻿@using Asterisk.ControllerHelpers.Directory.Entry.Interfaces
+@model IOrderedEnumerable<Asterisk.ControllerHelpers.Directory.Entry.Interfaces.IDirectoryEntry>
+@{
+    Layout = null;
+}
+<?xml version="1.0" encoding="UTF-8" ?>
+<foursightdirectory>
+    <Title>4COM</Title>
+    <Prompt></Prompt>
+    @foreach (IDirectoryEntry de in Model)
+    {
+        <DirectoryEntry>
+            <FirstName>@de.FirstName</FirstName>
+            <LastName>@de.LastName</LastName>
+            <Telephone>@de.MainNumber</Telephone>
+            <Department>@de.Department</Department>
+            <DDI>@de.DDI</DDI>
+            <Type>@de.Entrytype</Type>
+        </DirectoryEntry>
+    }
+</foursightdirectory>

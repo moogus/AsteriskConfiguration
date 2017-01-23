@@ -1,0 +1,107 @@
+﻿@model  IEnumerable<string>
+@{
+    ViewBag.Title = "CLI Admin";
+}
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+}
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        window.SetCurrentPage("CLIs");
+
+
+        $("#uploadOpen").click(function(e) {
+            $("#uploader").show('fast');
+            e.preventDefault();
+        });
+        $(".modalClose").click(function(e) {
+            $("#uploader").hide('fast');
+            e.preventDefault();
+        });
+
+        var tableConfig = {
+            table: $("#clis"),
+            source: "CLIData",
+            columnTypes: [
+                idColumn(),
+                editTextColumn(),
+                editTextColumn(),
+                dropdownColumn([@Html.Raw(String.Join(",", Model.Select(d => "'" + d + "'")))]),
+                editColumn(),
+                deleteColumn()
+            ],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&cliName=" + encodeURI(inputs[1]) + "&cliNumber=" + encodeURI(inputs[2]) + "&trunk=" + encodeURI(inputs[3]);
+            }
+        };
+        dynamicTable(tableConfig);
+
+    });
+
+</script>
+
+<div class="dataUploader" style="margin-top: 2px; margin-bottom: 5px">
+    <a href="" id="uploadOpen" class="linkFormat">...Import</a>
+</div>
+<br/>
+<br/>
+<table id="clis">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                CLI Name</th>
+            <th>
+                CLI Number</th>
+            <th>
+                Trunk</th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+<div id='uploader' class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent' style="width: 600px;">
+        <h1>
+            Upload from CSV</h1>
+        <p>
+            CSV files should be formatted with the following columns; no column header is required.</p>
+        <div style="margin-top: 5px;">
+            <table class='dataTable'>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr class='odd'>
+                        <td>Name</td>
+                        <td>Number</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top: 5px;">
+            <a href=" @Url.Content("~/Content/sampleCVS/SampleCSV2.csv")" class="linkFormat">Download Example File</a>
+        </div>
+        <br />
+        @using (Html.BeginForm("UploadCliByCSV", "CLI", FormMethod.Post, new {enctype = "multipart/form-data"}))
+        {
+            <input type="file" name="file" id="file" />
+            <input type="submit" value="Upload Excel" name="uploadExcell" class="button" />
+        }
+
+        <br />
+        <br />
+        Click off this window to close.
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿.startHidden { display: none; }
+
+div.modalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    opacity: 0.8;
+    z-index: 1000;
+}
+
+div.modalContent {
+    position: fixed;
+    margin-top: -200px;
+    left: 50%;
+    background: white;
+    width: 400px;
+    margin-left: -200px;
+    z-index: 1001;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+div.modalContent h1 {
+    width: 100%;
+    font-weight: bold;
+    font-size: 14pt;
+    background: #e2e2e2;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}

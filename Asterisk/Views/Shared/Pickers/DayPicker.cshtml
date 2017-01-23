@@ -1,0 +1,116 @@
+﻿<script type="text/javascript">
+
+     var createDayPicker = function() {
+
+         var publicMembers = picker({ title: "Select Week Days", width: '225', moveTop: '-100' });
+
+         var baseshow = publicMembers.show;
+         publicMembers.show = function(value) {
+             baseshow();
+             publicMembers.setCurrentValues(value);
+         };
+
+         publicMembers.showAddTabs = function(basediv) {
+
+             var dayPicker = addStaticTab('Add Week Days');
+
+             dayPicker.html = "<table style='margin-bottom: 10px;' class='dataTable'><thead></thead><tbody><tr class='odd'><td><input name=\"day\" type=\"checkbox\" id=\"valueDaysMon\" value=\"mon\" " +
+                 " onchange=\"$('#" + dayPicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" /></td>" +
+                 "<td><b>Monday</b></td></tr><tr class='even'><td><input name=\"day\" type=\"checkbox\" id=\"valueDaysTue\" value=\"tue\"" +
+                 " onchange=\"$('#" + dayPicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" /></td>" +
+                 "<td><b>Tuesday</b></td></tr><tr class='odd'><td><input name=\"day\" type=\"checkbox\" id=\"valueDaysWed\" value=\"wed\"" +
+                 " onchange=\"$('#" + dayPicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\"/></td>" +
+                 "<td><b>Wednesday</b></td></tr><tr class='even'><td><input name=\"day\" type=\"checkbox\" id=\"valueDaysThur\" value=\"thur\" " +
+                 " onchange=\"$('#" + dayPicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" /></td>" +
+                 "<td><b>Thursday</b></td></tr><tr class='odd'><td><input name=\"day\" type=\"checkbox\" id=\"valueDaysFri\" value=\"fri\" " +
+                 "onchange=\"$('#" + dayPicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" /></td>" +
+                 "<td><b>Friday</b></td></tr><tr class='even'><td><input name=\"day\" type=\"checkbox\" id=\"valueDaysSat\" value=\"sat\" " +
+                 "onchange=\"$('#" + dayPicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" /></td>" +
+                 "<td><b>Saturday</b></td></tr><tr class='odd'><td><input name=\"day\" type=\"checkbox\" id=\"valueDaysSun\" value=\"sun\" " +
+                 " onchange=\"$('#" + dayPicker.uniqueTabId + "').find('input.button').removeAttr('disabled')\" /></td>" +
+                 "<td><b>Sunday</b></td></tr></tbody></table>" + dayPicker.html;
+
+             var baseAddTab1 = dayPicker.addTabForThisTable;
+
+             dayPicker.addTabForThisTable = function(parent) {
+                 baseAddTab1(parent);
+                 dayPicker.currentTab.find('input.button').removeClass('tabButton');
+             };
+
+             dayPicker.click = function(picker) {
+                 var csl = privateMembers.setValueDayString();
+                 picker.setValueInDataTable(csl);
+             };
+
+             publicMembers.addTab(dayPicker);
+
+         };
+
+         publicMembers.setCurrentValues = function(value) {
+             privateMembers.setDayCheckBox(value, '#valueDaysMon', 'mon');
+             privateMembers.setDayCheckBox(value, '#valueDaysTue', 'tue');
+             privateMembers.setDayCheckBox(value, '#valueDaysWed', 'wed');
+             privateMembers.setDayCheckBox(value, '#valueDaysThur', 'thur');
+             privateMembers.setDayCheckBox(value, '#valueDaysFri', 'fri');
+             privateMembers.setDayCheckBox(value, '#valueDaysSat', 'sat');
+             privateMembers.setDayCheckBox(value, '#valueDaysSun', 'sun');
+         };
+
+         var privateMembers = {
+             setValueDayString: function() {
+                 var rtn = "";
+
+                 rtn = this.buildCommaSeparatedList(rtn, 'valueDaysMon');
+                 rtn = this.buildCommaSeparatedList(rtn, 'valueDaysTue');
+                 rtn = this.buildCommaSeparatedList(rtn, 'valueDaysWed');
+                 rtn = this.buildCommaSeparatedList(rtn, 'valueDaysThur');
+                 rtn = this.buildCommaSeparatedList(rtn, 'valueDaysFri');
+                 rtn = this.buildCommaSeparatedList(rtn, 'valueDaysSat');
+                 rtn = this.buildCommaSeparatedList(rtn, 'valueDaysSun');
+
+                 return rtn;
+             },
+
+             buildCommaSeparatedList: function(commaSeparatedList, id) {
+                 var csl = "";
+                 if (this.isDayChecked(id)) {
+                     if (commaSeparatedList == "") {
+                         csl = $('#' + id).val();
+                     } else {
+                         csl = commaSeparatedList + "," + $('#' + id).val();
+                     }
+                 } else
+                     csl = commaSeparatedList;
+
+                 return csl;
+             },
+
+             isDayChecked: function(id) {
+                 return $('#' + id).is(":checked") ? true : false;
+             },
+	
+             //set the checkboxs on the day form based on the current held values
+             setDayCheckBox: function(commaSeparatedList, checkbox, day) {
+                 if (this.isInList(commaSeparatedList, ",", day) == 1) {
+                     $(checkbox).attr('checked', true);
+                 } else {
+                     $(checkbox).attr('checked', false);
+                 }
+             },
+
+             isInList: function(separatedList, listDelimiter, valueToFind) {
+                 var list = separatedList.split(listDelimiter);
+                 var rtn = 0;
+                 for (var d in list) {
+                     if (list[d] == valueToFind) {
+                         rtn = 1;
+                     }
+                 }
+                 return rtn;
+             }
+         };
+
+         publicMembers.linkText = "Day Picker";
+         return publicMembers;
+     };
+ </script>

@@ -1,0 +1,130 @@
+﻿html {
+    height: 100%;
+    font-size: 20px;
+    font-family: sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+h1 {
+    font-size: 3em;
+    margin-left: 95px;
+    margin-top: 10px;
+    font-weight: normal;
+}
+
+#left {
+    background-color: #ddd;
+    width: 40em;
+    float: left;
+    height: 100%;
+}
+
+#hide { display: none;}
+#viewFolders h2 {
+    clear: left;
+    margin-left: 1em;
+    margin-bottom: 0;
+}
+
+.messageRow { 
+    color: black;
+    padding-left: 3em;
+    float: left;
+    clear: left;
+    margin-bottom: 0.5em;
+    width: 27em;
+    background-color: #b5c9d3;
+    font-size: 1.3em;
+}
+
+.messageRow.selected { 
+    color: white;
+    height: auto;
+}
+
+.messageRow.selected .fromNumber,.duration {
+}
+
+.messageRow span { 
+    padding-right: 1em;
+    float:left
+}
+
+
+
+.messageRow .fromNumber {
+    font-weight: bold;
+}
+
+.messageRow .time {
+    clear: left;
+    float: right;
+    margin-right: -0.5em; 
+}
+
+.messageRow .duration:after {
+    content: ' seconds' ; 
+    white-space: pre;
+}
+
+#messageDisplay {
+    padding-top: 1em;
+    border-top: 1px solid white;
+    clear: left;
+}
+
+#messageDisplay .control {
+    float: left;
+    color: white;
+}
+
+#messageDisplay .actionControl {
+    float: left;
+    color: white;
+    margin-right: 1em;
+    height: 2em;
+    width: 5em;
+    border: none;
+    margin-bottom: 1em;
+    margin-top: 0.5em;
+}
+
+#messageDisplay #play {
+    margin-top: -0.35em;
+    /*margin-left: -0.9em;*/
+    background: none;
+    border: none;
+    font-size: 3em;
+}
+
+#messageDisplay #call {
+    clear: both;
+    background-color: #10f210;
+}
+
+#messageDisplay #delete {
+    background-color: #f04040;
+    
+}
+
+#messageDisplay #move {
+  
+}
+
+#seek {
+    width: 21em;
+}
+#messageDisplay #timeRemaining {
+    float: right;
+}
+
+#messageDisplay audio {
+    /*display: none;
+    width: 10px;*/
+}
+

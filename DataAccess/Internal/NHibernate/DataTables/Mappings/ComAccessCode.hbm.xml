@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+  <class name ="ComAccessCode" table="com_accessCodes">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Code" column="Code"/>
+    <property name="TrunkId" column="TrunkId"/>
+    <property name="Priority" column="Priority"/>
+  </class>
+
+</hibernate-mapping>

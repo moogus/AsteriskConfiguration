@@ -1,0 +1,61 @@
+﻿@model Asterisk.ViewModels.PermissionControllerViewModel
+@{
+    ViewBag.Title = "Pattern Admin";
+}
+@section AddToHead
+{
+    <script src="@Url.Content("~/Javascript/DynamicTable/dynamicTable.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/DynamicTable/dynamicColumn.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/modalDialog.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/picker.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/pickerTabFactory.js")" type="text/javascript"> </script>
+    <link href="@Url.Content("~/Content/TabbedModalPopup.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/datePicker.css")" rel="stylesheet" type="text/css" />
+}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        SetCurrentPage("Permissions");
+
+        var tableConfig = {
+            table: $("#patterns"),
+            source: "PatternData",
+            columnTypes: [idColumn(),
+                editTextColumn(),
+                editTextColumn(),
+                editColumn(),
+                deleteColumn()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&name=" + encodeURI(inputs[1]) + "&pattern=" + encodeURI(inputs[2]);
+            }
+        };
+        dynamicTable(tableConfig);
+
+    });
+</script>
+<div class="dataUploader"  style="float: right; margin-right: 5px;">
+    <a href="@Url.Content("~/Content/PatternLanguage/AsteriskPatternLanguage.docx")" class="linkFormat">...pattern lanuage download</a>
+</div>
+
+<div class="dataUploader"  style="margin-bottom: 10px;">
+    <a href="@Url.Content("~/PermissionClass/Index?dialplan=" + @Model.SelectedDialplan)" class="linkFormat">...return to classes</a>
+</div>
+<table id="patterns">
+
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Name</th>
+            <th>
+                Pattern</th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

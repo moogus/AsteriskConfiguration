@@ -1,0 +1,11 @@
+#!/bin/bash
+# Consume all variables sent by Asterisk
+while read VAR && [ -n ${VAR} ] ; do : ; done
+# Answer the call.
+
+#echo "SAY ALPHA \"$1\" \"\""
+echo `/usr/bin/mono /home/Release/DScriptCheck.exe $1 $2 $3 $4`
+read RESPONSE
+exit 0
+
+#this needs to be placed in the following foler /var/lib/asterisk/agi-bin

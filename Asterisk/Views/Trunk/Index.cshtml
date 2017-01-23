@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Trunk Administration Page";
+}
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+    <link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+    <script src="../../Javascript/Modal Interfaces/modalDialog.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/picker.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/pickerTabFactory.js" type="text/javascript"> </script>
+}
+@{
+    @Html.Partial("Pickers/RouteToPicker")
+    @Html.Partial("Pickers/TrunkInformationPicker")
+    @Html.Partial("Pickers/AccessCodePicker")
+}
+<script type="text/javascript">
+    $(document).ready(function() {
+        SetCurrentPage("Trunks");
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var routePicker = createRouteToPicker();
+        var trunkDetailsPicker = createTrunkInformationPicker();
+        var accessCodePicker = createAccessCodePicker();
+
+        var tableConfig = {
+            table: $("#siptrunks"),
+            source: "TrunkData",
+            columnTypes: [idColumn(),
+                editTextColumn(),
+                pickerColumn(accessCodePicker),
+                pickerColumn(trunkDetailsPicker),
+                pickerColumn(routePicker),
+                editColumn(),
+                deleteColumn()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&name=" + encodeURI(inputs[1]) + "&accessCodes=" + encodeURI(inputs[2]) +
+                    "&info=" + encodeURI(inputs[3]) + "&destination=" + encodeURI(inputs[4]);
+            }
+        };
+        dynamicTable(tableConfig);
+
+        //#endregion ** DataTable **
+
+        $("#showAccessCodes").click(function(e) {
+            $("#accessCodesInfo").show('fast');
+            e.preventDefault();
+        });
+        $(".modalClose").click(function(e) {
+            $("#accessCodesInfo").hide('fast');
+            e.preventDefault();
+        });
+
+    });
+</script>
+<div id="accessCodesInfo" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent'>
+        <h1>
+            Access AccessCode Format</h1>
+        <table class='dataTable'>
+            <tbody>
+                <tr class='odd'>
+                    <td><b>Access Codes are displayed in two parts the code and it's priority.</b></td>
+                </tr>
+                <tr class='odd'>
+                    <td><b style="font-size: 17px; font-weight: bold; margin-left: 100px;">eg. 9:1, 5:2 </b></td>
+                </tr>
+                <tr class='odd'>
+                    <td><b>In the example above the access code 9 has a priority of 1 and 5 has a priority of 2. Priorities must be unique to the access code.</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class='description'>
+    <p>
+        Add an entry in the table below for each trunk that will be connected to the system.</p>
+    <p>
+        The systems currently only supports SIP trunks, but support for BRIs and PRIs will be added soon.</p>
+</div>
+<table id="siptrunks">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Trunk Name</th>
+            <th>
+                Access Codes<a id='showAccessCodes' class="infoIco" /></th>
+            <th>
+                Trunk Information</th>
+            <th>
+                Default Route</th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

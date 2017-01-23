@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+  <class name ="FuDefaults" table="fu_defaults">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Type" column="fu_type"/>
+    <property name="ColumnIndex" column="fu_columnIndex"/>
+    <property name="ColumnType" column="fu_columnType"/>
+    <property name="ColumnTitle" column="fu_columnTitle"/>
+    <property name="Property" column="fu_property"/>
+    <property name="Default" column="fu_default"/>
+    <property name="Picker" column="fu_picker"/>
+  </class>
+
+</hibernate-mapping>

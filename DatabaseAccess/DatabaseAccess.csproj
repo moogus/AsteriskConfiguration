@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DB38B267-BF63-4EB2-8E46-875A5E6A1623}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DatabaseAccess</RootNamespace>
+    <AssemblyName>DatabaseAccess</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MySql.Data.6.5.4\lib\net40\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DatabaseTables\ComDahdiChannel.cs" />
+    <Compile Include="DatabaseTables\ComExtension.cs" />
+    <Compile Include="DatabaseTables\ComSipCredentials.cs" />
+    <Compile Include="DatabaseTables\ComTrunk.cs" />
+    <Compile Include="DatabaseTables\ComAccessCode.cs" />
+    <Compile Include="DatabaseTables\AstSipReg.cs" />
+    <Compile Include="DatabaseTables\ComQueue.cs" />
+    <Compile Include="DatabaseTables\ComQueueMember.cs" />
+    <Compile Include="DatabaseTables\ComRoutingRule.cs" />
+    <Compile Include="DatabaseTables\ComCLIs.cs" />
+    <Compile Include="DatabaseTables\ComServer.cs" />
+    <Compile Include="DatabaseTables\AstVoiceMessage.cs" />
+    <Compile Include="DatabaseTables\ComMusicOnHold.cs" />
+    <Compile Include="DatabaseTables\FuIaxCredentials.cs" />
+    <Compile Include="DatabaseTables\FuFederation.cs" />
+    <Compile Include="DatabaseTables\FuEmergencyNumber.cs" />
+    <Compile Include="DatabaseTables\FuKnownNumber.cs" />
+    <Compile Include="DatabaseTables\FuAutoAttendantRules.cs" />
+    <Compile Include="DatabaseTables\FuAutoAttendant.cs" />
+    <Compile Include="DatabaseTables\FuPermisionClassMember.cs" />
+    <Compile Include="DatabaseTables\FuPermissionClass.cs" />
+    <Compile Include="DatabaseTables\FuPermissionPattern.cs" />
+    <Compile Include="DatabaseTables\FuRingtone.cs" />
+    <Compile Include="DatabaseTables\SessionWrapper.cs" />
+    <Compile Include="DatabaseTester.cs" />
+    <Compile Include="GenericRepository.cs" />
+    <Compile Include="Interfaces.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="MixIns.cs" />
+    <Compile Include="Models\AsteriskAudioStream.cs" />
+    <Compile Include="Models\AutoAttendantRules.cs" />
+    <Compile Include="Models\AutoAttendant.cs" />
+    <Compile Include="Models\BriTrunk.cs" />
+    <Compile Include="Models\CLI.cs" />
+    <Compile Include="Models\IaxTrunk.cs" />
+    <Compile Include="Models\Federation.cs" />
+    <Compile Include="Models\EmergencyNumber.cs" />
+    <Compile Include="Models\KnownNumber.cs" />
+    <Compile Include="Models\MusicOnHold.cs" />
+    <Compile Include="Models\PermisionClass.cs" />
+    <Compile Include="Models\PermissionClassMember.cs" />
+    <Compile Include="Models\PermissionPattern.cs" />
+    <Compile Include="Models\SipTrunk.cs" />
+    <Compile Include="Models\Trunk.cs" />
+    <Compile Include="Models\VoiceMessage.cs" />
+    <Compile Include="Models\RingTone.cs" />
+    <Compile Include="Models\CurrentDialPlan.cs" />
+    <Compile Include="Models\DDI.cs" />
+    <Compile Include="Models\Default.cs" />
+    <Compile Include="Models\Dialplan.cs" />
+    <Compile Include="Models\DialplanDate.cs" />
+    <Compile Include="Models\DialplanRange.cs" />
+    <Compile Include="Models\Extension.cs" />
+    <Compile Include="Models\Queue.cs" />
+    <Compile Include="Models\QueueMember.cs" />
+    <Compile Include="Models\RoutingRule.cs" />
+    <Compile Include="Models\Server.cs" />
+    <Compile Include="Models\UserConfig.cs" />
+    <Compile Include="Models\Voicemail.cs" />
+    <Compile Include="DatabaseTables\AstVoicemail.cs" />
+    <Compile Include="DatabaseTables\FuDefaults.cs" />
+    <Compile Include="DatabaseTables\FuUserConfig.cs" />
+    <Compile Include="DatabaseTables\FuContactDetails.cs" />
+    <Compile Include="DatabaseTables\FuCurrentDialplan.cs" />
+    <Compile Include="DatabaseTables\FuDDIs.cs" />
+    <Compile Include="DatabaseTables\FuDialPlan.cs" />
+    <Compile Include="DatabaseTables\FuDialplanDate.cs" />
+    <Compile Include="DatabaseTables\FuDialplanRange.cs" />
+    <Compile Include="DatabaseTables\IDatabaseTable.cs" />
+    <Compile Include="ModelUtilities\QueueStrategy\QueueStrategyAddOns.cs" />
+    <Compile Include="ModelUtilities\TrunkManager\ITrunkManager.cs" />
+    <Compile Include="ModelUtilities\TrunkManager\TrunkManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuContactDetails.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDDI.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDialplan.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDialplanDate.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDialplanRange.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuCurrentDialplan.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\AstVoicemail.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuUserConfig.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuDefaults.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuRingtone.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuAutoAttendantRules.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuAutoAttendant.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComExtension.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComTrunk.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComAccessCode.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\AstSipReg.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComQueue.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComQueueMember.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComRoutingRule.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComCLI.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComServer.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\AstVoiceMessages.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComDahdiChannels.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComSipCredentials.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuKnownNumber.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuPermissionPattern.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuPermissionClass.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuPermissionClassMember.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuEmergencyNumber.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\ComMusicOnHold.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuFederationLink.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseTables\DatabaseTableMappings\FuIaxCredentials.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

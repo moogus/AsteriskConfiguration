@@ -1,0 +1,72 @@
+﻿@model DatabaseAccess.IAutoAttendant
+@{
+    ViewBag.Title = "AutoAttendant Rules Page";
+}
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/modalDialog.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/picker.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/pickerTabFactory.js" type="text/javascript"> </script>
+    <link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+}
+
+@{
+    @Html.Partial("Pickers/RouteToPicker")
+    @Html.Partial("Pickers/AARules")
+}
+
+<h1>
+    Currently editing auto attendant '@Model.Name'</h1>
+<script type="text/javascript">
+    SetCurrentPage("AutoAttendant");
+    $(document).ready(function() {
+
+        var entryPicker = createAARulesPicker('@Model.Name');
+        var routePicker = createRouteToPicker();
+
+        var tableConfig = {
+            table: $("#AutoAttRules"),
+            source: '@Url.Content("~/AutoAttendantRules/AutoAttendantRulesData?autoName=")@Model.Name',
+            columnTypes: [idColumn(),
+                pickerColumn(entryPicker),
+                pickerColumn(routePicker),
+                editColumn(),
+                deleteColumn()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&name=" + '@Model.Name' + "&entry=" + encodeURI(inputs[1]) + "&dest=" + encodeURI(inputs[2]);
+            }
+        };
+        dynamicTable(tableConfig);
+
+        tableConfig.columnTypes[1].stopUpdate = true;
+
+    });
+</script>
+<div style="margin-bottom: 5px;">
+    <a href="@Url.Content("~/AutoAttendant/Index")">...return to Auto Attendant</a>
+</div>
+<div class='description'>
+    <p>
+        Some description about auto-attendant rules and how this is used to make them.</p>
+</div>
+<table id="AutoAttRules">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Entry</th>
+            <th>
+                Destination</th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

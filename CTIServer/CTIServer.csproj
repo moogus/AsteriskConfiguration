@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B61983F3-3C26-4A0C-A922-EE629A9AF9C4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CTIServer</RootNamespace>
+    <AssemblyName>CTIServer</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dial\Dialers\AsteriskDialer.cs" />
+    <Compile Include="Dial\IDialer.cs" />
+    <Compile Include="CallHandler\CallHandlers\AsteriskCallHandler.cs" />
+    <Compile Include="CallHandler\ICallHandler.cs" />
+    <Compile Include="Call\CallStateEnum.cs" />
+    <Compile Include="Call\Calls\AsteriskCall.cs" />
+    <Compile Include="Call\ICall.cs" />
+    <Compile Include="ConnectionManger\ConnectionManagers\AsteriskConnectionManager.cs" />
+    <Compile Include="ConnectionManger\IConnectionManager.cs" />
+    <Compile Include="PhoneManager\IPhoneManager.cs" />
+    <Compile Include="PhoneManager\PhoneManagers\AsteriskPhoneManager.cs" />
+    <Compile Include="Phone\IPhone.cs" />
+    <Compile Include="Phone\Phones\AsteriskPhone.cs" />
+    <Compile Include="Presence\IPresence.cs" />
+    <Compile Include="Presence\PhoneState.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Asterisk.NET.1.6.3.1\Asterisk.NET\Asterisk.NET.csproj">
+      <Project>{BC6E7DBA-C05A-45FE-A2A3-B1637CE16274}</Project>
+      <Name>Asterisk.NET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DatabaseAccess\DatabaseAccess.csproj">
+      <Project>{DB38B267-BF63-4EB2-8E46-875A5E6A1623}</Project>
+      <Name>DatabaseAccess</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

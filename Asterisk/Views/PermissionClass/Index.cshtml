@@ -1,0 +1,104 @@
+﻿@model Asterisk.ViewModels.PermissionControllerViewModel
+@{
+    ViewBag.Title = "Permission Class Admin";
+}
+@section AddToHead
+{
+    <script src="@Url.Content("~/Javascript/DynamicTable/dynamicTable.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/DynamicTable/dynamicColumn.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/modalDialog.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/picker.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Javascript/Modal Interfaces/pickerTabFactory.js")" type="text/javascript"> </script>
+    <link href="@Url.Content("~/Content/TabbedModalPopup.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/datePicker.css")" rel="stylesheet" type="text/css" />
+}
+
+@Html.Partial("Pickers/PermissionPatternPicker")
+@Html.Partial("Pickers/PermissionApplicationPicker")
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        SetCurrentPage("Permissions");
+        var picker1 = createPermisssionPatternPicker();
+        var picker2 = createPermisionApplicationPicker();
+
+        var tableConfig = {
+            table: $("#permissionClass"),
+            source: '@Url.Content("~/PermissionClass/PermissionClassData?dialplan=" + @Model.SelectedDialplan)',
+            columnTypes: [idColumn(),
+                editTextColumn(),
+                editTextColumn(),
+                pickerColumn(picker1),
+                pickerColumn(picker2),
+                linkColumn(),
+                editColumn(),
+                deleteColumn()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&name=" + encodeURI(inputs[1]) + "&description=" + encodeURI(inputs[2]) +
+                    "&patterns=" + encodeURI(inputs[3]) + "&dialplan=" + '@Model.SelectedDialplan' + "&extens=" + encodeURI(inputs[4]);
+            }
+        };
+
+        dynamicTable(tableConfig);
+
+    });
+</script>
+
+<div class="dataUploader">
+    <a href="@Url.Content("~/PermissionPattern/Index?dialplan=" + @Model.SelectedDialplan)" class="linkFormat">....edit patterns</a>
+</div>
+
+<div style="float: right">
+    <p class="CurrentObjectInfo" >Editing permissions for the @Model.GetCurrentDialPlanName() dialplan </p>
+</div>
+
+<div class="description" style="clear: both; margin-bottom: -10px"  >
+    Permissions allow you to apply rules to numbers. The Permissions are defined by patterns and affect the associated numbers dependant on dialplan.
+</div>
+
+<div style="float: right; margin-bottom: 10px">
+    <form method="GET" action="@Url.Content("~/PermissionClass/Index")">
+        <select name="dialplan">
+            @foreach (var d in Model.Dialplans)
+            {
+                if (d.Id == Model.SelectedDialplan)
+                {
+                    <option selected="selected" value="@d.Id">@d.Name</option>
+                }
+                else
+                {
+                    <option  value="@d.Id">@d.Name</option>
+                }
+            }
+        </select>
+        <input type="submit" class="button" value="Select Dialplan" />
+    </form>
+</div>
+
+  
+
+<table id="permissionClass">
+
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Name</th>
+            <th>
+                Description</th>
+            <th>
+                Patterns</th>
+            <th>
+                Applies To</th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

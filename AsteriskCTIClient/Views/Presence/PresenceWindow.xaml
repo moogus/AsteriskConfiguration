@@ -1,0 +1,230 @@
+﻿<viewUtilities:TransparentWindow x:Class="AsteriskCTIClient.Views.Presence.PresenceWindow"
+                                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                 xmlns:Presence="clr-namespace:AsteriskCTIClient.Views.Presence"
+                                 xmlns:Views="clr-namespace:AsteriskCTIClient.Views"
+                                 xmlns:viewUtilities="clr-namespace:AsteriskCTIClient.Views.ViewUtilities"
+                                 Title="PresenceWindow" Height="504"
+                                 Width="316"
+                                 Loaded="TransparentWindowLoaded"
+                                 FocusManager.FocusedElement="{Binding ElementName=searchBox}">
+  <viewUtilities:TransparentWindow.Resources>
+    <viewUtilities:LengthToVisibilityConverter x:Key="LengthToVisibilityConverter" />
+  </viewUtilities:TransparentWindow.Resources>
+  <Grid>
+
+    <Grid.RowDefinitions>
+      <RowDefinition Height="2" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Grid Grid.Row="0" Margin="0,0,0,5">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="190" />
+        <ColumnDefinition Width="*" />
+
+      </Grid.ColumnDefinitions>
+      <ComboBox Margin="0,0,0,-23" Grid.Column="1" Height="23" VerticalAlignment="Bottom" SelectedIndex="0">
+        <ComboBoxItem Height="20">
+          <StackPanel Orientation="Horizontal">
+            <Image Margin="0,0,3,0" Source="/Views\ViewResources\Available.png" Height="16"></Image>
+            <TextBlock Text="Available"></TextBlock>
+          </StackPanel>
+        </ComboBoxItem>
+        <ComboBoxItem Height="20">
+          <StackPanel Orientation="Horizontal">
+            <Image Margin="0,0,3,0" Source="/Views\ViewResources\DND.png" Height="16"></Image>
+            <TextBlock Text="Do Not Disturb"></TextBlock>
+          </StackPanel>
+        </ComboBoxItem>
+        <ComboBoxItem Height="0">
+        </ComboBoxItem>
+      </ComboBox>
+
+    </Grid>
+    <Grid Grid.Row="1">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="60" />
+      </Grid.RowDefinitions>
+      <TabControl Grid.Row="0" x:Name="tabs">
+
+        <TabControl.Template>
+          <ControlTemplate TargetType="TabControl">
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+              </Grid.RowDefinitions>
+              <Border Grid.Row="1" BorderBrush="#969fa6" BorderThickness="1" Background="{TemplateBinding Background}">
+                <ContentPresenter ContentSource="SelectedContent" />
+              </Border>
+              <TabPanel Grid.Row="0" IsItemsHost="true" />
+            </Grid>
+          </ControlTemplate>
+        </TabControl.Template>
+        <TabItem Header="Favourites" Width="82" Height="24">
+          <TabItem.Template>
+            <ControlTemplate TargetType="{x:Type TabItem}">
+              <Grid>
+                <Border Name="Border" Margin="0,1,0,-1">
+                  <ContentPresenter TextBlock.Foreground="White" x:Name="ContentSite" VerticalAlignment="Center"
+                                    HorizontalAlignment="Center" ContentSource="Header" />
+                </Border>
+              </Grid>
+
+
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                  <Setter TargetName="Border" Property="Background">
+                    <Setter.Value>
+                      <ImageBrush ImageSource="/Views\ViewResources\lefttabselected.png"></ImageBrush>
+                    </Setter.Value>
+                  </Setter>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                  <Setter TargetName="Border" Property="Background">
+                    <Setter.Value>
+                      <ImageBrush ImageSource="/Views\ViewResources\lefttab.png"></ImageBrush>
+                    </Setter.Value>
+                  </Setter>
+                </Trigger>
+                <MultiTrigger>
+                  <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="False" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                  </MultiTrigger.Conditions>
+                  <Setter TargetName="Border" Property="Background">
+                    <Setter.Value>
+                      <ImageBrush ImageSource="/Views\ViewResources\lefttabmouseover.png"></ImageBrush>
+                    </Setter.Value>
+                  </Setter>
+                </MultiTrigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </TabItem.Template>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="2" />
+              <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border BorderBrush="#51cabe" BorderThickness="1" Grid.Row="0" />
+            <ScrollViewer Grid.Row="1">
+              <Presence:PresenceList
+                EmptyMessage="Add contacts to your favourites by clicking on them in the Search view."
+                DataContext="{Binding FavouriteContacts}" />
+            </ScrollViewer>
+          </Grid>
+        </TabItem>
+        <TabItem Header="Search" Height="24">
+
+          <TabItem.Template>
+            <ControlTemplate TargetType="{x:Type TabItem}">
+              <Grid>
+                <Border Name="Border" Width="58" Margin="3,1,0,-1">
+
+                  <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                    ContentSource="Header" />
+                </Border>
+              </Grid>
+
+              <ControlTemplate.Triggers>
+
+                <Trigger Property="IsSelected" Value="True">
+                  <Setter TargetName="Border" Property="Background">
+                    <Setter.Value>
+                      <ImageBrush ImageSource="/Views\ViewResources\selectedtab.png"></ImageBrush>
+                    </Setter.Value>
+                  </Setter>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                  <Setter TargetName="Border" Property="Background" Value="{x:Null}" />
+                </Trigger>
+                <MultiTrigger>
+                  <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="False" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                  </MultiTrigger.Conditions>
+                  <Setter TargetName="Border" Property="Background">
+                    <Setter.Value>
+                      <ImageBrush ImageSource="/Views\ViewResources\tabmouseover.png"></ImageBrush>
+                    </Setter.Value>
+                  </Setter>
+                </MultiTrigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </TabItem.Template>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="2" />
+              <RowDefinition Height="*" />
+              <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" />
+            <ScrollViewer Grid.Row="1">
+              <Presence:PresenceList x:Name="SearchList" EmptyMessage="No results found."
+                                     DataContext="{Binding AllContacts}" />
+            </ScrollViewer>
+
+          </Grid>
+        </TabItem>
+
+      </TabControl>
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="190*" />
+          <ColumnDefinition Width="62*" />
+        </Grid.ColumnDefinitions>
+
+        <ComboBox Grid.Column="1" Margin="0,0,0,19" VerticalAlignment="Bottom" SelectedIndex="0"
+                  ItemsSource="{Binding Grouping}"
+                  SelectedValue="{Binding SelectedGroup,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        </ComboBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+          <TextBox x:Name="searchBox" BorderBrush="{x:Null}" FocusVisualStyle="{x:Null}" Width="232" Height="55"
+                   Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"
+                   Padding="21,14,68,5" FontSize="13"
+                   VerticalAlignment="Bottom">
+
+            <TextBox.Template>
+              <ControlTemplate>
+                <Grid>
+                  <ScrollViewer x:Name="PART_ContentHost">
+                    <ScrollViewer.Background>
+                      <ImageBrush ImageSource="/Views\ViewResources\searchbar.png" />
+                    </ScrollViewer.Background>
+                  </ScrollViewer>
+                  <TextBlock Margin="23,14,68,5" x:Name="watermark" Text="Search on name, dept or extn..."
+                             Visibility="{Binding ElementName=searchBox, Path=Text.Length, 
+                                    Converter={StaticResource LengthToVisibilityConverter}}"
+                             Foreground="#FF9D9D9D" />
+                </Grid>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Background" TargetName="PART_ContentHost">
+                      <Setter.Value>
+                        <ImageBrush ImageSource="/Views\ViewResources\searchbaractive.png" Stretch="Fill"></ImageBrush>
+                      </Setter.Value>
+                    </Setter>
+                  </Trigger>
+                  <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" TargetName="PART_ContentHost">
+                      <Setter.Value>
+                        <ImageBrush ImageSource="/Views\ViewResources\searchbaractive.png" Stretch="Fill"></ImageBrush>
+                      </Setter.Value>
+                    </Setter>
+                  </Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate>
+            </TextBox.Template>
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{Binding DialNumberCommand}" />
+            </TextBox.InputBindings>
+          </TextBox>
+
+          <!--<Button Content="Search" Command="{Binding Path=UpdateSearch}"/>-->
+        </StackPanel>
+      </Grid>
+    </Grid>
+  </Grid>
+</viewUtilities:TransparentWindow>

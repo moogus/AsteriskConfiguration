@@ -1,0 +1,17 @@
+#!/usr/bin/perl -w
+
+use DBI;
+
+my $db_spec="DBI:mysql:database=asterisk;hostname=10.10.20.188";
+my $dbid = DBI->connect($db_spec,'asterisk','password');
+
+my $query = $dbid->prepare("select Username, Password, Host from com_sipTrunkCredentials");
+$query->execute;
+while (my @stuff = $query->fetchrow_array) {
+	print "register => $stuff[0]:$stuff[1]\@$stuff[2]\n";
+}
+$query->finish;
+$dbid->disconnect;
+
+
+

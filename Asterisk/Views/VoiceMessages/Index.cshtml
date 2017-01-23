@@ -1,0 +1,218 @@
+﻿@using ModelRepository.ModelInterfaces
+@model Asterisk.ViewModels.MessageViewModel
+@{
+    Layout = null;
+}
+@if (Model.VoiceMail != null)
+{
+    <div id="taber" style="margin-top: 5px; width: 1000px">
+        <ul>
+            @foreach (IVoiceMessageFolder folder in Model.VoiceMail.MessageFolders.OrderBy(f => f.Order))
+            {
+                string name = folder.FolderName == "Old" ? "Saved" : folder.FolderName;
+                <li><a style="font-size: 17.5px; width: 250px;"  href="#@folder.FolderName">@name</a></li>
+            }
+        </ul>
+        @{
+
+            foreach (IVoiceMessageFolder folder in Model.VoiceMail.MessageFolders.OrderBy(m => m.FolderName))
+            {
+                int count = 0;
+
+                <div id="@folder.FolderName" class="tabTableText tabTableSetButtonPosition">
+                    <div>
+                        <table class="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Number</th>
+                                    <th>
+                                        Caller Id</th>
+                                    <th>
+                                        Time Called</th>
+                                    <th>
+                                        Duration</th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (IVoiceMessage message in folder.FolderMessages)
+                                {
+                                    count++;
+                                    string myclass = count%2 == 0 ? "even" : "odd";
+                                    <tr  class="@myclass">
+                                        <td>@message.CallerNumber</td>
+                                        <td>@message.CallerId</td>
+                                        <td>@string.Format("{0} @ {1}", message.CalledAt.ToShortDateString(), message.CalledAt.ToShortTimeString())</td>
+                                        <td>@string.Format("{0} seconds", @message.Duration)</td>
+                                        <td>
+                                            <input type="button" class="button fixedButtonWidth" value="Play" onclick=" playAudio(@message.Id); return false; "/>
+                                        </td>
+                                        <td>
+                                            <input type="button" class="button fixedButtonWidth" value="Forward" onclick=" showMakeEmail(@message.Id); return false; "/>
+                                        </td>
+                                        <td>
+                                            <input type="button" class="button fixedButtonWidth" value="Download" onclick=" downloadAudio(@message.Id); return false; "/>
+                                        </td>
+                                        <td>
+                                            <input type="button" class="button" value="Move Folder" onclick=" showManageFolders(@message.Id, '@folder.FolderName'); return false; "/>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+else
+{
+    <h1>
+        You have no messages.</h1>
+}
+<div id="sound_element">
+</div>
+<input type="hidden" id="play" />
+<script type="text/javascript">
+    $(document).ready(function() {
+        setCurrentTab();
+    });
+
+    function setCurrentTab() {
+        var x = '@Model.LastFolder';
+        $("#taber").tabs({
+            selected: x
+        });
+    }
+
+    function playAudio(id) {
+        var source = '@Url.Content("~/VoiceMessages/Play?id=")' + id;
+        $('#sound_element').html("<embed src='" + source + "' hidden=true autostart=true loop=false>");
+    }
+
+    function downloadAudio(id) {
+        var source = '@Url.Content("~/VoiceMessages/Download?id=")' + id;
+        $('#sound_element').html("<embed src='" + source + "' hidden=true autostart=true loop=false>");
+    }
+
+    function forwardAudio() {
+        var message = $('#messageBody').val();
+
+        var eTo = $('#emailTo').val();
+        if (eTo === undefined || eTo === '') {
+            $('#emailTo').css('outline', 'orange solid thin');
+            alert('Please ensure a valid email address has been supplied');
+        } else {
+            if (message === undefined || message === '') {
+                var ok = confirm('There is no message do you want to continue?');
+                if (ok) {
+                    doForward(eTo, message);
+                }
+            } else {
+                doForward(eTo, message);
+            }
+        }
+    }
+
+    function doForward(to, message) {
+        var source = '@Url.Content("~/VoiceMessages/Forward?id=")' + encodeURI($('#currentId').val()) + '&emailTo=' + encodeURI(to) + '&messageBody=' + encodeURI(message);
+        $('#notificationEmail').load(source);
+        $('#emailTo').val('');
+        $('#messageBody').val('');
+    }
+
+    function showMakeEmail(id) {
+        $('#currentId').val(id);
+        $('#emailTo').val('');
+        $('#messageBody').val('');
+        $('#notificationEmail').val('');
+        $('#makeEmail').show('fast');
+    }
+
+    function showManageFolders(id, currentFolder) {
+        $('#currentId').val(id);
+        $('#manageFolders').show('fast');
+        $('#heldFolder').val(currentFolder);
+    }
+
+    function doMove(fromFolder) {
+        var source = '@Url.Content("~/VoiceMessages/MoveFolder?id=")' + encodeURI($('#currentId').val()) + '&folder=' + encodeURI($("#folder").val());
+        $('#notificationFolders').load(source);
+        $('#voiceMessagePartial').html(' <img src="../../Content/Images/ajax-loader.gif" style="margin-left: 37px; margin-bottom: 10px;" alt="" /><h1 id="voiceMessageh1" style="font-size: 15px;">Messages&nbspLoading....</h1>');
+        $('#voiceMessagePartial').load('/VoiceMessages/Index?extn=' + '@Model.Extension' + '&isAdminEdit=' + 'false' + '&lastFolder=' + fromFolder);
+    }
+
+</script>
+<input type="hidden" id="currentId" />
+<div id="manageFolders" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent' style="width: 400px;">
+        <h1>
+            Manage Folders</h1>
+        <p>
+            Please use this interface to mange the location of your messages.</p>
+        <br />
+        <div>
+            <select id="folder">
+                @if (Model.VoiceMail != null)
+                {
+                    foreach (IVoiceMessageFolder folder in Model.VoiceMail.MessageFolders.OrderBy(f => f.Order))
+                    {
+                        string name = folder.FolderName == "Old" ? "Saved" : folder.FolderName;
+                        <option value="@folder.FolderName">@name</option>
+                    }
+                }
+            </select>
+            <input type="button" class="button" value="Move Message" onclick=" doMove($('#heldFolder').val());return false; " />
+        </div>
+        <br />
+        <br />
+        <input type="hidden" id="heldFolder" value="" />
+        <label id="notificationFolders" style="clear: both">
+        </label>
+        <br />
+        <br />
+        Click off this window to close.
+    </div>
+</div>
+<div id="makeEmail" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent' style="width: 400px;">
+        <h1>
+            Create Email</h1>
+        <p>
+            Please fill in the fields provided.</p>
+        <br />
+        <div style="border: 1px solid #ddd">
+            <div style="margin: 5px; margin-left: 5px; margin-top: 10px">
+                <label style="margin-right: 5px">
+                    Email to:</label>
+                <input type="text" id="emailTo" />
+            </div>
+            <div style="margin: 5px; margin-left: 5px; margin-top: 10px">
+                <label>
+                    Message:</label>
+                <textarea rows="10" cols="10" id="messageBody" style="height: 75px; margin-top: 5px; width: 390px;" />
+            </div>
+        </div>
+        <input type="button" value="Send Email" class="button" onclick=" forwardAudio();return false; " style="float: right; margin-top: 15px;" />
+        <br />
+        <br />
+        <label id="notificationEmail" style="clear: both">
+        </label>
+        <br />
+        <br />
+        Click off this window to close.
+    </div>
+</div>

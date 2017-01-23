@@ -1,0 +1,27 @@
+﻿@model List<DatabaseAccess.IVoiceMessage>
+<table>
+	@foreach (var vm in Model)
+ {
+		<tr>
+      <td>
+        <input type="button" class="button" value="Play Message" onclick="playAudio(@vm.Id); return false;"/>
+      </td>
+      <td>
+        <input type="button" class="button" value="Delete Message" onclick="deleteAudio(@vm.Id); return false;"/>
+      </td>
+		</tr>
+ }
+</table>
+<div id="sound_element">
+</div>
+<input type="hidden" id="play" />
+<script type="text/javascript">
+	function playAudio(id) {
+		var source = '@Url.Content("~/Home/Play?id=")' + id;
+		$('#sound_element').html("<embed src='" + source + "' hidden=true autostart=true loop=false>");
+	}
+	function deleteAudio(id) {
+		var source = '@Url.Content("~/Home/Delete?id=")' + id;
+		$('#sound_element').html("<embed src='" + source + "' hidden=true autostart=true loop=false>");
+	}
+</script>

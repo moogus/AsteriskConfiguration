@@ -1,0 +1,78 @@
+﻿@model UserConfiguration.Controllers.ForwardingViewModel
+@{
+    Layout = null;
+}
+@Html.Partial("Pickers/RouteToPicker",Model)
+
+<script type="text/javascript">
+
+  var routePicker;
+	
+  $(document).ready(function () {
+
+    routePicker = createRouteToPicker();
+	  
+    var tableConfig = {
+      table: $("#userRingPlan"),
+      source: "Forwarding/RingPlanData",
+
+      columnTypes: [
+        idColumn(),
+        dropdownColumn(['yes', 'no']),
+        pickerColumn(routePicker),
+        editColumn(),
+        deleteColumn()
+      ],
+
+      getString: function (inputs) {
+      	return "id=" + encodeURI(inputs[0]) + "&enabled=" + encodeURI(inputs[1]) + "&goesTo=" + encodeURI(inputs[2]);
+      },
+      addURL: 'Forwarding/Add',
+      updateURL: 'Forwarding/Update',
+      deleteURL: 'Forwarding/Delete?id='
+    };
+
+    dynamicTable(tableConfig);
+
+  });
+</script>
+
+<div style="height: 10px;">
+		</div>
+		
+<div class='modalContentLighter' style="width: 750px;">
+  
+	 <div id="profileHeader" style="background-color:#f1f1f1; margin-left: -50px; margin-right: -45px; margin-top: -10px; text-align: center; ">
+      <h1 style="padding-top: 5px;" >Call Forwarding</h1>
+    </div>
+
+
+  <div style="width: 750px;">
+    <div class="description">
+       <p class="SpaceBelow" style="margin-left: -40px; margin-right: -40px;" >
+         This page is used to set personal forwarding routes, set as many routes as required. Forwarding can be to another extension, a queue, a voice-mail or an external number. 
+				 Only one route can be enabled at a any one time.</p>
+    </div>
+    <div class="mainContent">
+      <table id="userRingPlan">
+        <thead>
+          <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+              Enabled</th>
+            <th>
+              Goes To</th>
+            <th>
+            </th>
+            <th>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

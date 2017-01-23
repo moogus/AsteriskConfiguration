@@ -1,0 +1,34 @@
+;;Incoming Internal
+;;Access intenal by dialing
+;;Called by User interaction
+
+[LocalSets]
+exten => asterisk,1,VoiceMailMain(${CALLERID(num)})
+exten => _i[n]use.,1,Set(DEVICE_STATE(Custom:extblf${EXTEN:5})=INUSE)
+same => n,Hangup()
+exten => _[n]ouse.,1,Set(DEVICE_STATE(Custom:extblf${EXTEN:5})=NOT_INUSE)
+same => n,Hangup()
+; the next line allows us to use BLFs on the snom phones for extensions on another system
+exten => _other.,1,GoSub(LocalSets,${EXTEN:5},1)
+exten => **,1,GoSub(CanDialNumber,07726000101,1)
+exten => _*59.,1,GoSub(CheckPickUp,${EXTEN:3},1)
+exten => *78,1,GoSub(SetDnD,s,1(${CALLERID(num)},1))
+exten => *79,1,GoSub(SetDnD,s,1(${CALLERID(num)},0))
+exten => _[A-Z].,1,GoSub(CheckAutoButton,${EXTEN},1(${CHANNEL},${UID}))
+exten => _X.,1,GoSub(CheckVoiceMail,${EXTEN},1)
+exten => _X.,2,GoSub(CheckAutoDial,${EXTEN},1(${CHANNEL}))
+exten => _X.,3,GoSub(MakeInternalOrExternalCall,start,1(${EXTEN},extension,${CALLERID(num)}))
+
+[CrossPresence]
+exten => _i[n]use.,1,Set(DEVICE_STATE(Custom:extblf${EXTEN:5})=INUSE)
+same => n,Hangup()
+exten => _[n]ouse.,1,Set(DEVICE_STATE(Custom:extblf${EXTEN:5})=NOT_INUSE)
+same => n,Hangup()
+exten => _ri[n]gi[n]g.,1,Set(DEVICE_STATE(Custom:extblf${EXTEN:7})=RINGING)
+same => n,Hangup()
+
+[CrossCheckPickUp]
+exten => _X.,1,NoOp(${EXTEN})
+exten => _X.,2,NoOp(${CHANNEL:4:4})
+same => n,System(/usr/bin/curl  "http://10.10.20.171:8000/Pickup?from=${EXTEN}&to=${CHANNEL:4:4}")
+same => n,Hangup()

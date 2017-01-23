@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+  <class name ="AstVoiceMessage" table="ast_voicemessages">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="MsgNum" column="msgnum"/>
+    <property name="Directrory" column="dir"/>
+    <property name="CallerId" column="callerid"/>
+    <property name="OrigTime" column="origtime"/>
+    <property name="Duration" column="duration"/>
+    <property name="MailBox" column="mailboxuser"/>
+    <property name="Recording" column="recording"/>
+    <property name="TimeStamp" column="timeStamp"/>
+  </class>
+
+</hibernate-mapping>

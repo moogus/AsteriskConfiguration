@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="FuEmergencyNumber" table="fu_emergencyNumber">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Number" column="number"/>
+    <property name="Description" column="description"/>
+  </class>
+
+</hibernate-mapping>

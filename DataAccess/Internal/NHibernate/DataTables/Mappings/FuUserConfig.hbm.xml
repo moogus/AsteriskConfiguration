@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+  <class name ="FuUserConfig" table="fu_userConfig">
+    <id name="Id" column="id">
+      <generator class="native"/>
+    </id>
+    <property name="Password" column="fu_password"/>
+    <property name="ExtensionNumber" column="ast_extensions_exten"/>
+    <property name="Role" column="fu_role"/>
+  </class>
+
+</hibernate-mapping>

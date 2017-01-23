@@ -1,0 +1,11 @@
+http://<IPADDESSS>/dummy.htm?settings=save&led_message_usage=CurrentIdentityHasVoiceMessages
+
+
+http://<IPADDRESS>/dummy.htm?settings=save&led_call_indicator_usage=PhoneHasCallInStateRinging%20PhoneHasCall%20PhoneHasMissedCalls
+
+documentation is on
+
+http://wiki.snom.com/Settings/Leds_Behavior_8.6.6
+
+http://wiki.snom.com/Settings/status_msgs/DESCRIPTION
+

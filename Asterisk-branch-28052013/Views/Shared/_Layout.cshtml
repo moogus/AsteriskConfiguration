@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+        <link href="@Url.Content("~/Content/DataTables-1.9.1/media/css/jquery.dataTables_themeroller.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/themes/base/jquery.ui.theme.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/min.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/modal.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/DataTables-1.9.1/media/css/jquery.dataTables.css")" rel="stylesheet"
+              type="text/css" />
+        <link href="@Url.Content("~/Content/editableTable.css")" rel="stylesheet" type="text/css" />
+        <script src="@Url.Content("~/Scripts/jquery.js")" type="text/javascript"> </script>
+        <script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.js")" type="text/javascript"> </script>
+        <script src="@Url.Content("~/Javascript/DataTables-1.9.1/media/js/jquery.dataTables.js")" type="text/javascript"> </script>
+        <script src="@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"> </script>
+        <script src="@Url.Content("~/Javascript/Utilities/dataTableAddOns.js")" type="text/javascript"> </script>
+        <script src="@Url.Content("~/Javascript/userConfigHomePage.js")" type="text/javascript"> </script>
+        <script src="@Url.Content("~/Javascript/Utilities/Utilities.js")" type="text/javascript"> </script>
+        <link href="@Url.Content("~/Content/header.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+        @if (IsSectionDefined("AddToHead"))
+        {
+            @RenderSection("AddToHead", false)
+        }
+        @RenderSection("AddToHeadAnotherWay", false)
+    </head>
+    <body>
+        <script type="text/javascript">
+            function SetCurrentPage(menuItem) {
+                $("#header" + menuItem).addClass("current");
+            }
+        </script>
+        <div id="header">
+            <div id="logindisplay">
+                @Html.Partial("_LogOnPartial")
+            </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("admin"))
+                {
+                    <h1>
+                        Phone System Configuration </h1>
+                    <ul>
+                        <li id="headerOverview"><a href="@Url.Content("~/ExtensionAdmin/Index")">Overview</a> </li>
+                        <li id="headerExtensions"><a href="@Url.Content("~/ExtensionAdmin/Extensions")">Extensions</a> </li>
+                        <li id="headerPermissions"><a href="@Url.Content("~/PermissionClass/Index")">Permissions</a> </li>
+                        <li id="headerQueues"><a href="@Url.Content("~/GroupAdmin/Index")">Queues</a> </li>
+                        <li id="headerDialPlan"><a href="@Url.Content("~/RoutingAdmin/Index")">Dial Plans</a> </li>
+                        <li id="headerAutoAttendant"><a href="@Url.Content("~/AutoAttendant/Index")">Auto Attendant</a></li>
+                        <li id="headerMusicOnHold"><a href="@Url.Content("~/MusicOnHold/Index")">Music On Hold</a></li>
+                        <li id="headerRoute"><a href="@Url.Content("~/Route")">Routing</a></li>
+                        <li id="headerTrunks"><a href="@Url.Content("~/Trunk/Index")">Trunks</a> </li>
+                        <li id="headerDDIs"><a href="@Url.Content("~/DDI/Index")">DDIs</a></li>
+                        <li id="headerCLIs"><a href="@Url.Content("~/CLI/Index")">CLIs</a></li>
+                        <li id="headerVoiceMail"><a href="@Url.Content("~/VoiceMail/VoiceMailConfig")">Voice-Mail</a></li>
+                        <li id="headerKnownNumbers"><a href="@Url.Content("~/KnownNumber/Index")">Known Numbers</a></li>
+                        <li id="headerDefaults"><a href="@Url.Content("~/DefaultAdmin/Index")">Defaults</a></li>
+                        <li id="headerUserConfig"><a href="@Url.Content("~/UserConfigHome/Index")">User Configuration</a></li>
+                        <li id="headerServer"><a href="@Url.Content("~/ServerSettings/Index")">Server</a></li>
+                        <li id="headerFederation"><a href="@Url.Content("~/Federation/Index")">Federation</a></li>
+                    </ul>
+                }
+                else
+                {
+                    <h1>
+                        User Configuration </h1>
+                }
+            }
+        </div>
+        <div id="content">
+            @RenderBody()
+        </div>
+        <div style="clear: both;">
+        </div>
+    </body>
+</html>

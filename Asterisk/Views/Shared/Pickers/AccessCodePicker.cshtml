@@ -1,0 +1,153 @@
+﻿<script type="text/javascript">
+
+     var emptyValues = 0;
+
+     var createAccessCodePicker = function() {
+         var publicMembers = picker({ title: "Set Access Codes and Prioirties", width: '525' });
+         var baseshow = publicMembers.show;
+
+
+         publicMembers.show = function(value) {
+             emptyValues = 0;
+             baseshow();
+             publicMembers.setCurrentValues(value);
+         };
+
+         publicMembers.showAddTabs = function(basediv) {
+
+             var accessCodePicker = addStaticTab('Set Access Codes');
+
+             accessCodePicker.html = " <div style=\"width: 325px\">  <div class=\"accessCodeLeft\"> <div style=\"width: 155px; clear: both\"> <label>Access Code</label>" +
+                 " <input type=\"text\" id=\"code1\"  style=\"margin-right: -5px\" /> </div> <div style=\"clear: both; height: 2px\"> <br /> </div>" +
+                 " <div style=\"width: 155px; clear: both\"> <label>Priority</label> <input type=\"text\" id=\"priority1\" style=\"margin-right: -5px\" />" +
+                 " </div> <div style=\"margin-bottom: 2px; width: 250px; clear: both\"> </div> </div>    <div class=\"accessCodeRight\">" +
+                 " <div style=\"width: 155px; clear: both; \"> <label >Access Code</label> <input type=\"text\" id=\"code2\"  style=\"margin-right: 2px\"/>" +
+                 " </div> <div style=\"clear: both; height: 2px\"> <br /> </div> <div style=\"width: 155px; clear: both\"> <label>Priority</label>" +
+                 " <input type=\"text\" id=\"priority2\" style=\"margin-right: 2px\" /> </div> <div style=\"margin-bottom: 2px; width: 250px; clear: both\">" +
+                 " </div> </div> <div style=\"clear: both; height: 2px\"> <br /> </div>  <div style=\"margin-bottom: 2px; width: 250px; clear: both\">" +
+                 " </div>  <div class=\"accessCodeLeft\"> <div style=\"width: 155px; clear: both\"> <label>Access Code</label> <input type=\"text\" id=\"code3\"" +
+                 " style=\"margin-right: -5px\" /> </div> <div style=\"clear: both; height: 2px\"> <br /> </div> <div style=\"width: 155px; clear: both\">" +
+                 " <label>Priority</label> <input type=\"text\" id=\"priority3\" style=\"margin-right: -5px\" /> </div> <div style=\"margin-bottom: 2px; width:" +
+                 " 250px; clear: both\"> </div> </div> <div class=\"accessCodeRight\"> <div style=\"width: 155px; clear: both\"> <label style=\"float: left\">" +
+                 " Access Code</label> <input type=\"text\" id=\"code4\" style=\"margin-right: 2px\"/> </div> <div style=\"clear: both; height: 2px\"> <br />" +
+                 " </div> <div style=\"width: 155px; clear: both\"> <label style=\"float: left\"> Priority</label> <input type=\"text\" id=\"priority4\"" +
+                 " style=\"margin-right: 2px\"/> </div> <div style=\"margin-bottom: 2px; width: 250px; clear: both\"> </div> </div>  <div style=\"clear:" +
+                 " both; height: 2px\"> <br /> </div>  <div style=\"margin-bottom: 2px; width: 250px; clear: both\"> </div>  <div class=\"accessCodeLeft\">" +
+                 " <div style=\"width: 155px; clear: both\"> <label>Access Code</label> <input type=\"text\" id=\"code5\" style=\"margin-right: -5px\"/>" +
+                 " </div> <div style=\"clear: both; height: 2px\"> <br /> </div> <div style=\"width: 155px; clear: both\"> <label>Priority</label>" +
+                 " <input type=\"text\" id=\"priority5\" style=\"margin-right: -5px\" /> </div> <div style=\"margin-bottom: 2px; width: 250px; clear: both\">" +
+                 " </div> </div>  <div class=\"accessCodeRight\"> <div style=\"width: 155px; clear: both\"> <label style=\"float: left\"> Access Code</label>" +
+                 " <input type=\"text\" id=\"code6\" style=\"margin-right: 2px\" /> </div> <div style=\"clear: both; height: 2px\"> <br /> </div> <div" +
+                 " style=\"width: 155px; clear: both\"> <label style=\"float: left\"> Priority</label> <input type=\"text\" id=\"priority6\" style=\"margin-right: 2px\"/> </div>" +
+                 " <div style=\"margin-bottom: 2px; width: 250px; clear: both\"> </div> </div>  <div style=\"padding-top: 5px; width: 400px; clear: both\"><label id=\"messageUser\" style=\"color: red;font-weight: bold; margin-top:2px\"></label>" +
+                 " </div>  </div>" + accessCodePicker.html;
+
+             accessCodePicker.click = function(picker) {
+                 for (var i = 0; i < 6; i++) {
+                     $('#code' + i).removeClass('hasError');
+                     $('#priority' + i).removeClass('hasError');
+                 }
+                 if (privateMembers.validateAllValues()) {
+                     picker.setValueInDataTable(privateMembers.setValuesForPicker());
+                 }
+             };
+
+             //TODO this needs to be set so if the value has not been entered the button is greyed out
+             var baseAddTab1 = accessCodePicker.addTabForThisTable;
+
+             accessCodePicker.addTabForThisTable = function(parent) {
+                 baseAddTab1(parent);
+                 accessCodePicker.currentTab.find('input.button').removeAttr('disabled');
+             };
+
+
+             publicMembers.addTab(accessCodePicker);
+
+         };
+
+         publicMembers.setCurrentValues = function(value) {
+             var csl = value.split(',');
+             for (var i in csl) {
+                 var codeAndPriority = csl[i].split(':');
+                 $('#code' + (parseInt(i) + 1)).val(codeAndPriority[0]);
+                 $('#priority' + (parseInt(i) + 1)).val(codeAndPriority[1]);
+             }
+         };
+
+         publicMembers.linkText = "Access Code Picker";
+         return publicMembers;
+     };
+
+     var privateMembers = {
+         validateAllValues: function() {
+             for (var i = 0; i < 6; i++) {
+                 if (privateMembers.hasValue('#code' + i, '#priority' + i) === false) {
+                     return false;
+                 }
+             }
+             if (emptyValues === 6) {
+                 return false;
+             }
+             return true;
+         },
+
+         hasValue: function(input1, input2) {
+             var t1 = true;
+             var t2 = true;
+             var rtn = false;
+
+             if ($(input1).val() === undefined || $(input1).val().length === 0) {
+                 t1 = false;
+             }
+
+             if ($(input2).val() === undefined || $(input2).val().length === 0) {
+                 t2 = false;
+             }
+
+             if (t1 === false && t2 === true || t2 === false && t1 === true) {
+                 $(input1).addClass('hasError');
+                 $(input2).addClass('hasError');
+                 $('#messageUser').text('Every code must have a priority.');
+             }
+
+             if (t1 === false && t2 === false) {
+                 emptyValues++;
+                 rtn = true;
+             }
+
+             if (t1 && t2) {
+                 if (privateMembers.validator(input1)) {
+                     if (privateMembers.validator(input2)) {
+                         rtn = true;
+                     }
+                 }
+             }
+             return rtn;
+         },
+
+         validator: function(input) {
+             var regex = '^(\\d+(,\\d+)*)?$';
+             var valueToCheck = $(input).val();
+             if (valueToCheck.match(regex)) {
+                 return true;
+             } else {
+                 $('#messageUser').text('Please ensure the value entered is valid.');
+                 $(input).addClass('hasError');
+                 return false;
+             }
+
+         },
+
+         setValuesForPicker: function() {
+             var rtn = '';
+             for (var i = 0; i < 6; i++) {
+                 var hasValue = $('#code' + i).val() + $('#priority' + i).val();
+                 if (hasValue.length > 0) {
+                     rtn = rtn === '' ? $('#code' + i).val() + ':' + $('#priority' + i).val() : rtn + ',' + $('#code' + i).val() + ':' + $('#priority' + i).val();
+                 }
+             }
+             return rtn;
+         }
+     };
+
+ </script>

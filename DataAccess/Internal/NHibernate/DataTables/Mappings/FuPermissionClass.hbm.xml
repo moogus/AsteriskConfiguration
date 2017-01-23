@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+  <class name ="FuPermissionClass" table="fu_permissionClass">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="FuPermissionClassName" column="name"/>
+    <property name="Description" column="description"/>
+  </class>
+
+</hibernate-mapping>

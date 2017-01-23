@@ -1,0 +1,43 @@
+;;;CAN DIAL NUMBER
+;;;Validates a number based on the caller id, what is dialed and if the
+;;;call id internal of external
+;;;called using GoSub(CanDialNumber,start,1,(internal_or_external,callerType,callerId,number))
+
+[CanDialNumber]
+;set variables.....
+exten => start,1,SET(DIRECTION=${ARG1})
+same => n,SET(CALLERTYPE=${ARG2})
+same => n,SET(CALLER=${ARG3})
+same =>n,SET(NUMBER=${ARG4})
+;
+;check for emergency numbers and if the user can dial them..
+same =>	n,SET(ISEMERGENCYNUMBER=${ODBC_ISEMERGENCY(${NUMBER:1})})
+same => n,GotoIf($[${ISEMERGENCYNUMBER}>0]?makeEmergencyCall)
+;
+;if default class then allow dial
+same => n,SET(ISDEFAULT=${ODBC_ISDEFAULTPERMISSIONS(${CALLER})})
+same => n,GotoIf($[${ISDEFAULT}=1]?CanDial)
+;
+;test values with AGI call 
+same => n,AGI(RunMonoDScriptChecker.sh,${DIRECTION},${CALLERTYPE},${CALLER},${NUMBER})
+same => n,GotoIf($[${CANDIAL} = 1]?CanDial)
+;
+;user cannot dial the number
+same => n,GoSub(CannotDial,s,1)
+;
+;user can dial
+same => n(CanDial),Return()
+same => n(makeEmergencyCall),GoSub(IsEmergencyOk,${CALLER},1(${NUMBER}))
+same => n,Return()
+
+[CannotDial]
+exten => s,1,Playback(im-sorry)
+same => n,Playback(discon-or-out-of-service)
+same =>n,Hangup()
+
+[IsEmergencyOk]
+exten => _X.,1,SET(NOTALLOWED=${ODBC_EMERGENCYNOTALLOWED(${EXTEN})})
+same => n,GotoIf($[${NOTALLOWED}=1]?CannotCall)
+same => n,Return()
+same => n(CannotCall),GoSub(CannotDial,s,1)
+

@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+
+#this is to be placed t in the following directory :  /home/asterisktest
+
+use DBI;
+
+my $fname = $ARGV[0];
+open FILE, "< $fname" or die "can't open $fname\n";
+my $bytes=16000000;
+$fname =~ s{.*/}{}; # removes the path from the file name
+
+my $spec = "DBI:mysql:database=asterisk;hostname=localhost";
+my $dbh = DBI->connect($spec, 'root', 'password') || die "Could not connect to database";
+	
+my $sth = $dbh->prepare(qq{
+	INSERT INTO ast_voicemessages (msgnum,dir,mailboxuser,mailboxcontext,duration,recording) VALUES (-1,'/var/spool/asterisk/voicemail/default/$ARGV[1]/unavail','$ARGV[1]','default',0,?)
+});
+
+# now we read the file and upload it piece by piece
+while ($bytes) {
+	read FILE, $bytes,16000000;
+	$sth->execute($bytes) 
+	    if $bytes;
+}
+close FILE;

@@ -1,0 +1,114 @@
+﻿@using Asterisk.ViewHelpers
+@model IEnumerable<DatabaseAccess.IDefault>
+@{
+    ViewBag.Title = "Voice-Mail Page";
+}
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+    <link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+    <script src="../../Javascript/Modal Interfaces/modalDialog.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/picker.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/pickerTabFactory.js" type="text/javascript"> </script>
+    <link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+    @*	the css in here adds to the effects on the tabbed object in the modal popup*@
+    <link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+}
+@Html.Partial("Pickers/VoiceMailEmailPicker")
+<script type="text/javascript">
+
+    SetCurrentPage("VoiceMail");
+
+
+    $(document).ready(function() {
+
+        $("#showEmailInfo").click(function(e) {
+            $("#emailInfo").show('fast');
+            e.preventDefault();
+        });
+        $(".modalClose").click(function(e) {
+            $("#emailInfo").hide('fast');
+            e.preventDefault();
+        });
+
+
+        @foreach (var x in ModelTranformation.CreatePickers(Model))
+        {
+            @x.ToHtmlString()
+        }
+
+        var tableConfig = {
+            table: $("#sipVoiceMail"),
+            source: "VoiceMailData",
+
+            columnTypes: [@ModelTranformation.GenerateColumns(Model)],
+
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&number=" + encodeURI(inputs[1]) + "&password=" + encodeURI(inputs[2]) +
+                    "&canRecord=" + encodeURI(inputs[3]) + "&maxMessages=" + encodeURI(inputs[4]) + "&messageLength=" + encodeURI(inputs[5])
+                    + "&defaultEmail=" + encodeURI(inputs[6]) + "&hasMp3=" + encodeURI(inputs[7]);
+            }
+        };
+        dynamicTable(tableConfig);
+    });
+</script>
+<div class='description' style="margin-bottom: -10px">
+    <p>
+        This page enables voice-mail and allows configuration. Application of voice-mail to Extensions and Queues is available on their respective pages.<br />
+        Individual voice-mail boxes can be created from the Extension and Queue pages.</p>
+</div>
+<div class="mainContent">
+    <br />
+    <br />
+    <table id="sipVoiceMail">
+        <thead>
+            <tr>
+                <th style="display: none;">
+                </th>
+                <th>
+                    Number</th>
+                <th>
+                    Voice-Mail Password</th>
+                <th>
+                    Can Record</th>
+                <th>
+                    Max Messages</th>
+                <th>
+                    Message Length</th>
+                <th>
+                    Default Email<a id='showEmailInfo' class="infoIco" /></th>
+                <th>
+                    Inculde Mp3 In Email</th>
+                <th>
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div id="emailInfo" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent'>
+        <h1>
+            Email</h1>
+        <table class='dataTable'>
+            <thead>
+                <tr>
+                    <th>
+                        Description:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class='odd'>
+                    <td><b>Emails can be added and removed through the picker provided.<br />
+                            When generating a Voice-Mail automatically from an extension, the extensions' email is used.</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

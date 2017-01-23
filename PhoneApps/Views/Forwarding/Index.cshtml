@@ -1,0 +1,73 @@
+﻿@using System.Web.Script.Serialization
+@model PhoneApps.ViewModels.Interfaces.IForwardingVM
+@{
+  Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="@Url.Content("~/Javascript/forwardingControlPageSetUp.js")"></script>
+  <script src="@Url.Content("~/Scripts/jquery-1.8.3.js")"></script>
+  <link href="~/Content/tablet.css" rel="stylesheet" />
+  <title>title</title>
+</head>
+<body>
+  <div id='left'>
+    <div style="float: right; margin-right: 10px; margin-top: 10px; font-size: medium;">
+      <div>@Model.CurrentRuleType</div>
+      <div>@Model.CurrentRuleDestination</div>
+    </div>
+    <h1>Forwarding</h1>
+    <div>
+      <select id="typeSelector">
+        @{
+          foreach (var type in Model.RouteTypes)
+          {
+          <option value="@type" >@type</option>
+          }
+        }
+      </select>
+      <div id="partialContainer">
+        <div>
+          <div class="partial" id="noPartial">
+            <h1 id="noPartialh1">
+            </h1>
+          </div>
+          @foreach (var type in Model.RouteTypes)
+          {
+            <div  id="@string.Format("partial{0}", type)">
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+<script type="text/javascript">
+  var forwardingControl;
+
+  $(document).ready(function () {
+    var config = {
+      allTypes: getArray(@Html.Raw(new JavaScriptSerializer().Serialize(Model.RouteTypes.Aggregate("", (current, t) => string.IsNullOrEmpty(current) ? t : string.Format("{0},{1}", current, t))))),
+      currentExtension: '@Model.CurrentExtension',
+      getForwardingBaseUrl: '@Url.Content("~/Forwarding/GetForwardingRoutes?type=")',
+      getSaveBaseUrl: '@Url.Content("~/Forwarding/SaveForwardingRoute?value=")',
+      ajaxLoadImage: '@Url.Content("~/Content/Images/ajax-loader-bar.gif")'
+    };
+
+    $("#typeSelector").on("change", function (e) {
+      e.preventDefault();
+      forwardingControl.showPartial($('#typeSelector').val());
+    });
+
+    forwardingControl = forwardingControlPageSetUp(config);
+    forwardingControl.initalize();
+  });
+
+  function getArray(csl) {
+    return csl.split(',');
+  }
+
+</script>

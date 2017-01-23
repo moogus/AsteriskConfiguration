@@ -1,0 +1,36 @@
+;;MakeInetrnal/External Call
+;;MAKES INTERNAL OR EXTERNAL CALL BASED ON IF THERE IS AN ACESS CODE
+;;called using GoSub(MakeInternalOrExternalCall,start,1(number,callerType,callersNumber))
+
+[MakeInternalOrExternalCall]
+;get caller id and type
+exten => start,1,SET(CALLER=${ARG3})
+same => n,SET(BASENUMBER=${ARG1})
+same => n,SET(CALLERTYPE=${ARG2})
+;
+;is the number prefixed with a valid prefix
+;
+same => n,SET(ISEXT=${ODBC_HASEXTERNALCARRIER(${ARG1:0:1})})
+same => n,GotoIf($[${ISEXT} = 0]?notAnAccessCode)
+same => n,SET(ACCESSCODE=${ARG1:0:1})
+same => n,SET(EXTERNALNUMBER=${ARG1:1})
+;
+;validate the external call
+same => n,GoSub(CanDialNumber,start,1,(external,${CALLERTYPE},${CALLER},${ACCESSCODE}${EXTERNALNUMBER}))
+;
+;dial external
+same => n,GoSub(MakeExternalCall,s,1(${ACCESSCODE},${EXTERNALNUMBER}))
+same => n,Hangup()
+;
+;otherwise call is internal
+same => n(notAnAccessCode),SET(INTERNALNUMBER=${ARG1})
+;
+;validate the internal call
+same => n,GoSub(CanDialNumber,start,1,(internal,${CALLERTYPE},${CALLER},${INTERNALNUMBER}))
+;
+;dial internal
+same => n,GoSub(MakeInternalCall,${INTERNALNUMBER},1)
+same => n,Hangup()
+;
+#include extensions_CanDialNumber.conf
+

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+  <class name="AstSipReg" table="ast_sipregs">
+    <id name="Id">
+      <generator class="native" />
+    </id>
+    <property name="IpAddress" column="ipaddr" />
+    <property name="Number" column="name" />
+    <property name="StatusTime" column="regseconds" />
+    <property name="Model" column="useragent" />
+  </class>
+
+</hibernate-mapping>

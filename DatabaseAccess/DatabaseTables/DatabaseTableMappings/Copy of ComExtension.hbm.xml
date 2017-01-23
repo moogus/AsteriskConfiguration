@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="ComExtension" table="com_extensions">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Password" column="Password"/>
+    <property name="Notes" column="Notes" />
+    <property name="Number" column="Number" />
+    <property name="FirstName" column="FirstName" />
+    <property name="LastName" column="LastName" />
+    <property name="Department" column="Department" />
+    <property name="Email" column="Email" />
+    <property name="JobTitle" column="JobTitle" />
+    <property name="DDINumber" column="DDINumber" />
+    <property name="VoiceMailId" column="VoiceMailId" />
+    <property name="VoiceMailDelay" column="VoiceMailDelay" />
+    <property name="CLIId" column="CliId" />
+    <property name="DND" column="DND" />
+    <property name="PermissionClassId" column="PermissionClassId" />
+    <property name="IncludeInDirectory" column="IncludeInDirectory" />
+  </class>
+
+</hibernate-mapping>

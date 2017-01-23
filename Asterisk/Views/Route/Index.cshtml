@@ -1,0 +1,160 @@
+﻿@using System.Globalization
+@model Asterisk.ViewModels.RouteControllerViewModel
+@{
+    ViewBag.Title = "Route Admin";
+}
+
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/modalDialog.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/picker.js" type="text/javascript"> </script>
+    <script src="../../Javascript/Modal Interfaces/pickerTabFactory.js" type="text/javascript"> </script>
+    <link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+}
+@{
+    @Html.Partial("Pickers/RouteToPicker")
+    @Html.Partial("Pickers/AjaxNumberPicker")
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        window.SetCurrentPage("Route");
+
+        var routePicker1 = createRouteToPicker();
+        var routePicker2 = createRouteToPicker();
+        var routePicker3 = createRouteToPicker();
+        var routePicker4 = createRouteToPicker();
+        var routePicker5 = createRouteToPicker();
+        var numberPicker = createAjaxNumberPicker();
+
+        var tableConfig = {
+            table: $('#routes'),
+            source: '@Url.Content("~/Route/RouteData?dialplan=" + @Model.SelectedDialplan)',
+            columnTypes: [
+                idColumn(),
+                pickerColumn(numberPicker),
+                pickerColumn(routePicker1),
+                pickerColumn(routePicker2),
+                pickerColumn(routePicker3),
+                pickerColumn(routePicker4),
+                pickerColumn(routePicker5),
+                editColumn(),
+                deleteColumn()
+            ],
+
+            getString: function(inputs) {
+                return "number=" + encodeURI(inputs[1]) + "&d1=" + encodeURI(inputs[2]) + "&d2=" + encodeURI(inputs[3]) +
+                    "&d3=" + encodeURI(inputs[4]) + "&d4=" + encodeURI(inputs[5]) + "&d5=" + encodeURI(inputs[6]) + "&dialplan=" + '@Model.SelectedDialplan';
+            },
+            addURL: '@Url.Content("~/Route/Add")',
+            updateURL: '@Url.Content("/Route/Update")',
+            deleteURL: '@Url.Content("/Route/Delete")?dialplan=@Model.SelectedDialplan.ToString(CultureInfo.InvariantCulture)&number='
+        };
+
+        dynamicTable(tableConfig);
+        tableConfig.columnTypes[1].stopUpdate = true;
+
+        var modConfig = {
+            columns: [2, 3, 4, 5, 6],
+            tableData: tableConfig
+        };
+        AddTextboxToPicker(modConfig);
+
+    });
+
+    var AddTextboxToPicker = function(config) {
+
+        var privateMembers = {
+            initialize: function() {
+                for (var c in config.columns) {
+                    config.tableData.columnTypes[config.columns[c]].editHTML = privateMembers.addTextBoxToPicker;
+                    config.tableData.columnTypes[config.columns[c]].extractValue = privateMembers.getValuesFromTextAndPicker;
+                    $('#NumberPicker_tabs-4').hide();
+                    $('#NPvoicetab').hide();
+                }
+            },
+
+            addTextBoxToPicker: function(data) {
+                var d = data.split('for');
+                var time = d[1] === undefined ? 0 : d[1];
+                var str = "<a href=\"\">Route Picker</a>" +
+                    "<span id='pickerSpan' style='margin-left: 8px;'>" + d[0] + "</span><br/>" +
+                    '<input type="text" size=7 value="' + time + '">' +
+                    "<span style='margin-left: 8px;'>time in seconds</span>";
+
+                return str;
+            },
+
+            getValuesFromTextAndPicker: function(td) {
+                var pickerVal = td.children("span")[0].textContent;
+                var textBoxVal = td.children("input[type='text']")[0].value;
+                return pickerVal + ' for ' + textBoxVal;
+            }
+        };
+
+        privateMembers.initialize();
+
+    };
+
+</script>
+
+<div style="float: right">
+    <p class="CurrentObjectInfo">Editing routes for the @Model.GetCurrentDialPlanName() dialplan</p>
+</div>
+<br />
+<div class="description" style="margin-bottom: -8px; margin-top: -15px;">
+    @{
+        string message1 = (Model.SelectedDialplan != 13)
+                              ? "Any number on the system can be overridden by a route."
+                              : "When setting a Not Recognised route please ensure the Dialed Number field is a \"Route\" set as the written text \"Any\".";
+
+        string message2 = (Model.SelectedDialplan != 13) ? "The \"Original Number\" field can contain the number of an extension, a queue, a DDI or a number that is not currently assigned on the system." : "";
+
+        <p>@message1</p>
+        <p>@message2</p>
+    }
+</div>
+
+<div style="float: right; margin-bottom: 10px">
+    <form method="GET" action="@Url.Content("~/Route/Index")">
+        <select name="dialplan">
+            @foreach (var d in Model.Dialplans)
+            {
+                if (d.Id == Model.SelectedDialplan)
+                {
+                    <option selected="selected" value="@d.Id">@d.Name</option>
+                }
+                else
+                {
+                    <option  value="@d.Id">@d.Name</option>
+                }
+            }
+        </select>
+        <input type="submit" class="button" value="Select Dialplan" />
+    </form>
+</div>
+<table id="routes">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            <th>
+                Dialed Number</th>
+            @for (int i = 1; i <= 5; i++)
+            {
+                <th>
+                    Destination @i</th>
+            }
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

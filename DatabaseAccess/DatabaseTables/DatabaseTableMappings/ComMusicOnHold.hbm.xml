@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="ComMusicOnHold" table="com_musiconhold">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Name" column="name"/>
+    <property name="Directory" column="directory" />
+    <property name="Application" column="application"/>
+    <property name="Mode" column="mode"/>
+    <property name="Digit" column="digit"/>
+    <property name="Sort" column="sort"/>
+    <property name="Format" column="format"/>
+    <property name="Random" column="random"/>
+  </class>
+</hibernate-mapping>

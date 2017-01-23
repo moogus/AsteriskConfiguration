@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+        <link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/DataTables-1.9.1/media/css/jquery.dataTables_themeroller.css"
+              rel="stylesheet" type="text/css" />
+        <link href="../../Content/themes/base/jquery.ui.theme.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/min.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/modal.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/DataTables-1.9.1/media/css/jquery.dataTables.css" rel="stylesheet"
+              type="text/css" />
+        <link href="../../Content/editableTable.css" rel="stylesheet" type="text/css" />
+        <script src="../../Scripts/jquery.js" type="text/javascript"> </script>
+        <script src="../../Scripts/jquery-ui-1.8.20.js" type="text/javascript"> </script>
+        <script src="../../Javascript/DataTables-1.9.1/media/js/jquery.dataTables.js" type="text/javascript"> </script>
+        <script src="../../Scripts/jquery.jeditable.js" type="text/javascript"> </script>
+        <script src="../../Javascript/editableTable.js" type="text/javascript"> </script>
+        <link href="../../Content/header.css" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+        <link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/Side.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/userConfiguration.css" rel="stylesheet" type="text/css" />
+    
+    </head>
+    <body>
+        <script type="text/javascript">
+            function SetCurrentPage(menuItem) {
+                $("#header" + menuItem).addClass("current");
+            }
+        </script>
+        <div id="header">
+            <h1>
+                4com Phone System
+            </h1>
+            <a href="@Url.Content("~/ExtensionAdmin/Index")" style="font-size: 12px; margin-left: 45px; float: right; margin-right: 110px; margin-top: 40px;">...return to configuration</a>
+        </div>
+        <div id="content">
+            @RenderBody()
+        </div>
+        <div style="clear: both;">
+        </div>
+    </body>
+</html>

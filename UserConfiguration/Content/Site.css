@@ -1,0 +1,167 @@
+﻿html
+{
+    height: 100%;
+    font-family: calibri;
+}
+
+body
+{
+    background: #f1f1f1;
+    min-height: 100%;
+    padding-bottom: 30px !important;
+}
+
+#main 
+{
+    height: 100%;
+}
+
+#content
+{
+    margin-left: 30px;
+    margin-right: 30px;
+    background: #ffffff;
+    height: 100%;
+    padding: 10px;
+    padding-bottom: 25px;
+    font-size: 10pt;
+    overflow: auto;
+}
+
+
+.columnSelector 
+{
+    float:right;
+}
+
+.dataUploader
+{
+    margin-top: -5px;
+    float:left;
+}
+.button {
+	-moz-box-shadow:inset 0px 1px 6px 0px #caefab;
+	-webkit-box-shadow:inset 0px 1px 6px 0px #caefab;
+	box-shadow:inset 0px 1px 6px 0px #caefab;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #77d42a), color-stop(1, #5cb811) );
+	background:-moz-linear-gradient( center top, #77d42a 5%, #5cb811 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77d42a', endColorstr='#5cb811');
+	background-color:#77d42a;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	border:1px solid #268a16;
+	display:inline-block;
+	color:#fff;
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:3px 15px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #306108;
+}.button:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a) );
+	background:-moz-linear-gradient( center top, #5cb811 5%, #77d42a 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cb811', endColorstr='#77d42a');
+	background-color:#5cb811;
+}.button:active {
+	position:relative;
+	top:1px;
+}
+.removeButton {
+	-moz-box-shadow:inset 0px 1px 6px 0px #f5978e;
+	-webkit-box-shadow:inset 0px 1px 6px 0px #f5978e;
+	box-shadow:inset 0px 1px 6px 0px #f5978e;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f24537), color-stop(1, #c62d1f) );
+	background:-moz-linear-gradient( center top, #f24537 5%, #c62d1f 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#c62d1f');
+	background-color:#f24537;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	border:1px solid #d02718;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:3px 15px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #810e05;
+}.removeButton:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #c62d1f), color-stop(1, #f24537) );
+	background:-moz-linear-gradient( center top, #c62d1f 5%, #f24537 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c62d1f', endColorstr='#f24537');
+	background-color:#c62d1f;
+}.removeButton:active {
+	position:relative;
+	top:1px;
+}
+.orangeButton {
+	-moz-box-shadow:inset 0px 1px 6px 0px #fed897;
+	-webkit-box-shadow:inset 0px 1px 6px 0px #fed897;
+	box-shadow:inset 0px 1px 6px 0px #fed897;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f6b33d), color-stop(1, #d29105) );
+	background:-moz-linear-gradient( center top, #f6b33d 5%, #d29105 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6b33d', endColorstr='#d29105');
+	background-color:#f6b33d;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	border:1px solid #eda933;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:3px 15px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #cd8a15;
+}.orangeButton:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #d29105), color-stop(1, #f6b33d) );
+	background:-moz-linear-gradient( center top, #d29105 5%, #f6b33d 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#d29105', endColorstr='#f6b33d');
+	background-color:#d29105;
+}.orangeButton:active {
+	position:relative;
+	top:1px;
+}
+
+div.description 
+{
+    margin-bottom: 15px;
+}
+h1.description {
+  margin-bottom: 3px;
+  font-size: 10.5pt;
+}
+h2.description {
+  font-size: 14pt; 
+  margin-bottom: 3px; 
+}
+a 
+{
+    color: #027384;
+    text-decoration: none;
+}
+.spaceBetween {
+
+}
+.AddNumber {
+  margin-bottom: 5px;
+  
+}
+
+h1
+{
+    color: #027384;
+    height: 30px;
+    font-size: 14pt;
+    display: block;
+}
+.tabButton {
+  float: right; 
+}
+.colorBlack {
+  color: black;
+}

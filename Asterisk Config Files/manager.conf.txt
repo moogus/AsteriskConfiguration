@@ -1,0 +1,9 @@
+[general]
+enabled=yes
+webenabled=yes
+bindaddr=0.0.0.0
+
+[admin]
+secret=31994
+read=call
+write=all

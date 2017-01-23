@@ -1,0 +1,59 @@
+﻿@model Asterisk.AccountManagement.AccountModels.LogOnModel
+@{
+    ViewBag.Title = "Log On";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"> </script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"> </script>
+
+@section AddToHead
+{
+    <link href="../../Content/userConfiguration.css" rel="stylesheet" type="text/css" />
+}
+
+@using (Html.BeginForm())
+{
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent tabbedPopUp' style="margin-top: 100px; width: 310px;">
+        <fieldset>
+            <h1>
+                Login</h1>
+            <div style="margin: 5px;">
+                <div>
+                    @Html.LabelFor(m => m.UserName)
+                </div>
+                <div>
+                    @Html.TextBoxFor(m => m.UserName)
+                    @Html.ValidationMessageFor(m => m.UserName)
+                </div>
+                <div>
+                    @Html.LabelFor(m => m.Password)
+                </div>
+                <div>
+                    @Html.PasswordFor(m => m.Password)
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+                <div style="float: left; margin-top: 10px;">
+                    @Html.CheckBoxFor(m => m.RememberMe)
+                    @Html.LabelFor(m => m.RememberMe)
+                </div>
+            </div>
+            <p>
+                <input type="submit" class="button accountButtonPosition" value="Log On"  />
+            </p>
+        </fieldset>
+        <div style="margin-bottom: 7.5px;">@Html.ValidationSummary(true)</div>
+		
+        <p class="accountMessage" >Click off this window to close.</p>
+    </div>
+}
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        var thisConfig = {
+            isGood: "@User.Identity.IsAuthenticated"
+        };
+        userHomePageSetUp(thisConfig);
+    });
+
+</script>

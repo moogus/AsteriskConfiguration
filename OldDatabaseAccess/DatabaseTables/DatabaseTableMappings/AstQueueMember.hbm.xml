@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="AstQueueMember" table="ast_queue_members">
+    <id name="Id" column="uniqueid">
+      <generator class="native"/>
+    </id>
+    <property name="MemberName" column="membername" />
+    <property name="QueueName" column="queue_name" />
+    <property name="Interface" column="interface"/>
+    <property name="Penalty" column="penalty" />
+    <property name="Paused" column="paused" />
+
+  </class>
+
+</hibernate-mapping>

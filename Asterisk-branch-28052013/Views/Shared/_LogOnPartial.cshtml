@@ -1,0 +1,16 @@
+﻿<div style="margin-top: -2px">
+    @if (Request.IsAuthenticated)
+    {
+        <text>Extension: <strong>@User.Identity.Name</strong> [ @Html.ActionLink("Log Off", "LogOff", "Account") ]</text>
+    }
+    else
+    {
+        @:[ @Html.ActionLink("Log On", "LogOn", "Account") ]
+    }
+    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+    {
+        <div style="margin-bottom: 15px;">
+            <a href="@Url.Content("~/EndUser/Index")" style="font-size: 12px; margin-left: 45px;">...set current dial-plan</a>
+        </div>
+    }
+</div>

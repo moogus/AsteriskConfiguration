@@ -1,0 +1,308 @@
+;
+; func_odbc.conf
+;
+; Each context is a separately defined function.  By convention, all
+; functions are entirely uppercase, so the defined contexts should also
+; be all-uppercase, but there is nothing that enforces this.  All functions
+; are case-sensitive, however.
+;
+; For substitution, you have ${ARG1}, ${ARG2} ... ${ARGn}
+; for the arguments to each SQL statement.
+;
+; In addition, for write statements, you have ${VAL1}, ${VAL2} ... ${VALn}
+; parsed, just like arguments, for the values.  In addition, if you want the
+; whole value, never mind the parsing, you can get that with ${VALUE}.
+;
+;
+; If you have data which may potentially contain single ticks, you may wish
+; to use the dialplan function SQL_ESC() to escape the data prior to its
+; inclusion in the SQL statement.
+;
+;
+; The following options are available in this configuration file:
+;
+; readhandle   A comma-separated list of DSNs (from res_odbc.conf) to use when
+;              executing the readsql statement.  Each DSN is tried, in
+;              succession, until the statement succeeds.  You may specify up to
+;              5 DSNs per function class.  If not specified, it will default to
+;              the value of writehandle or dsn, if specified.
+; writehandle  A comma-separated list of DSNs (from res_odbc.conf) to use when
+;              executing the writesql statement.  The same rules apply as to
+;              readhandle.  "dsn" is a synonym for "writehandle".
+; readsql      The statement to execute when reading from the function class.
+; writesql     The statement to execute when writing to the function class.
+; insertsql    The statement to execute when writing to the function class
+;              succeeds, but initially indicates that 0 rows were affected.
+; prefix       Normally, all function classes are prefixed with "ODBC" to keep
+;              them uniquely named.  You may choose to change this prefix, which
+;              may be useful to segregate a collection of certain function
+;              classes from others.
+; escapecommas This option may be used to turn off the default behavior of
+;              escaping commas which occur within a field.  If commas are
+;              escaped (the default behavior), then fields containing commas
+;              will be treated as a single value when assigning to ARRAY() or
+;              HASH().  If commas are not escaped, then values will be separated
+;              at the comma within fields.  Please note that turning this option
+;              off is incompatible with the functionality of HASH().
+; synopsis     Appears in the synopsis field for the command
+;              'core show function <function name>'
+; mode         This option may be set to 'multirow' to allow the function
+;              specified to return more than a single row.  However, this
+;              changes the way that func_odbc normally works.  Instead of the
+;              invocation of the function returning a row, it returns an opaque
+;              ID, which may be passed to ODBC_FETCH() to return each row in
+;              turn.  ODBC_FETCH_STATUS returns SUCCESS or FAILURE, to indicate
+;              whether any results were stored, and you should call ODBC_Finish
+;              on the ID to clean up any remaining results when you are done
+;              with the query.  Also, the variable ODBCROWS is set initially,
+;              which may be used in an iterative fashion to return each row in
+;              the result.
+;              Please note that multirow queries are isolated to the channel,
+;              and rows may not be fetched outside of the channel where the
+;              query was initially performed.  Additionally, as the results are
+;              associated with a channel, mode=multirow is incompatible with
+;              the global space.
+; rowlimit     Rowlimit limits the total number of rows which can be stored for
+;              that query.  For mode=multirow, otherwise, func_odbc will
+;              attempt to store all rows in the resultset, up to the maximum
+;              amount of memory.  In normal mode, rowlimit can be set to allow
+;              additional rows to be fetched, rather than just the first one.
+;              These additional rows can be returned by using the name of the
+;              function which was called to retrieve the first row as an
+;              argument to ODBC_FETCH().
+
+
+
+; ODBC_SQL - Allow an SQL statement to be built entirely in the dialplan
+[SQL]
+dsn=mysql1
+readsql=${ARG1}
+GETDNDVAL
+
+; ODBC_ANTIGF - A blacklist.
+[ANTIGF]
+dsn=mysql1,mysql2   ; Use mysql1 as the primary handle, but fall back to mysql2
+                    ; if mysql1 is down.  Supports up to 5 comma-separated
+                    ; DSNs.  "dsn" may also be specified as "readhandle" and
+                    ; "writehandle", if it is important to separate reads and
+                    ; writes to different databases.
+readsql=SELECT COUNT(*) FROM exgirlfriends WHERE callerid='${SQL_ESC(${ARG1})}'
+syntax=<callerid>
+synopsis=Check if a specified callerid is contained in the ex-gf database
+
+; ODBC_PRESENCE - Retrieve and update presenceuk-00000002", "DDITYPE=QUEUE") in new stack
+
+[PRESENCE]
+
+dsn=mysql1
+readsql=SELECT location FROM presence WHERE id='${SQL_ESC(${ARG1})}'List<string>
+writesql=UPDATE presence SET location='${SQL_ESC(${VAL1})}' WHERE id='${SQL_ESC(${ARG1})}'
+
+[CURRENTDIALPLAN]
+dsn=asterisk
+readsql=select min(currentDialplan) from fu_currentDialplan
+
+[AAAnnouncement]
+dsn=asterisk
+readsql=select announcement from fu_AutoAttendant where name='${SQL_ESC(${ARG1})}'
+
+[AATimeout]
+dsn=asterisk
+readsql=select timeout from fu_AutoAttendant where name='${SQL_ESC(${ARG1})}'
+
+[AARuleExists]
+dsn=asterisk
+readsql=select 1 from fu_AutoAttendantRules where AAName='${SQL_ESC(${ARG1})}' and entry='${SQL_ESC(${ARG2})}'
+
+[AARuleType]
+dsn=asterisk
+readsql=select destinationType from fu_AutoAttendantRules where AAName='${SQL_ESC(${ARG1})}' and entry='${SQL_ESC(${ARG2})}'
+
+[AARuleDest]
+dsn=asterisk
+readsql=select destination from fu_AutoAttendantRules where AAName='${SQL_ESC(${ARG1})}' and entry='${SQL_ESC(${ARG2})}'
+
+[ISEXT]
+dsn=asterisk
+readsql=select count(*) from com_extensions where Number='${SQL_ESC(${ARG1})}'
+
+[ISDDI]
+dsn=asterisk
+readsql=select count(*) from fu_ddis where ddi ='${SQL_ESC(${ARG1})}'
+
+[ISQUEUE]
+dsn=asterisk
+readsql=select count(*) from com_queues where Number='${SQL_ESC(${ARG1})}'
+
+[HASEXTERNALCARRIER]
+dsn=asterisk
+readsql= select count(*) from com_accessCodes where  Code = '${SQL_ESC(${ARG1})}'
+
+[HASNEXTTRUNK]
+dsn=asterisk
+readsql=select count(*) from com_trunk where id = (select TrunkId from com_accessCodes where Code = '${SQL_ESC(${ARG1})}' and Priority= ${SQL_ESC(${ARG2})})
+
+[GETTRUNKTYPE]
+dsn=asterisk
+readsql=select com_trunk.TrunkType from com_trunk where id = (select TrunkId from com_accessCodes where Code = '${SQL_ESC(${ARG1})}' and Priority= ${SQL_ESC(${ARG2})})
+
+[GETSIPCARRIER]
+dsn=asterisk
+readsql=select com_trunk.TrunkName from com_trunk left join com_accessCodes on com_trunk.Id = com_accessCodes.TrunkId where TrunkType = 'Sip' and com_accessCodes.code = '${SQL_ESC(${ARG1})}' and Priority= ${SQL_ESC(${ARG2})}
+
+[GETIAXNAME]
+dsn=asterisk
+readsql= select com_iaxFriends.name from com_iaxFriends left join com_accessCodes on com_accessCodes.TrunkId = com_iaxFriends.com_trunkId where com_accessCodes.code = '${SQL_ESC(${ARG1})}' and Priority= ${SQL_ESC(${ARG2})}
+
+[GETNUMBEROFDAHDICHANNEL]
+dsn=asterisk
+readsql=select count(*) from asterisk.com_dahdiChannels where Trunkid=(Select TrunkId from com_accessCodes where Code = '${SQL_ESC(${ARG1})}' and Priority = '${SQL_ESC(${ARG2})}' )
+
+[GETNEXTDAHADICHANNEL]
+dsn=asterisk
+readsql=select concat('dahdi/',channelName) from com_dahdiChannels where trunkId = (Select TrunkId from com_accessCodes where Code = '${SQL_ESC(${ARG1})}' and Priority = '${SQL_ESC(${ARG2})}' ) limit ${SQL_ESC(${ARG3})},1
+
+[GETSIPTRUNKAVAILCHANNEL]
+dsn=asterisk
+readsql=select Channels from com_sipTrunkCredentials join com_trunk on com_trunk.id = com_sipTrunkCredentials.trunkId where com_trunk.TrunkName = '${SQL_ESC(${ARG1})}'
+
+[ISROUTINGRULE]
+dsn=asterisk
+readsql=SELECT count(*) FROM asterisk.com_routingRule where DialplanId ='${SQL_ESC(${ARG1})}' and Number = '${SQL_ESC(${ARG2})}'
+
+[GETNUMBERFROMRR]
+dsn=asterisk
+readsql=SELECT DestinationNumber FROM asterisk.com_routingRule where DialplanId ='${SQL_ESC(${ARG1})}' and Number = '${SQL_ESC(${ARG2})}'
+
+[GETTYPEFROMRR]
+dsn=asterisk
+readsql=SELECT DestinationType  FROM asterisk.com_routingRule where DialplanId = '${SQL_ESC(${ARG1})}' and Number = '${SQL_ESC(${ARG2})}'
+
+[GETDDITYPE]
+dsn=asterisk
+readsql=select UsedOn from fu_ddis where fu_ddis.ddi = '${SQL_ESC(${ARG1})}'
+
+[GETNUMBERFROMDDIEXT]
+dsn=asterisk
+readsql=select Number from com_extensions where DDINumber='${SQL_ESC(${ARG1})}'
+
+[GETNUMBERFROMDDIQUE]
+dsn=asterisk
+readsql=select Number from com_queues where DDINumber='${SQL_ESC(${ARG1})}'
+
+[GETMAILDELAYEXT]
+dsn=asterisk
+readsql=SELECT VoiceMailDelay FROM asterisk.com_extensions where Number ='${SQL_ESC(${ARG1})}'
+
+[GETVOICEMAILEXT]
+dsn=asterisk
+readsql= SELECT ast_voicemail.mailbox FROM asterisk.com_extensions left join ast_voicemail on com_extensions.VoiceMailId = ast_voicemail.uniqueid where com_extensions.Number ='${SQL_ESC(${ARG1})}'
+
+[GETMAILDELAYQUE]
+dsn=asterisk
+readsql=SELECT VoiceMailDelay FROM asterisk.com_queues where Number ='${SQL_ESC(${ARG1})}'
+
+[GETVOICEMAILQUE]
+dsn=asterisk
+readsql= SELECT ast_voicemail.mailbox FROM asterisk.com_queues left join ast_voicemail on com_queues.VoiceMailId = ast_voicemail.uniqueid where com_queues.Number ='${SQL_ESC(${ARG1})}'
+
+[ISCLISET]
+dsn=asterisk
+readsql=SELECT count(*) FROM com_clis left join asterisk.com_extensions on com_extensions.CliId = com_clis.id left join com_queues on com_queues.CliId = com_clis.id where com_extensions.Number = '${SQL_ESC(${ARG1})}' or com_queues.Number = '${SQL_ESC(${ARG1})}'
+
+[GETCLINUMBER]
+dsn=asterisk
+readsql= SELECT com_clis.cliNumber FROM com_clis left join asterisk.com_extensions on com_extensions.CliId = com_clis.id left join com_queues on com_queues.CliId = com_clis.id where com_extensions.Number = '${SQL_ESC(${ARG1})}' or com_queues.Number = '${SQL_ESC(${ARG1})}'
+
+[GETCALLERIDNAME]
+dsn=asterisk
+readsql=select concat(FirstName,  ' ', LastName) from com_extensions where Number = '${SQL_ESC(${ARG1})}'
+
+[GETCLINAME]
+dsn=asterisk
+readsql= SELECT com_clis.cliName FROM com_clis left join asterisk.com_extensions on com_extensions.CliId = com_clis.id left join com_queues on com_queues.CliId = com_clis.id where com_extensions.Number = '${SQL_ESC(${ARG1})}' or com_queues.Number = '${SQL_ESC(${ARG1})}'
+
+[ISONFORWARD]
+dsn=asterisk
+readsql= select count(*) from com_routingRule where Number = '${SQL_ESC(${ARG1})}'  and DialplanId =6
+
+[GETDND]
+dsn=asterisk
+readsql= select case when DND =0 then 1 when DND = 1 then 0 end as DND from com_extensions where number ='${SQL_ESC(${ARG1})}'
+
+[SETDND]
+dsn=asterisk
+writesql= update com_extensions SET DND = ${SQL_ESC(${VAL1})} where Number ='${SQL_ESC(${ARG1})}'
+
+[GETEXTENSIONIP]
+dsn=asterisk
+readsql= select concat(name,':',com_extensions.Password,'@', ipaddr) from ast_sipregs join com_extensions on ast_sipregs.name =com_extensions.Number where name = '${SQL_ESC(${ARG1})}'
+
+[GETSERVERIP]
+dsn=asterisk
+readsql= SELECT IpAddress FROM com_server
+
+[ISTRUNK]
+dsn=asterisk
+readsql= select count(*)from com_trunk where com_trunk.TrunkName ='${SQL_ESC(${ARG1})}'
+
+[GETPRESENTATIONTYPE]
+dsn=asterisk
+readsql= select CLIPresentationType1 from com_trunk where com_trunk.TrunkName ='${SQL_ESC(${ARG1})}'
+
+
+[GETPRESENTATIONLENGTH]
+dsn=asterisk
+readsql= select  length(cliPresentaionValue1) from com_sipTrunkCredentials left join com_trunk on com_sipTrunkCredentials.trunkId = com_trunk.Id where  com_trunk.TrunkName= '${SQL_ESC(${ARG1})}'
+
+[HASSECONDPRESENTATIONVAL]
+dsn=asterisk
+readsql= select CASE WHEN LENGTH(cliPresentaionValue2) > 0 Then 1 ELSE 0 end as hasOther from com_sipTrunkCredentials left join com_trunk on com_sipTrunkCredentials.trunkId = com_trunk.Id where  com_trunk.TrunkName= '${SQL_ESC(${ARG1})}'
+
+[GETPRESENTATIONVALUE]
+dsn=asterisk
+readsql= select  cliPresentaionValue1 from com_sipTrunkCredentials left join com_trunk on com_sipTrunkCredentials.trunkId = com_trunk.Id where  com_trunk.TrunkName= '${SQL_ESC(${ARG1})}'
+
+[GETOTHERPRESENTATIONTYPE]
+dsn=asterisk
+readsql= select CLIPresentationType2 from com_trunk where com_trunk.TrunkName ='${SQL_ESC(${ARG1})}'
+
+[GETOTHERPRESENTATIONLENGTH]
+dsn=asterisk
+readsql= select  length(cliPresentaionValue2) from com_sipTrunkCredentials left join com_trunk on com_sipTrunkCredentials.trunkId = com_trunk.Id where  com_trunk.TrunkName= '${SQL_ESC(${ARG1})}'
+
+[GETOTHERPRESENTATIONVALUE]
+dsn=asterisk
+readsql= select  cliPresentaionValue2 from com_sipTrunkCredentials left join com_trunk on com_sipTrunkCredentials.trunkId = com_trunk.Id where  com_trunk.TrunkName= '${SQL_ESC(${ARG1})}'
+
+[GETCALLERNAME]
+dsn=asterisk
+readsql=select description from fu_knownNumber where number LIKE '${SQL_ESC(${ARG1})}'
+
+[ISKNOWNNUMBER]
+dsn=asterisk
+readsql=select count(*) from fu_knownNumber where number ='${SQL_ESC(${ARG1})}'and isInternal =1
+
+[ISTRUNKID]
+dsn=asterisk
+readsql=select count(*)from com_sipTrunkCredentials where UserName = '${SQL_ESC(${ARG1})}'
+
+[QUEUEHASMOH]
+dsn=asterisk
+readsql= SELECT com_musiconholdId from com_queues where Number ='${SQL_ESC(${ARG1})}'
+
+[ISVOICEMAIL]
+dsn=asterisk
+readsql= select count(*) from com_server where voicemailNumber ='${SQL_ESC(${ARG1})}'
+
+[ISEMERGENCY]
+dsn=asterisk
+readsql=select count(*) from fu_emergencyNumber where number like '${SQL_ESC(${ARG1})}'
+
+[ISDEFAULTPERMISSIONS]
+dsn=asterisk
+readsql=select count(*) from com_extensions where Number ='${SQL_ESC(${ARG1})}' and PermissionClassId = (select id from fu_permissionClass where name like 'Default')
+
+[EMERGENCYNOTALLOWED]
+dsn=asterisk
+readsql=select count(*) from com_extensions where Number ='${SQL_ESC(${ARG1})}' and PermissionClassId = (select id from fu_permissionClass where name like 'No Emergency')

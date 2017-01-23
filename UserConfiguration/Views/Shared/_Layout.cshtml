@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/header.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/DataTables-1.9.1/media/css/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/min.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/modal.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/editableTable.css" rel="stylesheet" type="text/css" />
+	<script src="../../Scripts/jquery.js" type="text/javascript"></script>
+	<script src="../../Scripts/jquery-ui-1.8.20.js" type="text/javascript"></script>
+	<script src="../../Scripts/jquery.jeditable.js" type="text/javascript"></script>
+	<script src="../../Scripts/DataTables-1.9.1/media/js/jquery.dataTables.js" type="text/javascript"></script>
+	<link href="../../Content/TabbedModalPopup.css" rel="stylesheet" type="text/css" />
+	<link href="../../Content/datePicker.css" rel="stylesheet" type="text/css" />
+	<script src="../../Javascript/dynamicColumn.js" type="text/javascript"></script>
+	<script src="../../Javascript/dynamicTable.js" type="text/javascript"></script>
+	<script src="../../Javascript/dataTableAddOns.js" type="text/javascript"></script>
+	<script src="../../Javascript/userConfigHomePage.js" type="text/javascript"></script>
+	<link href="../../Content/Side.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+	<div id="header">
+		<h1>
+			User Configuration </h1>
+		<div id="logindisplay" style="float: right; margin-right: 110px;margin-top:13px;">
+			@Html.Partial("_LogOnPartial")
+		</div>
+	</div>
+	<div id="content">
+		@RenderBody()
+	</div>
+	<div style="clear: both;">
+	</div>
+</body>
+</html>

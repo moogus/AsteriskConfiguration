@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  <class name ="FuDialplanRange" table="fu_dialplanRanges">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="DaysOfWeek" column="daysOfWeek"/>
+    <property name="TimeRange" column="timeRange"/>
+    <property name="Priority" column="priority"/>
+    <property name="FuDialplanId" column="fu_dialplansId"/>
+  </class>
+
+</hibernate-mapping>

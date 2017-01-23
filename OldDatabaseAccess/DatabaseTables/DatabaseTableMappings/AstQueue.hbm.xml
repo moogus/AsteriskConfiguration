@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DatabaseAccess"
+                   namespace="DatabaseAccess.DatabaseTables">
+
+  
+  <class name ="AstQueue" table="ast_queues">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="Name" column="name"/>
+    <property name="MusicOnHold" column="musiconhold"/>
+    <property name="Strategy" column="strategy" />
+    <property name="JoinEmpty" column="joinempty" />
+    <property name="LeaveWhenEmpty" column="leavewhenempty"/>
+    <property name="RingInUse" column="ringinuse" />
+  </class>
+</hibernate-mapping>

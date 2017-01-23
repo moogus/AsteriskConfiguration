@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+  <class name ="ComCLI" table="com_clis">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="CLIName" column="cliName"/>
+    <property name="CLINumber" column="cliNumber"/>
+    <property name="TrunkId" column="TrunkId"/>
+    </class>
+
+</hibernate-mapping>

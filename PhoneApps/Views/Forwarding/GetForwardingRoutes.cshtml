@@ -1,0 +1,78 @@
+﻿@using DatabaseAccess
+@model PhoneApps.ViewModels.Interfaces.IForwardingRouteVM
+@{
+  Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="~/Scripts/jquery-1.8.3.js"></script>
+  <link href="~/Content/tablet.css" rel="stylesheet" />
+  <title>title</title>
+</head>
+<body>
+  <div id="">
+    <input type="hidden" name="extension" value="forwardingControl.currentNumber" />
+
+    @{
+      
+      var enabled = Model.IsEnabled ? "selected" : "";
+      var disabled = Model.IsEnabled ? "" : "selected";
+      <select name="enabled" id="enabledForward">
+        <option value="Enabled" selected="@enabled">Enabled</option>
+        <option value="Disabled" selected="@disabled">Disabled</option>
+      </select>
+      
+      switch (Model.ForwardingType)
+      {
+        case ForwardingDestination.Extension:
+      <select id="extensionValue">
+        @foreach (var e in Model.RoutesInformation)
+        {
+          <option value="@e.Number">@e.Number</option>
+        }
+      </select>
+
+      <input type="button" value="Set Destination" onclick="forwardingControl.setPartialforSave(forwardingControl.currentNumber,$('#enabledForward').val(), 'Extension', $('#extensionValue').val())" />
+    
+        break;
+
+        case ForwardingDestination.Group:
+      <select id="GroupValue">
+        @foreach (var e in Model.RoutesInformation)
+        {
+          <option value="@e.Number">@e.Number</option>
+        }
+      </select>
+
+      <input type="button" value="Set Destination" onclick="forwardingControl.setPartialforSave(forwardingControl.currentNumber,$('#enabledForward').val(), 'Group', $('#groupValue').val())" />
+    
+        break;
+
+        case ForwardingDestination.Voicemail:
+      <select id="voicemailValue">
+        @foreach (var e in Model.RoutesInformation)
+        {
+          <option value="@e.Number">@e.Number</option>
+        }
+      </select>
+    
+      <input type="button" value="Set Destination" onclick="forwardingControl.setPartialforSave(forwardingControl.currentNumber,$('#enabledForward').val(), 'Voicemail', $('#voicemailValue').val())" />
+ 
+        break;
+
+        case ForwardingDestination.External:
+      <input type="text" name="externalValue" />
+    
+      <input type="button" value="Set Destination" onclick="forwardingControl.setPartialforSave(forwardingControl.currentNumber,$('#enabledForward').val(), 'External', $('#externalValue').val())" />
+ 
+        break;
+      }
+ 
+    }
+  </div>
+</body>
+<script type="text/javascript">
+    
+</script>
+</html>

@@ -1,0 +1,108 @@
+﻿@using DatabaseAccess
+@model Asterisk.ViewModels.ForwardingViewModel
+
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+
+    function updateRule(dialPlan) {
+        var extension = $('#' + dialPlan + 'Ext').html();
+        var enabled = $('#' + dialPlan + 'Enable').val();
+        var destination = $('#' + dialPlan + 'Dest').html();
+
+        $('#updateCurrentRule').load(encodeURI('@Url.Content("~/Forwarding/Update?extension=")' + extension + '&enabled=' + enabled + '&destination=' + destination + '&dialplan=' + dialPlan));
+    }
+</script>
+
+@*TODO: Refactor the shit out of this!!!!!!!*@
+
+<div class='modalContentLighter' style="width: 750px;">
+    <div id="profileHeader" class="headUserConfig">
+        <h1>Call Forwarding for Extension : @Model.ThisExtension.Number</h1>
+    </div>
+    <div style="width: 750px;">
+        <div class="description">
+            <p class="SpaceBelow message">
+                This page is used to set personal forwarding routes, set as many routes as required. Forwarding can be to another extension, a queue, a voice-mail or an external number. Only one route can be enabled at a any one time.</p>
+        </div>
+        <div class="mainContent">
+            <table id="userRingPlan" class='dataTable'>
+                <tbody>
+                    @foreach (var r in Model.PersonalRules.OrderByDescending(rr => rr.Dialplan.Name))
+                    {
+                        //TODO:Added to exclude onbusy and noAnwser...to be fixed in the next release
+                        if (!r.Dialplan.Name.StartsWith("unconditional"))
+                        {
+                            continue;
+                        }
+                        var myclass = (r.Dialplan.Name.StartsWith("unconditional")) ? "odd" : (r.Dialplan.Name.StartsWith("onBusy")) ? "even" : "odd";
+
+                        string dp;
+                        var enable = true;
+                        if (r.Dialplan.Name.Equals("unconditionalOn") || r.Dialplan.Name.Equals("onBusyOn") || r.Dialplan.Name.Equals("noAnwserOn"))
+                        {
+                            dp = r.Dialplan.Name.Substring(0, r.Dialplan.Name.Length - 2);
+                        }
+                        else
+                        {
+                            dp = r.Dialplan.Name.Substring(0, r.Dialplan.Name.Length - 3);
+                            enable = false;
+                        }
+
+                        var extId = string.Format("{0}Ext", dp);
+                        var enabledId = string.Format("{0}Enable", dp);
+                        var destId = string.Format("{0}Dest", dp);
+
+                        <tr class="@myclass">
+                            <td style="display: none" id="@extId">@Model.ThisExtension.Number</td>
+                            @if (r.Dialplan.Name.StartsWith("unconditional"))
+                            {
+                                <td>Unconditional</td>
+                            }
+                            else
+                            {
+                                if (r.Dialplan.Name.StartsWith("onBusy"))
+                                {
+                                    <td>When busy</td>
+                                }
+                                else
+                                {
+                                    <td>No anwser</td>
+                                }
+                            }
+                            <td><a class="showRoutePickerLink" id="@dp" href="">Edit Destination</a> <span id="@destId" style="margin-left: 3px">
+                                                                                                         @if (r.DestinationType == RoutingRuleDestination.Error)
+                                                                                                         {
+                                                                                                             @string.Format("Not Set")
+                                                                                                         }
+                                                                                                         else
+                                                                                                         {
+                                                                                                             @string.Format("{0},{1}", r.DestinationType, r.DestinationNumber)
+                                                                                                         }
+                                                                                                     </span></td>
+                            <td>
+                                <select id="@enabledId">
+                                    @if (enable)
+                                    {
+                                        <option value="Enabled" selected="selected">Enabled</option>
+                                        <option value="Disabled">Disabled</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Enabled">Enabled</option>
+                                        <option value="Disabled" selected="selected">Disabled</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><a onclick=" updateRule('@dp');return false; " href="">Update Rule</a> </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<a id="updateCurrentRule" style="margin-top: 3px; margin-right: 10px; float: right; color: black;" />

@@ -1,0 +1,8 @@
+[asterisk-connector]
+Description = MySQL connection to asterisk DB
+Driver = MySQL
+Database = asterisk
+Servername = localhost
+UserName = root
+Password = password
+Port = 3306

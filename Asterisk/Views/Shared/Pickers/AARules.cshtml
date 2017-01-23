@@ -1,0 +1,33 @@
+﻿<script type="text/javascript">
+     var createAARulesPicker = function(attendantName) {
+         var heldValue;
+         var publicMembers = picker({ title: "Select Key" });
+
+         var baseshow = publicMembers.show;
+
+         publicMembers.show = function(value) {
+             heldValue = value;
+             baseshow();
+         };
+
+         publicMembers.showAddTabs = function(basediv) {
+             var keyTab = addAjaxTabWithRadio(
+                 'Key',
+                 '/AutoAttendantRules/AttendantRuleData?atten=' + attendantName, [
+                     ["", function(a) { return a.Key; }],
+                     ["Key", function(a) { return a.Key; }]],
+                 heldValue
+             );
+
+             var removeTab = addRemoveTab();
+
+             publicMembers.addTab(keyTab);
+             publicMembers.addTab(removeTab);
+         };
+
+         publicMembers.linkText = "Key Picker";
+
+         return publicMembers;
+
+     };
+ </script>

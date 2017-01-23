@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "AutoAttendant Page";
+}
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+}
+@Html.Partial("Pickers/CallPhoneForAudioFile")
+<script type="text/javascript">
+    SetCurrentPage("AutoAttendant");
+
+    var table;
+    var config = {};
+    var call;
+
+    $(document).ready(function() {
+
+        config.isAutoAtt = true;
+        call = createCallPhone(config);
+
+        var ruleLink = function(id) {
+            return '<a  href="/AutoAttendantRules/Index?id=' + id + '">Edit&nbsp;Rules</a>';
+        };
+
+        var tableConfig = {
+            table: $("#AutoAttendant"),
+            source: "AutoAttendantData",
+            columnTypes: [idColumn(),
+                editTextColumn(),
+                linkColumn(),
+                editTextColumn(),
+                linkColumn(ruleLink),
+                editColumn(),
+                deleteColumn()],
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&name=" + encodeURI(inputs[1]) + "&timeout=" + encodeURI(inputs[3]);
+            }
+        };
+
+        tableConfig.columnTypes[2].transform = function(value) {
+            var temp = value.split(",");
+            var method = "showCallPhoneForAudio(" + temp[1] + ",'" + temp[0] + "')";
+            return '<a id="addAudio" onClick="' + method + ';return false;" href="#">Edit&nbsp;Audio</a><span style="margin-left:10px;">' + temp[0] + '</span>';
+        };
+        table = dynamicTable(tableConfig);
+    });
+
+    function showCallPhoneForAudio(id, name) {
+        call.setIdAndName(id, name);
+        call.showInterface();
+    }
+
+</script>
+<div class='description'>
+    <p>
+        Some description about auto-attendants and how this is used to make them.</p>
+</div>
+<table id="AutoAttendant">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Name</th>
+            <th>
+                Announcement</th>
+            <th>
+                Time Out</th>
+            <th>
+                Edit Rules</th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

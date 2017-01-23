@@ -1,0 +1,80 @@
+﻿<script type="text/javascript">
+
+     var createTimePicker = function() {
+
+         var publicMembers = picker({ title: "Select Time From To", moveTop: '-75' });
+
+         var baseshow = publicMembers.show;
+         publicMembers.show = function(value) {
+             baseshow();
+             publicMembers.setCurrentValues(value);
+         };
+
+         publicMembers.showAddTabs = function(basediv) {
+
+             var timePicker = addStaticTab('Set Times');
+
+             timePicker.html = "<div style=\"float: left; margin-right: 10px;\"><p>Start Time:</p><input type=\"text\" id=\"timeFrom\" style=\"margin-right: 2px; width: 75px;\"  />" +
+                 "</div><div><p>End Time:</p><input type=\"text\" id=\"timeTo\" style=\"margin-right: 2px; width: 75px;\" /></div>" + timePicker.html;
+
+             var baseAddTab1 = timePicker.addTabForThisTable;
+
+             timePicker.addTabForThisTable = function(parent) {
+                 baseAddTab1(parent);
+                 timePicker.currentTab.find('#timeFrom').timepicker({ 'timeFormat': 'H:i' });
+                 timePicker.currentTab.find('#timeTo').timepicker({ 'timeFormat': 'H:i' });
+                 timePicker.currentTab.find('input.button').removeAttr('disabled');
+             };
+
+             timePicker.click = function(picker) {
+                 if (privateMembers.isTimeValid()) {
+                     var time = $('#timeFrom').val() + "-" + $('#timeTo').val();
+                     picker.setValueInDataTable(time);
+                 } else {
+                     picker.hide();
+                     privateMembers.showError();
+                 }
+             };
+
+             publicMembers.addTab(timePicker);
+
+         };
+
+         publicMembers.setCurrentValues = function(value) {
+             if (value) {
+                 var values = value.split('-');
+                 var from = values[0];
+                 var to = values[1];
+                 $('#timeFrom').val(from);
+                 $('#timeTo').val(to);
+             }
+         };
+
+
+         publicMembers.returnToTime = function() {
+             privateMembers.hideError();
+             privateMembers.showPicker();
+         };
+
+         var privateMembers = {
+             isTimeValid: function() {
+                 var regexcode = /^[0-9]{1,2}:[0-9]{1,2}$/;
+                 return $('#timeFrom').val().match(regexcode) && $('#timeTo').val().match(regexcode) ? true : false;
+             },
+
+             //for this to be seen the page must have this element on it see the Routing Admin/Index
+             showError: function() {
+                 $('#errorTime').show('fast');
+             },
+
+             //for this to be seen the page must have this element on it see the Routing Admin/Index
+             hideError: function() {
+                 $('#errorTime').hide('fast');
+             }
+         };
+
+         publicMembers.linkText = "Time Picker";
+         return publicMembers;
+     };
+
+ </script>

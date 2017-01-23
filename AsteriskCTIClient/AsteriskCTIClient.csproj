@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5D01D28D-8C35-4DFE-8C17-D5F1786D5EFA}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AsteriskCTIClient</RootNamespace>
+    <AssemblyName>AsteriskCTIClient</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\packages\MySql.Data.6.5.4\lib\net40\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="ApplicationResource\Singleton\AppArgumentClient.cs" />
+    <Compile Include="ApplicationResource\Singleton\AppArgumentServer.cs" />
+    <Compile Include="ApplicationResource\Singleton\OurSingleArgs.cs" />
+    <Compile Include="ApplicationResource\Singleton\SingleInstanceManager.cs" />
+    <Compile Include="Enums\MessageTypeEnum.cs" />
+    <Compile Include="Enums\PresenceStateEnum.cs" />
+    <Compile Include="Model\ModelInterfaces\IAccessListModel.cs" />
+    <Compile Include="Model\ModelInterfaces\IAddressContactsModel.cs" />
+    <Compile Include="Model\ModelInterfaces\IContactModel.cs" />
+    <Compile Include="Model\ModelInterfaces\IContactListModel.cs" />
+    <Compile Include="Model\ModelInterfaces\IMessageChanged.cs" />
+    <Compile Include="Model\ModelInterfaces\ICallerIdModel.cs" />
+    <Compile Include="Model\ModelInterfaces\IClipboardWatcherModel.cs" />
+    <Compile Include="Model\ModelInterfaces\ICtiCall.cs" />
+    <Compile Include="Model\ModelInterfaces\IDialerModel.cs" />
+    <Compile Include="Model\ModelInterfaces\IFavouriteContactsManager.cs" />
+    <Compile Include="Model\ModelInterfaces\INumber.cs" />
+    <Compile Include="Model\ModelInterfaces\IPresenceItem.cs" />
+    <Compile Include="Model\ModelInterfaces\IPresenceManagerModel.cs" />
+    <Compile Include="Model\ModelInterfaces\IValidNumber.cs" />
+    <Compile Include="Model\Models\AsteriskAccessListModel.cs" />
+    <Compile Include="Model\Models\AsteriskCallerIdModel.cs" />
+    <Compile Include="Model\Models\AsteriskCallManagerModel.cs" />
+    <Compile Include="Model\Models\AsteriskDialerModel.cs" />
+    <Compile Include="Model\Models\AsteriskPresenceModel.cs" />
+    <Compile Include="Model\Models\CallerIdManagerModel.cs" />
+    <Compile Include="Model\Models\ClipBoardWatcherModel.cs" />
+    <Compile Include="Model\Models\ContactModel.cs" />
+    <Compile Include="Model\Models\ContactCollectionsModel.cs" />
+    <Compile Include="Model\Models\CSVListContactsModel.cs" />
+    <Compile Include="Model\Models\CtiCallModel.cs" />
+    <Compile Include="Model\Models\ExternalKnownCompanyModel.cs" />
+    <Compile Include="Model\Models\NumberPresentationModel.cs" />
+    <Compile Include="Model\Models\PresenceManagerModel.cs" />
+    <Compile Include="Model\Models\SnomDialerModel.cs" />
+    <Compile Include="Model\Models\ValidPhoneNumberModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Service References\GetComapnyDetails\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+    <Compile Include="ViewModel\ViewModels\ContactVM.cs" />
+    <Compile Include="ViewModel\ViewModels\CtiBalloonPopupVM.cs" />
+    <Compile Include="ViewModel\ViewModels\HistoryContactVM.cs" />
+    <Compile Include="ViewModel\ViewModels\HistoryWindowVM.cs" />
+    <Compile Include="ViewModel\ViewModels\MessageVM.cs" />
+    <Compile Include="ViewModel\ViewModels\NotifyIconVM.cs" />
+    <Compile Include="ViewModel\ViewModels\PhoneWindowVM.cs" />
+    <Compile Include="ViewModel\ViewModels\SettingsWindowVM.cs" />
+    <Compile Include="ViewModel\VMInterfaces\IContactVM.cs" />
+    <Compile Include="ViewModel\VMInterfaces\IHistoryContactVM.cs" />
+    <Compile Include="ViewModel\VMUtilities\CopyWatcher.cs" />
+    <Compile Include="ViewModel\VMUtilities\SimpleCommand.cs" />
+    <Compile Include="Views\CtiBalloon\CtiBalloonPopup.xaml.cs">
+      <DependentUpon>CtiBalloonPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\History\HistoryItem.xaml.cs">
+      <DependentUpon>HistoryItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\History\HistoryList.xaml.cs">
+      <DependentUpon>HistoryList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\History\HistoryWindow.xaml.cs">
+      <DependentUpon>HistoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NotifyIcon.xaml.cs">
+      <DependentUpon>NotifyIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Presence\PresenceItemView.xaml.cs">
+      <DependentUpon>PresenceItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Presence\PresenceList.xaml.cs">
+      <DependentUpon>PresenceList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Presence\PresenceWindow.xaml.cs">
+      <DependentUpon>PresenceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\ViewUtilities\BoolToHeightConverter.cs" />
+    <Compile Include="Views\ViewUtilities\LengthToVisibilityConverter.cs" />
+    <Compile Include="Views\ViewUtilities\TransparentWindow.cs" />
+    <Page Include="Views\CtiBalloon\CtiBalloonPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\History\HistoryItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\History\HistoryList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\History\HistoryWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NotifyIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Presence\PresenceItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Presence\PresenceList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Presence\PresenceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Resource Include="Views\CtiBalloon\Images\4com72.png" />
+    <Resource Include="Views\CtiBalloon\Images\Add.png" />
+    <Resource Include="Views\CtiBalloon\Images\Close.png" />
+    <Resource Include="Views\CtiBalloon\Images\Info.png" />
+    <Resource Include="Views\CtiBalloon\Images\Preferences.png" />
+    <Resource Include="Views\CtiBalloon\Images\Remove.png" />
+    <None Include="Service References\GetComapnyDetails\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\GetComapnyDetails\configuration.svcinfo" />
+    <None Include="Service References\GetComapnyDetails\configuration91.svcinfo" />
+    <Resource Include="Views\ViewResources\tabmouseover.png" />
+    <Resource Include="Views\ViewResources\selectedtab.png" />
+    <Resource Include="Views\ViewResources\searchbaractive.png" />
+    <Resource Include="Views\ViewResources\searchbar.png" />
+    <Resource Include="Views\ViewResources\OnPhone.png" />
+    <Resource Include="Views\ViewResources\MoreOtherWay.png" />
+    <Resource Include="Views\ViewResources\More.png" />
+    <Resource Include="Views\ViewResources\lefttabselected.png" />
+    <Resource Include="Views\ViewResources\lefttabmouseover.png" />
+    <Resource Include="Views\ViewResources\lefttab.png" />
+    <Resource Include="Views\ViewResources\Favourite.png" />
+    <Resource Include="Views\ViewResources\DND.png" />
+    <Resource Include="Views\ViewResources\Available.png" />
+    <Resource Include="Views\ViewResources\Disconnected.ico" />
+    <Resource Include="Views\ViewResources\Connected.ico" />
+    <Resource Include="Views\ViewResources\Busy.ico" />
+    <EmbeddedResource Include="Model\ModelResources\TESTDATA.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model\ModelResources\smallTest.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="Service References\GetComapnyDetails\service.wsdl" />
+    <None Include="Service References\GetComapnyDetails\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GetComapnyDetails\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="app.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CTIServer\CTIServer.csproj">
+      <Project>{B61983F3-3C26-4A0C-A922-EE629A9AF9C4}</Project>
+      <Name>CTIServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DatabaseAccess\DatabaseAccess.csproj">
+      <Project>{DB38B267-BF63-4EB2-8E46-875A5E6A1623}</Project>
+      <Name>DatabaseAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NotifyIconWpf\NotifyIconWpf.csproj">
+      <Project>{7AC63864-7638-41C4-969C-D3197EF2BED9}</Project>
+      <Name>NotifyIconWpf</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="hibernate.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\GetComapnyDetails\" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

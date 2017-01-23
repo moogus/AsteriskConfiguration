@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="DataAccess"
+                   namespace="DataAccess.Internal.NHibernate.DataTables.Classes">
+
+  <class name ="FuSamsungFederation" table="fu_SamsungfederationLink">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <property name="FuFederationName" column="name"/>
+    <property name="Description" column="description"/>
+    <property name="ComTrunkId" column="com_trunkId"/>
+    <property name="ComExtensionId" column="com_extensionsId"/>
+    <property name="ComRoutingRuleId" column="com_routingRuleId"/>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,173 @@
+﻿@using Asterisk.ViewHelpers
+@model IEnumerable<DatabaseAccess.IDefault>
+@{
+    ViewBag.Title = "Queue Administration Page";
+}
+@section AddToHead
+{
+    <script src="../../Javascript/DynamicTable/dynamicTable.js" type="text/javascript"> </script>
+    <script src="../../Javascript/DynamicTable/dynamicColumn.js" type="text/javascript"> </script>
+}
+
+<script type="text/javascript">
+    SetCurrentPage("Queues");
+
+    var table;
+
+    $(document).ready(function() {
+
+        @foreach (var x in ModelTranformation.CreatePickers(Model))
+        {
+            @x.ToHtmlString()
+        }
+
+        //#region ** DataTable **
+        var tableConfig = {
+            table: $("#sipQueue"),
+            source: "QueueData",
+
+            columnTypes: [@ModelTranformation.GenerateColumns(Model)],
+
+            getString: function(inputs) {
+                return "id=" + encodeURI(inputs[0]) + "&number=" + encodeURI(inputs[1]) + "&notes=" + encodeURI(inputs[2]) + "&qName=" + encodeURI(inputs[3]) + "&strategy=" + encodeURI(inputs[5]) +
+                    "&ringOnBusy=" + encodeURI(inputs[6]) + "&voiceMail=" + encodeURI(inputs[7]) + "&mailDelay=" + encodeURI(inputs[8]) + "&moh=" + encodeURI(inputs[9]) +
+                    "&inDirectory=" + encodeURI(inputs[10]);
+            }
+        };
+
+        tableConfig.columnTypes[7].transform = function(value, id) {
+            if (value != "")
+                return value;
+            return '<a class="defaultVoiceMail" href="" onClick="createNewVoiceMail(' + id + '); return false;">Add&nbsp;Default</a>';
+        };
+
+        tableConfig.columnTypes[11].transform = function(id) {
+            return '<a href="/QueueMembers/Index/' + id + '">Edit&nbsp;Members</a>';
+        };
+
+        table = dynamicTable(tableConfig);
+
+        //#endregion ** DataTable **
+
+    });
+
+    function createNewVoiceMail(numberId) {
+        $.ajax({
+            url: '/GroupAdmin/AddVoiceMail/' + numberId,
+            success: function(data) {
+                //data returned should be the number/name
+                if (data) {
+                    // refresh table data
+                    table.refreshDataTable();
+                } else {
+                    alert("Couldn't delete record");
+                }
+            }
+        });
+    }
+
+</script>
+<div class="description">
+    <p>
+        A queue is a group of extensions (or other queues) that incoming calls are delivered to.</p>
+    <p>
+    </p>
+    <p>
+        Once a queue has been added, you will need to add members to it with the "Edit Members" link in its row.</p>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#showStrategies").click(function(e) {
+                $("#strategyInformation").show('fast');
+                e.preventDefault();
+            });
+            $(".modalClose").click(function(e) {
+                $("#strategyInformation").hide('fast');
+                e.preventDefault();
+            });
+        });
+    </script>
+</div>
+<table id="sipQueue">
+    <thead>
+        <tr>
+            <th style="display: none;">
+            </th>
+            <th>
+                Number</th>
+            <th>
+                Notes</th>
+            <th>
+                Name</th>
+            <th>
+                Members</th>
+            <th>
+                Type <a id='showStrategies' class="infoIco" /></th>
+            <th>
+                Ring On Busy?</th>
+            <th>
+                Voice Mail</th>
+            <th>
+                Mail Delay</th>
+            <th>
+                Music On Hold</th>
+            <th>
+                Directory Contact</th>
+            <th>
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<div id="strategyInformation" class='startHidden'>
+    <div class='modalBackground modalClose'>
+    </div>
+    <div class='modalContent'>
+        <h1>
+            Queue Types</h1>
+        <table class='dataTable'>
+            <thead>
+                <tr>
+                    <th>
+                        Type</th>
+                    <th>
+                        Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class='odd'>
+                    <td><b>ring all</b></td>
+                    <td>rings all available callers</td>
+                </tr>
+                <tr class='even'>
+                    <td><b>least recent</b></td>
+                    <td>rings the interface that least recently recieved a call </td>
+                </tr>
+                <tr class='odd'>
+                    <td><b>fewest calls</b></td>
+                    <td>rings the interface that has completed the fewest calls in this queue </td>
+                </tr>
+                <tr class='even'>
+                    <td><b>random</b></td>
+                    <td>rings a random interface</td>
+                </tr>
+                <tr class='odd'>
+                    <td><b>round robin</b></td>
+                    <td>rings members in a round robin fashion remembering where we left off last for the next caller </td>
+                </tr>
+                <tr class='even'>
+                    <td><b>linear</b></td>
+                    <td>rings members in the order specified, always starting at the beginning of the list </td>
+                </tr>
+                <tr class='odd'>
+                    <td><b>weighted random</b></td>
+                    <td>rings a random member, but uses the members' penalties as a weight </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

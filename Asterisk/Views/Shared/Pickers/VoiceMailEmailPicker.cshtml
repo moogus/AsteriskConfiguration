@@ -1,0 +1,38 @@
+﻿			 
+<script type="text/javascript">
+
+    var createVoiceEmailPicker = function() {
+        var heldValue;
+
+        var publicMembers = picker({ title: "Add Email", width: "500", moveLeft: "300", moveTop: "-400" });
+
+        var baseshow = publicMembers.show;
+        publicMembers.show = function(value) {
+            heldValue = value;
+            baseshow();
+        };
+
+        publicMembers.showAddTabs = function(basediv) {
+
+            var knowEmailTab = addAjaxTabWithRadio('Extension Emails', '/ExtensionAdmin/ExtensionEmailData', [
+                ["", function(a) { return "Extension " + a.Email; }],
+                ["Number", function(a) { return a.Number; }],
+                ["Name", function(a) { return a.FullName; }],
+                ["Email", function(a) { return a.Email; }]
+            ], heldValue);
+
+            var customEmailTab = addStaticTabWithTextInput('Custom VoiceMail');
+            var removeTab = addRemoveTab();
+
+            publicMembers.addTab(knowEmailTab);
+            publicMembers.addTab(customEmailTab);
+            publicMembers.addTab(removeTab);
+        };
+
+        publicMembers.linkText = "Email Picker";
+
+        return publicMembers;
+
+    };
+
+</script>

@@ -1,0 +1,97 @@
+/*
+ * An alternative styling for ColVis
+ * Note you will likely have to change the path for the background image used by jQuery UI theming:
+ *   ../../../../examples/examples_support/themes/smoothness
+ */
+
+.ColVis {
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 15px;
+}
+
+.ColVis_MasterButton {
+    background: url('../images/button.png') no-repeat top left;
+    border-left-width: 0;
+    cursor: pointer;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+}
+
+button.ColVis_Button::-moz-focus-inner {
+    border: none !important;
+    padding: 0;
+}
+
+.ColVis_text_hover {
+    background-color: #f0f0f0;
+    border: 1px solid #999;
+}
+
+div.ColVis_collectionBackground {
+    background-color: black;
+    z-index: 1100;
+}
+
+div.ColVis_collection {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 3px;
+    position: relative;
+    width: 150px;
+    z-index: 1102;
+}
+
+div.ColVis_collection button.ColVis_Button {
+    cursor: pointer;
+    *cursor: hand;
+    height: 30px;
+    margin-bottom: 2px;
+    margin-right: 3px;
+    padding: 3px 5px;
+    text-align: left;
+    width: 100%;
+}
+
+div.ColVis_collection button.ColVis_Button:hover {
+    background-color: #f0f0f0;
+    border: 1px solid #999;
+}
+
+div.ColVis_catcher {
+    position: absolute;
+    z-index: 1101;
+}
+
+span.ColVis_radio {
+    display: inline-block;
+    width: 20px;
+}
+
+button.ColVis_Restore { margin-top: 15px; }
+
+button.ColVis_Restore span {
+    display: inline-block;
+    padding-left: 10px;
+    text-align: left;
+}
+
+.disabled { color: #999; }
+
+
+
+/*
+ * Styles needed for DataTables scrolling
+ */
+
+div.dataTables_scrollHead {
+    overflow: hidden;
+    position: relative;
+}
+
+div.dataTables_scrollBody { overflow-y: scroll; }
+
+div.dataTables_scrollFoot { overflow: hidden; }

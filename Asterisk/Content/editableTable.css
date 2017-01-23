@@ -1,0 +1,23 @@
+﻿.editableTableAdd {
+    float: left;
+    margin-bottom: 5px;
+    margin-top: -2px;
+}
+
+.editableTableStatus { float: right; }
+
+.infoIco {
+    background-image: url("../../Content/Images/info.png");
+    display: inline-block;
+    height: 16px;
+    margin-bottom: -3px;
+    margin-left: 5px;
+    width: 16px;
+}
+
+.hasError {
+    border-color: #cc3300;
+    border-style: solid;
+    border-width: 1.25px;
+    font-weight: bold;
+}
